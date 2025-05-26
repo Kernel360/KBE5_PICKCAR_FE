@@ -1,10 +1,10 @@
-import LogoBox from './common/Navigation'
+import Logo from './common/Logo'
 
 function LoginForm() {
   return (
     <div className="mt-20 flex w-90 flex-col items-center rounded-2xl bg-white p-10 shadow-lg">
       <div className="mb-8 flex items-center">
-        <LogoBox>P</LogoBox>
+        <Logo />
         <div>
           <div className="text-2xl font-bold text-[#222]">PickCar</div>
           <div className="text-sm text-[#888]">렌터카 차량 관제 서비스</div>
