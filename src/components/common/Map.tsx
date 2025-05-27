@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 declare global {
   interface Window {
-    kakao: any // 좀 더 구체적인 타입을 정의하면 더욱 좋습니다.
+    kakao: any // todo : src/custom.d.ts or npm library 사용하기
   }
 }
 
