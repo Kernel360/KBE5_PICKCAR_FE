@@ -1,34 +1,45 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-declare global {
-  interface Window {
-    kakao: any // todo : src/custom.d.ts or npm library 사용하기
-  }
+interface Window {
+  kakao: any
 }
 
-function Map() {
-  const mapContainerRef = useRef(null)
+interface MapProps {
+  center?: { lat: number; lng: number }
+  level?: number
+}
+
+function Map({ center = { lat: 37.5665, lng: 126.978 }, level = 7 }: MapProps) {
+  const mapRef = useRef<HTMLDivElement>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    if (window.kakao && window.kakao.maps && mapContainerRef.current) {
-      window.kakao.maps.load(() => {
-        const mapOption = {
-          center: new window.kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-          level: 3
-        }
-        new window.kakao.maps.Map(mapContainerRef.current, mapOption)
-      })
-    } else {
-      console.error(
-        'Kakao Maps API 스크립트가 로드되지 않았거나, 지도 컨테이너를 찾을 수 없습니다.'
-      )
+    const checkKakao = () => {
+      if (window.kakao && window.kakao.maps) {
+        setIsLoaded(true)
+      } else {
+        setTimeout(checkKakao, 100)
+      }
     }
+    checkKakao()
   }, [])
+
+  useEffect(() => {
+    if (!isLoaded || !mapRef.current) return
+
+    window.kakao.maps.load(() => {
+      const mapCenter = new window.kakao.maps.LatLng(center.lat, center.lng)
+      new window.kakao.maps.Map(mapRef.current, {
+        center: mapCenter,
+        level
+      })
+    })
+  }, [isLoaded, center, level])
   return (
     <div
-      id="map"
-      ref={mapContainerRef}
-      style={{ width: '500px', height: '400px' }}></div>
+      ref={mapRef}
+      className="h-[500px] w-[500px] rounded-xl"
+    />
   )
 }
 
