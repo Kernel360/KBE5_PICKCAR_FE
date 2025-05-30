@@ -3,7 +3,7 @@ import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
 import MapControls from '@/components/tracking/MapControls'
 import type { Company, Car } from '@/types/tracking'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 /**
  * 1. 상태 관리: 차량 전체 목록 데이터(initialCars), 회사 목록 데이터(initialCompanies), 현재 선택된 필터 값(selectedCompany, searchTerm),
@@ -28,8 +28,8 @@ const initialCars: Car[] = [
     number: '12가 3456',
     model: '현대 아반떼',
     location: '서울',
-    lat: 37.5665,
-    lng: 126.978
+    lat: 37.619285,
+    lng: 126.921028
   },
   {
     number: '34나 5678',
@@ -61,13 +61,22 @@ const initialCars: Car[] = [
   }
 ]
 
+const SIMUL_CAR_NUMBER = '12가 3456'
+const SIMUL_LATLNG = [
+  { lat: 37.6129317, lng: 126.9278844 },
+  { lat: 37.607525, lng: 126.932515 },
+  { lat: 37.602822, lng: 126.935169 },
+  { lat: 37.526039, lng: 126.8351948 }
+]
+const SIMUL_INTEVER = 5000
+
 function TrackingCar() {
   const INIT_CENTER = { lat: 37.5665, lng: 126.978 }
-  const INIT_ZOOM_LEVEL = 7
+  const INIT_ZOOM_LEVEL = 9
   const DETAIL_ZOOM_LEVEL = 3
 
   const [companies] = useState<Company[]>(initialCompanies)
-  const [cars] = useState<Car[]>(initialCars)
+  const [cars, setCars] = useState<Car[]>(initialCars)
 
   const [selectedCompany, setSelectedCompany] = useState<string>('all')
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -80,6 +89,34 @@ function TrackingCar() {
     lng: INIT_CENTER.lng
   })
   const [mapZoom, setMapZoom] = useState<number>(INIT_ZOOM_LEVEL)
+
+  // --- 차량 위치 시뮬레이션 로직 ---
+  useEffect(() => {
+    let currentCoordinateIndex = 0
+
+    const intervalId = setInterval(() => {
+      setCars(prevCars =>
+        prevCars.map(car => {
+          if (car.number === SIMUL_CAR_NUMBER) {
+            const newCoords = SIMUL_LATLNG[currentCoordinateIndex]
+            console.log(
+              `차량 [${SIMUL_CAR_NUMBER}] 이동: (${newCoords.lat}, ${newCoords.lng})`
+            )
+            return { ...car, lat: newCoords.lat, lng: newCoords.lng }
+          }
+          return car
+        })
+      )
+
+      currentCoordinateIndex =
+        (currentCoordinateIndex + 1) % SIMUL_LATLNG.length // 다음 좌표로 순환
+    }, SIMUL_INTEVER)
+
+    return () => {
+      clearInterval(intervalId)
+      console.log('차량 시뮬레이션 인터벌이 정리되었습니다.')
+    }
+  }, [])
 
   const filteredCars = useMemo(() => {
     return cars.filter(car => {
@@ -102,7 +139,7 @@ function TrackingCar() {
       // 필터된 차량만 마커로 표시
       lat: car.lat,
       lng: car.lng,
-      label: `${car.number.substring(0, 4)}` // 차량 번호 앞 4자리로 라벨 (예시)
+      label: car.number
     }))
   }, [filteredCars])
 
