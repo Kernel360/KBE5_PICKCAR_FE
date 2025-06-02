@@ -27,6 +27,7 @@
     "paths": {
       "@/*": ["./src/*"]
     }
+    // "types": ["kakao.maps.d.ts"]
   },
   "include": ["src"]
 }
