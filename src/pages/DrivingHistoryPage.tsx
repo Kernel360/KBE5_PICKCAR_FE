@@ -7,6 +7,7 @@ import type {
 } from '@/types/drivingHistory'
 import axios from 'axios'
 import DrivingHistoryDetailModal from '@/components/history/DrivingHistoryDetailModal'
+import Header from '@/components/common/Header'
 
 // axios 기본 설정
 axios.defaults.baseURL = 'http://localhost:8080'
@@ -99,53 +100,72 @@ function DrivingHistoryPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-96px)] bg-[#f5f8fa] p-6">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">운행 기록</h1>
+    <div className="flex min-h-screen flex-col bg-[#f5f8fa]">
+      <header className="bg-white">
+        <Header activeMenu="driving-history" />
       </header>
-
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <div className="relative flex-grow">
-          <input
-            type="text"
-            placeholder="운행 기록 검색 (차량번호, 운전자, ID)..."
-            className="w-full rounded-md border-gray-300 p-2.5 pr-10 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-          <span className="pointer-events-none absolute inset-y-0 right-0 grid w-10 place-content-center text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-5 w-5">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-              />
-            </svg>
-          </span>
+      <div className="relative flex flex-1 flex-col p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-800">운행일지</h1>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="운행일지 검색..."
+              className="rounded border border-gray-300 bg-white px-3 py-2 text-sm"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              style={{ minWidth: 200 }}
+            />
+            <select className="rounded border border-gray-300 bg-white px-3 py-2 text-sm">
+              <option>모든 차량</option>
+            </select>
+            <select className="rounded border border-gray-300 bg-white px-3 py-2 text-sm">
+              <option>최근 30일</option>
+              <option>최근 7일</option>
+              <option>전체</option>
+            </select>
+            <button
+              className="rounded border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+              type="button">
+              내보내기
+            </button>
+          </div>
         </div>
+        <div className="flex min-h-[400px] flex-col rounded-2xl bg-white p-0 shadow">
+          <DrivingHistoryTable
+            logs={filteredHistoryLogs}
+            onViewDetails={handleViewHistoryDetails}
+          />
+        </div>
+        <div className="mt-auto flex items-center justify-between pt-4">
+          <div className="text-sm text-gray-500">
+            총 {filteredHistoryLogs.length}개 중 1-
+            {Math.min(filteredHistoryLogs.length, 10)} 표시
+          </div>
+          <div className="flex gap-2">
+            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50">
+              &lt;
+            </button>
+            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#2563eb] text-base font-bold text-white shadow">
+              1
+            </button>
+            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50">
+              2
+            </button>
+            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50">
+              3
+            </button>
+            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50">
+              &gt;
+            </button>
+          </div>
+        </div>
+        <DrivingHistoryDetailModal
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          detail={detail}
+        />
       </div>
-
-      <DrivingHistoryTable
-        logs={filteredHistoryLogs}
-        onViewDetails={handleViewHistoryDetails}
-      />
-
-      <div className="mt-6 text-sm text-gray-500">
-        총 {filteredHistoryLogs.length}개 중 1-
-        {Math.min(filteredHistoryLogs.length, 10)} 표시
-      </div>
-
-      <DrivingHistoryDetailModal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        detail={detail}
-      />
     </div>
   )
 }

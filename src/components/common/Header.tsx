@@ -9,7 +9,7 @@ function Header({ activeMenu }: HeaderProps) {
   const menus = [
     { name: '차량', url: '#' },
     { name: '실시간 관제', url: '#' },
-    { name: '운행일지', url: '#' },
+    { name: '운행일지', url: '#', target: 'driving-history' },
     { name: '회원', url: '#' }
   ]
 
@@ -27,7 +27,7 @@ function Header({ activeMenu }: HeaderProps) {
               <Link
                 to={menu.url}
                 className={
-                  menu.name === activeMenu
+                  menu.target === activeMenu
                     ? 'font-semibold text-blue-600'
                     : 'text-gray-500 hover:text-blue-600'
                 }>

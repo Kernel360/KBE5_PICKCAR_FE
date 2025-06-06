@@ -1,5 +1,6 @@
 import type { DrivingHistoryDetail } from '@/types/drivingHistory'
 import KakaoMap from '@/components/common/KakaoMap'
+import carSampleImg from '@/components/common/car_sample.jpg'
 
 interface Props {
   open: boolean
@@ -9,8 +10,8 @@ interface Props {
 
 const statusMap: Record<string, { label: string; color: string }> = {
   RESERVED: { label: '운행 중', color: 'bg-green-100 text-green-600' },
-  RETURNED: { label: '반납 완료', color: 'bg-red-100 text-black-600' }
-  // 필요시 다른 상태 추가
+  RETURNED: { label: '반납 완료', color: 'bg-red-100 text-black-600' },
+  CANCELLED: { label: '취소됨', color: 'bg-gray-100 text-gray-600' }
 }
 
 const INIT_CENTER = { lat: 37.5665, lng: 126.978 }
@@ -32,27 +33,11 @@ const DrivingHistoryDetailModal = ({ open, onClose, detail }: Props) => {
           ×
         </button>
         <div className="mb-6 flex items-center gap-3">
-          <div className="rounded-full bg-blue-100 p-2">
-            <svg
-              width={32}
-              height={32}
-              fill="none"
-              viewBox="0 0 24 24">
-              <path
-                d="M4 17V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10"
-                stroke="#2563eb"
-                strokeWidth={2}
-              />
-              <rect
-                x={7}
-                y={10}
-                width={10}
-                height={4}
-                rx={2}
-                fill="#2563eb"
-              />
-            </svg>
-          </div>
+          <img
+            src={carSampleImg}
+            alt="차량 샘플"
+            className="h-20 w-20 rounded-full object-contain"
+          />
           <div>
             <div className="text-lg font-bold">
               {detail.licensePlate} 상세 정보
