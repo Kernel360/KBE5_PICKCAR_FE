@@ -7,7 +7,6 @@ import type {
 import axios from 'axios'
 import DrivingHistoryDetailModal from '@/components/history/DrivingHistoryDetailModal'
 import Header from '@/components/common/Header'
-import Pagination from '@/components/common/Pagination'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
 import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
@@ -23,12 +22,10 @@ function DrivingHistoryPage() {
   const [historyLogs, setHistoryLogs] = useState<DrivingHistoryEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [setSelectedEntry] = useState<DrivingHistoryEntry | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [detail, setDetail] = useState<DrivingHistoryDetail | null>(null)
   const [page, setPage] = useState(1)
   const PAGE_SIZE = 10
-  const TABLE_MIN_HEIGHT = 400
 
   useEffect(() => {
     const fetchHistoryLogs = async () => {
@@ -74,7 +71,6 @@ function DrivingHistoryPage() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
-    setSelectedEntry(null)
   }
 
   const filteredHistoryLogs = useMemo(

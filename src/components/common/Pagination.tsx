@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-
 interface PaginationProps {
   current: number // 현재 페이지 (1부터 시작)
   total: number // 전체 페이지 수
