@@ -7,3 +7,16 @@ export interface DrivingHistoryEntry {
   totalDrivingTime: string
   totalDistance: number
 }
+
+export interface DrivingHistoryDetail {
+  historyId: number
+  licensePlate: string
+  model: string
+  carAge: string
+  reservationStatus: string
+  drivingStartedAt: string
+  drivingEndedAt: string
+  totalDrivingTime: string
+  totalDistance: number
+  driverName: string
+}

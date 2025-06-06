@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DrivingHistoryTable from '@/components/history/DrivingHistoryTable'
-import type { DrivingHistoryEntry } from '@/types/drivingHistory'
+import type {
+  DrivingHistoryEntry,
+  DrivingHistoryDetail
+} from '@/types/drivingHistory'
 import axios from 'axios'
+import DrivingHistoryDetailModal from '@/components/history/DrivingHistoryDetailModal'
 
 // axios 기본 설정
 axios.defaults.baseURL = 'http://localhost:8080'
@@ -15,6 +19,10 @@ function DrivingHistoryPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
+  const [selectedEntry, setSelectedEntry] =
+    useState<DrivingHistoryEntry | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [detail, setDetail] = useState<DrivingHistoryDetail | null>(null)
 
   useEffect(() => {
     const fetchHistoryLogs = async () => {
@@ -48,9 +56,20 @@ function DrivingHistoryPage() {
     fetchHistoryLogs()
   }, [])
 
-  const handleViewHistoryDetails = (logId: number) => {
-    console.log('상세보기 클릭 (라우팅 예정):', logId)
-    navigate(`/driving-history/${logId}`)
+  const handleViewHistoryDetails = async (logId: number) => {
+    try {
+      const res = await axios.get(`/api/v1/history/${logId}/detail`)
+      console.log('상세 정보 응답:', res.data)
+      setDetail(res.data.data)
+      setIsModalOpen(true)
+    } catch (error) {
+      console.error('상세 정보 요청 실패:', error)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedEntry(null)
   }
 
   const filteredHistoryLogs = historyLogs.filter(
@@ -121,6 +140,12 @@ function DrivingHistoryPage() {
         총 {filteredHistoryLogs.length}개 중 1-
         {Math.min(filteredHistoryLogs.length, 10)} 표시
       </div>
+
+      <DrivingHistoryDetailModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        detail={detail}
+      />
     </div>
   )
 }
