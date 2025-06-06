@@ -8,6 +8,7 @@ import type {
 import axios from 'axios'
 import DrivingHistoryDetailModal from '@/components/history/DrivingHistoryDetailModal'
 import Header from '@/components/common/Header'
+import Pagination from '@/components/common/Pagination'
 
 // axios 기본 설정
 axios.defaults.baseURL = 'http://localhost:8080'
@@ -24,6 +25,8 @@ function DrivingHistoryPage() {
     useState<DrivingHistoryEntry | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [detail, setDetail] = useState<DrivingHistoryDetail | null>(null)
+  const [page, setPage] = useState(1)
+  const pageSize = 10
 
   useEffect(() => {
     const fetchHistoryLogs = async () => {
@@ -80,6 +83,12 @@ function DrivingHistoryPage() {
       log.historyId.toString().includes(searchTerm)
   )
 
+  const totalPage = Math.ceil(filteredHistoryLogs.length / pageSize)
+  const pagedLogs = filteredHistoryLogs.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  )
+
   if (isLoading) {
     return (
       <div className="flex min-h-[calc(100vh-96px)] items-center justify-center bg-[#f5f8fa]">
@@ -131,34 +140,22 @@ function DrivingHistoryPage() {
             </button>
           </div>
         </div>
-        <div className="flex min-h-[400px] flex-col rounded-2xl bg-white p-0 shadow">
+        <div className="min-h-[400px] flex-1 flex-col rounded-2xl bg-white p-0 shadow">
           <DrivingHistoryTable
-            logs={filteredHistoryLogs}
+            logs={pagedLogs}
             onViewDetails={handleViewHistoryDetails}
           />
         </div>
-        <div className="mt-auto flex items-center justify-between pt-4">
-          <div className="text-sm text-gray-500">
-            총 {filteredHistoryLogs.length}개 중 1-
-            {Math.min(filteredHistoryLogs.length, 10)} 표시
+        <div className="mt-auto flex items-center justify-between pt-5 text-sm text-gray-500">
+          <div>
+            총 {filteredHistoryLogs.length}개 중 {(page - 1) * pageSize + 1}-
+            {Math.min(page * pageSize, filteredHistoryLogs.length)} 표시
           </div>
-          <div className="flex gap-2">
-            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50">
-              &lt;
-            </button>
-            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#2563eb] text-base font-bold text-white shadow">
-              1
-            </button>
-            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50">
-              2
-            </button>
-            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50">
-              3
-            </button>
-            <button className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50">
-              &gt;
-            </button>
-          </div>
+          <Pagination
+            current={page}
+            total={totalPage}
+            onChange={setPage}
+          />
         </div>
         <DrivingHistoryDetailModal
           open={isModalOpen}
