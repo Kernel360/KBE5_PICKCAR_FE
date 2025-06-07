@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Header from '@/components/common/Header'
 import VehicleAsideBar from '@/components/vehicle/common/VehicleAsideBar'
 import RegisterCarInfoSection from '@/components/vehicle/register/RegisterCarInfoSection'
+import RegisterCheckModal from '@/components/vehicle/register/RegisterCheckModal'
 
 export default function VehicleRegisterPage() {
   const [manufacturer, setManufacturer] = useState('')
@@ -14,6 +15,8 @@ export default function VehicleRegisterPage() {
   const [color, setColor] = useState('')
   const [fuelType, setFuelType] = useState('')
   const [hasGps, setHasGps] = useState('')
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [isRegistered, setIsRegistered] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,8 +41,14 @@ export default function VehicleRegisterPage() {
       alert(firstInvalid.message)
       return
     }
-    // 실제 등록 처리 로직...
-    alert('등록이 완료되었습니다!')
+    setShowConfirmModal(true)
+  }
+
+  const handleConfirm = () => {
+    setShowConfirmModal(false)
+    setIsRegistered(true)
+    setTimeout(() => setIsRegistered(false), 1500)
+    // 실제 등록 처리 로직을 이곳에 추가
   }
 
   return (
@@ -83,6 +92,31 @@ export default function VehicleRegisterPage() {
                 </button>
               </div>
             </form>
+            {/* 등록 확인 모달 */}
+            {showConfirmModal && (
+              <RegisterCheckModal
+                carNumber={carNumber}
+                model={model}
+                carType={carType}
+                customCarType={customCarType}
+                manufacturer={manufacturer}
+                customManufacturer={customManufacturer}
+                year={year}
+                color={color}
+                fuelType={fuelType}
+                hasGps={hasGps}
+                onConfirm={handleConfirm}
+                onCancel={() => setShowConfirmModal(false)}
+              />
+            )}
+            {/* 등록 완료 안내 */}
+            {isRegistered && (
+              <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
+                <div className="rounded-xl bg-white px-8 py-6 text-center text-lg font-semibold text-blue-600 shadow-xl">
+                  등록이 완료되었습니다!
+                </div>
+              </div>
+            )}
           </div>
         </main>
       </div>
