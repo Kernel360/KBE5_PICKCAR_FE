@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import TrackingCar from './pages/TrackingCar'
 import DrivingHistoryPage from './pages/DrivingHistoryPage'
+import VehicleManagement from './pages/VehicleManagement'
 
 const kakaoMapKey = import.meta.env.VITE_KAKAO_MAP_API_KEY
 
@@ -31,6 +32,11 @@ function App() {
         <Route
           path="/driving-history"
           element={<DrivingHistoryPage />}
+        />
+
+        <Route
+          path="/vehicle-management"
+          element={<VehicleManagement />}
         />
       </Routes>
     </BrowserRouter>
