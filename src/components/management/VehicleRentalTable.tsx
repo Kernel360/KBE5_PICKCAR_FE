@@ -46,22 +46,22 @@ function VehicleRentalTable({ vehicles, onAction }: VehicleRentalTableProps) {
         <table className="h-full w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+              <th className="w-32 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 차량번호
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+              <th className="w-40 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 차종
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+              <th className="w-24 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 상태
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+              <th className="w-32 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 회사
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+              <th className="w-32 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 대여일
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+              <th className="w-24 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 작업
               </th>
             </tr>
@@ -70,26 +70,26 @@ function VehicleRentalTable({ vehicles, onAction }: VehicleRentalTableProps) {
             {currentVehicles.map(vehicle => (
               <tr
                 key={vehicle.number}
-                className="hover:bg-gray-50">
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                className="h-12 hover:bg-gray-50">
+                <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
                   {vehicle.number}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="h-12 w-40 truncate px-4 py-3 whitespace-nowrap text-gray-600">
                   {vehicle.info}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap">
+                <td className="h-12 w-24 px-4 py-3 whitespace-nowrap">
                   <span
-                    className={`inline-flex w-20 justify-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusColor[vehicle.status] || ''}`}>
+                    className={`inline-flex w-20 justify-center rounded-full px-2.5 py-1 text-xs font-medium ${statusColor[vehicle.status] || ''}`}>
                     {vehicle.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
                   {vehicle.company}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
                   {vehicle.date}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="h-12 w-24 px-4 py-3 whitespace-nowrap text-gray-600">
                   <button
                     onClick={() => onAction(vehicle.number, vehicle.action)}
                     className={`rounded px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none ${actionColor[vehicle.action] || 'bg-gray-100 text-gray-500'}`}>
