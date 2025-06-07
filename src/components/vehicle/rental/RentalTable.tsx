@@ -13,9 +13,14 @@ interface VehicleRental {
 interface VehicleRentalTableProps {
   vehicles: VehicleRental[]
   onAction: (number: string, action: string) => void
+  onChangeStatus: (number: string) => void
 }
 
-function VehicleRentalTable({ vehicles, onAction }: VehicleRentalTableProps) {
+function VehicleRentalTable({
+  vehicles,
+  onAction,
+  onChangeStatus
+}: VehicleRentalTableProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
@@ -95,11 +100,17 @@ function VehicleRentalTable({ vehicles, onAction }: VehicleRentalTableProps) {
                 <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
                   {vehicle.date}
                 </td>
-                <td className="h-12 w-24 px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="flex h-12 w-24 gap-2 px-4 py-2 whitespace-nowrap text-gray-600">
                   <button
                     onClick={() => onAction(vehicle.number, vehicle.action)}
                     className={`rounded px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none ${actionColor[vehicle.action] || 'bg-gray-100 text-gray-500'}`}>
                     {vehicle.action}
+                  </button>
+
+                  <button
+                    onClick={() => onChangeStatus(vehicle.number)}
+                    className={`text-black-500 rounded bg-orange-100 px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none`}>
+                    상태 변경
                   </button>
                 </td>
               </tr>

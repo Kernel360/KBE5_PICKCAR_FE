@@ -5,6 +5,7 @@ import ManagementAsideBar from '@/components/vehicle/common/VehicleAsideBar'
 import ReservationTopBar from '@/components/vehicle/rental/RentalTopBar'
 import ReturnConfirmModal from '@/components/vehicle/rental/ReturnConfirmModal'
 import SelectCompanyModal from '@/components/vehicle/rental/SelectCompanyModal'
+import ChangeStatusModal from '@/components/vehicle/rental/ChangeStatusModal'
 
 const vehicleList = [
   {
@@ -102,6 +103,11 @@ export default function Rental() {
     useState(false)
   const [companySearch, setCompanySearch] = useState('')
   const [selectedCompany, setSelectedCompany] = useState('')
+  const [isChangeStatusModalOpen, setIsChangeStatusModalOpen] = useState(false)
+  const [changeStatusVehicle, setChangeStatusVehicle] = useState<
+    (typeof vehicleList)[0] | null
+  >(null)
+  const [changeStatusValue, setChangeStatusValue] = useState('')
 
   // 검색 및 필터 적용
   const filteredList = vehicleList.filter(vehicle => {
@@ -126,9 +132,20 @@ export default function Rental() {
       setIsSelectCompanyModalOpen(true)
       setSelectedCompany('')
       setCompanySearch('')
+    } else if (action === '상태변경') {
+      handleChangeStatusClick(number)
     } else {
       console.log(number, action)
     }
+  }
+
+  // 상태 변경 버튼 핸들러
+  const handleChangeStatusClick = (number: string) => {
+    const vehicle = vehicleList.find(v => v.number === number)
+    if (!vehicle) return
+    setChangeStatusVehicle(vehicle)
+    setChangeStatusValue(vehicle.status)
+    setIsChangeStatusModalOpen(true)
   }
 
   // 회수 모달 핸들러
@@ -163,6 +180,27 @@ export default function Rental() {
     setCompanySearch('')
   }
 
+  // 상태 변경 모달 핸들러
+  const handleChangeStatusConfirm = () => {
+    if (changeStatusVehicle && changeStatusValue) {
+      console.log(
+        '상태 변경:',
+        changeStatusVehicle.number,
+        '→',
+        changeStatusValue
+      )
+      // 상태 변경 처리 로직
+    }
+    setIsChangeStatusModalOpen(false)
+    setChangeStatusVehicle(null)
+    setChangeStatusValue('')
+  }
+  const handleChangeStatusCancel = () => {
+    setIsChangeStatusModalOpen(false)
+    setChangeStatusVehicle(null)
+    setChangeStatusValue('')
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-[#f7f9fb]">
       {/* 상단 헤더 */}
@@ -172,7 +210,7 @@ export default function Rental() {
         {/* 좌측 메뉴 */}
         <ManagementAsideBar />
         {/* 메인 */}
-        <main className="mx-32 flex min-h-0 flex-1 flex-col px-12 py-10">
+        <main className="mx-10 flex min-h-0 flex-1 flex-col px-12 py-10">
           <ReservationTopBar
             search={search}
             setSearch={setSearch}
@@ -184,6 +222,7 @@ export default function Rental() {
               <VehicleRentalTable
                 vehicles={filteredList}
                 onAction={handleAction}
+                onChangeStatus={handleChangeStatusClick}
               />
             </div>
           </div>
@@ -209,6 +248,16 @@ export default function Rental() {
           onCancel={handleCompanyCancel}
           search={companySearch}
           setSearch={setCompanySearch}
+        />
+      )}
+      {/* 상태 변경 모달 */}
+      {isChangeStatusModalOpen && changeStatusVehicle && (
+        <ChangeStatusModal
+          carNumber={changeStatusVehicle.number}
+          selectedStatus={changeStatusValue}
+          onSelect={setChangeStatusValue}
+          onConfirm={handleChangeStatusConfirm}
+          onCancel={handleChangeStatusCancel}
         />
       )}
     </div>
