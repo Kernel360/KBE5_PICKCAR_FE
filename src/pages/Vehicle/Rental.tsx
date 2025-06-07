@@ -3,7 +3,8 @@ import Header from '@/components/common/Header'
 import VehicleRentalTable from '@/components/vehicle/rental/RentalTable'
 import ManagementAsideBar from '@/components/vehicle/common/VehicleAsideBar'
 import ReservationTopBar from '@/components/vehicle/rental/RentalTopBar'
-import ReturnConfirmModal from '@/components/vehicle/register/ReturnConfirmModal'
+import ReturnConfirmModal from '@/components/vehicle/rental/ReturnConfirmModal'
+import SelectCompanyModal from '@/components/vehicle/rental/SelectCompanyModal'
 
 const vehicleList = [
   {
@@ -88,13 +89,19 @@ const vehicleList = [
   }
 ]
 
+const companyListData = ['ABC 렌터카', 'XYZ 렌터카', 'DEF 렌터카', 'GHI 렌터카']
+
 export default function Rental() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
   const [selectedVehicle, setSelectedVehicle] = useState<
     (typeof vehicleList)[0] | null
   >(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isReturnModalOpen, setIsReturnModalOpen] = useState(false)
+  const [isSelectCompanyModalOpen, setIsSelectCompanyModalOpen] =
+    useState(false)
+  const [companySearch, setCompanySearch] = useState('')
+  const [selectedCompany, setSelectedCompany] = useState('')
 
   // 검색 및 필터 적용
   const filteredList = vehicleList.filter(vehicle => {
@@ -103,28 +110,57 @@ export default function Rental() {
     return matchesSearch && matchesFilter
   })
 
+  // 회사명 검색 필터
+  const filteredCompanyList = companyListData.filter(company =>
+    company.toLowerCase().includes(companySearch.toLowerCase())
+  )
+
   const handleAction = (number: string, action: string) => {
     const vehicle = vehicleList.find(v => v.number === number)
-    if (vehicle && action === '회수') {
+    if (!vehicle) return
+    if (action === '회수') {
       setSelectedVehicle(vehicle)
-      setIsModalOpen(true)
+      setIsReturnModalOpen(true)
+    } else if (action === '대여') {
+      setSelectedVehicle(vehicle)
+      setIsSelectCompanyModalOpen(true)
+      setSelectedCompany('')
+      setCompanySearch('')
     } else {
       console.log(number, action)
     }
   }
 
-  const handleConfirm = () => {
+  // 회수 모달 핸들러
+  const handleReturnConfirm = () => {
     if (selectedVehicle) {
       console.log('회수 처리:', selectedVehicle)
-      // 여기에 회수 처리 로직 추가
+      // 회수 처리 로직
     }
-    setIsModalOpen(false)
+    setIsReturnModalOpen(false)
+    setSelectedVehicle(null)
+  }
+  const handleReturnCancel = () => {
+    setIsReturnModalOpen(false)
     setSelectedVehicle(null)
   }
 
-  const handleCancel = () => {
-    setIsModalOpen(false)
+  // 대여 모달 핸들러
+  const handleCompanyConfirm = () => {
+    if (selectedVehicle && selectedCompany) {
+      console.log('대여 처리:', selectedVehicle, '→', selectedCompany)
+      // 대여 처리 로직
+    }
+    setIsSelectCompanyModalOpen(false)
     setSelectedVehicle(null)
+    setSelectedCompany('')
+    setCompanySearch('')
+  }
+  const handleCompanyCancel = () => {
+    setIsSelectCompanyModalOpen(false)
+    setSelectedVehicle(null)
+    setSelectedCompany('')
+    setCompanySearch('')
   }
 
   return (
@@ -153,13 +189,26 @@ export default function Rental() {
           </div>
         </main>
       </div>
-      {isModalOpen && selectedVehicle && (
+      {/* 회수 모달 */}
+      {isReturnModalOpen && selectedVehicle && (
         <ReturnConfirmModal
           company={selectedVehicle.company}
           number={selectedVehicle.number}
           info={selectedVehicle.info}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
+          onConfirm={handleReturnConfirm}
+          onCancel={handleReturnCancel}
+        />
+      )}
+      {/* 대여 회사 선택 모달 */}
+      {isSelectCompanyModalOpen && selectedVehicle && (
+        <SelectCompanyModal
+          companyList={filteredCompanyList}
+          selected={selectedCompany}
+          onSelect={setSelectedCompany}
+          onConfirm={handleCompanyConfirm}
+          onCancel={handleCompanyCancel}
+          search={companySearch}
+          setSearch={setCompanySearch}
         />
       )}
     </div>
