@@ -46,6 +46,9 @@ function VehicleRentalTable({ vehicles, onAction }: VehicleRentalTableProps) {
         <table className="h-full w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
+              <th className="w-12 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+                No
+              </th>
               <th className="w-32 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 차량번호
               </th>
@@ -67,10 +70,13 @@ function VehicleRentalTable({ vehicles, onAction }: VehicleRentalTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-b border-gray-200">
-            {currentVehicles.map(vehicle => (
+            {currentVehicles.map((vehicle, idx) => (
               <tr
                 key={vehicle.number}
                 className="h-12 hover:bg-gray-50">
+                <td className="h-12 w-12 px-4 py-3 text-center text-gray-500">
+                  {startIndex + idx + 1}
+                </td>
                 <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
                   {vehicle.number}
                 </td>

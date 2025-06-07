@@ -7,18 +7,18 @@ export default function ManagementAsideBar() {
       <div className="mb-8 text-lg font-bold">차량 관리</div>
       <nav className="flex flex-col gap-2 text-gray-600">
         <NavLink
-          to="/vehicle/register"
-          className={({ isActive }) =>
-            `rounded px-3 py-2 hover:bg-gray-100 ${isActive ? 'bg-blue-50 font-semibold text-blue-600' : ''}`
-          }>
-          차량 등록/해지
-        </NavLink>
-        <NavLink
           to="/vehicle/rental"
           className={({ isActive }) =>
             `rounded px-3 py-2 hover:bg-gray-100 ${isActive ? 'bg-blue-50 font-semibold text-blue-600' : ''}`
           }>
           차량 대여/회수
+        </NavLink>
+        <NavLink
+          to="/vehicle/register"
+          className={({ isActive }) =>
+            `rounded px-3 py-2 hover:bg-gray-100 ${isActive ? 'bg-blue-50 font-semibold text-blue-600' : ''}`
+          }>
+          차량 등록/해지
         </NavLink>
         <NavLink
           to="/vehicle/assign"

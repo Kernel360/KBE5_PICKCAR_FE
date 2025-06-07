@@ -87,7 +87,7 @@ const vehicleList = [
   }
 ]
 
-export default function VehicleManagement() {
+export default function Rental() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
 
