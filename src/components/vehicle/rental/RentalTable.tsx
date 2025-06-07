@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Pagination from '../common/Pagination'
+import Pagination from '../../common/Pagination'
 
 interface VehicleRental {
   number: string

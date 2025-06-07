@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import Header from '@/components/common/Header'
-import VehicleRentalTable from '@/components/management/VehicleRentalTable'
-import ManagementAsideBar from '@/components/management/ManagementAsideBar'
-import ReservationTopBar from '@/components/management/ReservationTopBar'
+import VehicleRentalTable from '@/components/vehicle/rental/RentalTable'
+import ManagementAsideBar from '@/components/vehicle/common/VehicleAsideBar'
+import ReservationTopBar from '@/components/vehicle/rental/RentalTopBar'
 
 const vehicleList = [
   {

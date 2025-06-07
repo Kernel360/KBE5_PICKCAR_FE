@@ -35,7 +35,7 @@ function App() {
         />
 
         <Route
-          path="/vehicle-management"
+          path="/vehicle/rental"
           element={<VehicleManagement />}
         />
       </Routes>
