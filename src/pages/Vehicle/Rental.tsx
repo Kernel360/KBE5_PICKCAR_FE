@@ -3,6 +3,7 @@ import Header from '@/components/common/Header'
 import VehicleRentalTable from '@/components/vehicle/rental/RentalTable'
 import ManagementAsideBar from '@/components/vehicle/common/VehicleAsideBar'
 import ReservationTopBar from '@/components/vehicle/rental/RentalTopBar'
+import ReturnConfirmModal from '@/components/vehicle/register/ReturnConfirmModal'
 
 const vehicleList = [
   {
@@ -90,6 +91,10 @@ const vehicleList = [
 export default function Rental() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
+  const [selectedVehicle, setSelectedVehicle] = useState<
+    (typeof vehicleList)[0] | null
+  >(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // 검색 및 필터 적용
   const filteredList = vehicleList.filter(vehicle => {
@@ -97,6 +102,30 @@ export default function Rental() {
     const matchesFilter = filter === '' || vehicle.status === filter
     return matchesSearch && matchesFilter
   })
+
+  const handleAction = (number: string, action: string) => {
+    const vehicle = vehicleList.find(v => v.number === number)
+    if (vehicle && action === '회수') {
+      setSelectedVehicle(vehicle)
+      setIsModalOpen(true)
+    } else {
+      console.log(number, action)
+    }
+  }
+
+  const handleConfirm = () => {
+    if (selectedVehicle) {
+      console.log('회수 처리:', selectedVehicle)
+      // 여기에 회수 처리 로직 추가
+    }
+    setIsModalOpen(false)
+    setSelectedVehicle(null)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+    setSelectedVehicle(null)
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f7f9fb]">
@@ -118,15 +147,21 @@ export default function Rental() {
             <div className="max-w-8xl w-full">
               <VehicleRentalTable
                 vehicles={filteredList}
-                onAction={(number, action) => {
-                  // 회수/대여 버튼 클릭 시 처리
-                  console.log(number, action)
-                }}
+                onAction={handleAction}
               />
             </div>
           </div>
         </main>
       </div>
+      {isModalOpen && selectedVehicle && (
+        <ReturnConfirmModal
+          company={selectedVehicle.company}
+          number={selectedVehicle.number}
+          info={selectedVehicle.info}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
     </div>
   )
 }
