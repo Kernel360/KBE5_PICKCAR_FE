@@ -15,6 +15,7 @@
     "react-dom": "^19.1.0",
     "react-kakao-maps": "^0.0.13",
     "react-router-dom": "^7.6.1",
+    "sockjs-client": "^1.6.1",
     "tailwindcss": "^4.1.6"
   },
   "devDependencies": {
