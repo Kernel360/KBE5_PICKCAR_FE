@@ -63,6 +63,47 @@ function KakaoMap({ center, zoom, markers, polylinePath }: KakaoMapProps) {
         })
         polyline.setMap(map)
 
+        // Todo : 이미지 파일로
+        // 마커 이미지 URL 정의
+        const startMarkerSrc =
+          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png'
+        const endMarkerSrc =
+          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png'
+        const imageSize = new kakaoMaps.Size(20, 34)
+        const imageOption = { offset: new kakaoMaps.Point(10, 34) }
+
+        // [추가] 출발 지점과 도착 지점 좌표 추출
+        const startPoint = linePath[0]
+        const endPoint = linePath[linePath.length - 1]
+
+        // [추가] 출발/도착 마커 이미지 생성
+        const startMarkerImage = new kakaoMaps.MarkerImage(
+          startMarkerSrc,
+          imageSize,
+          imageOption
+        )
+        const endMarkerImage = new kakaoMaps.MarkerImage(
+          endMarkerSrc,
+          imageSize,
+          imageOption
+        )
+
+        // [추가] 출발 마커 생성 및 표시
+        new kakaoMaps.Marker({
+          map: map,
+          position: startPoint,
+          image: startMarkerImage,
+          title: '출발'
+        })
+
+        // [추가] 도착 마커 생성 및 표시
+        new kakaoMaps.Marker({
+          map: map,
+          position: endPoint,
+          image: endMarkerImage,
+          title: '도착'
+        })
+
         // Polyline이 있을 경우, 지도가 해당 경로를 모두 포함하도록
         // 경계(bounds)를 조정하여 자동으로 중심과 줌 레벨을 맞춤
         const bounds = new kakaoMaps.LatLngBounds()
