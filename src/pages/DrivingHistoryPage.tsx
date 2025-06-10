@@ -12,6 +12,122 @@ import ErrorScreen from '@/components/common/ErrorScreen'
 import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
 import DrivingHistoryBottomBar from '@/components/history/DrivingHistoryBottomBar'
 
+// ------------------------------
+// 임시사용을 위한 주석처리, 변수 선언
+const HISTORY_LOGS: DrivingHistoryEntry[] = [
+  {
+    historyId: 1,
+    licensePlate: '12가 3456',
+    driverName: '김민준',
+    drivingStartedAt: '2023-06-10 08:30',
+    drivingEndedAt: '2023-06-10 17:45',
+    totalDrivingTime: '9시간 15분',
+    totalDistance: 78.5
+  },
+  {
+    historyId: 2,
+    licensePlate: '34나 5678',
+    driverName: '이지은',
+    drivingStartedAt: '2023-06-11 09:15',
+    drivingEndedAt: '2023-06-11 16:30',
+    totalDrivingTime: '7시간 15분',
+    totalDistance: 62.3
+  },
+  {
+    historyId: 3,
+    licensePlate: '56다 7890',
+    driverName: '박준호',
+    drivingStartedAt: '2023-06-12 07:45',
+    drivingEndedAt: '2023-06-12 18:20',
+    totalDrivingTime: '10시간 35분',
+    totalDistance: 112.7
+  },
+  {
+    historyId: 4,
+    licensePlate: '78라 1234',
+    driverName: '최수진',
+    drivingStartedAt: '2023-06-13 10:00',
+    drivingEndedAt: '2023-06-13 15:30',
+    totalDrivingTime: '5시간 30분',
+    totalDistance: 45.2
+  },
+  {
+    historyId: 5,
+    licensePlate: '90마 5678',
+    driverName: '김유정',
+    drivingStartedAt: '2023-06-14 08:15',
+    drivingEndedAt: '2023-06-14 16:45',
+    totalDrivingTime: '8시간 30분',
+    totalDistance: 67.8
+  }
+]
+
+// src/pages/DrivingHistoryPage.tsx 상단에 선언
+const DETAIL_DATA: DrivingHistoryDetail[] = [
+  {
+    historyId: 1,
+    licensePlate: '12가 3456',
+    model: '아반떼',
+    carAge: '3년',
+    reservationStatus: '완료',
+    drivingStartedAt: '2023-06-10 08:30',
+    drivingEndedAt: '2023-06-10 17:45',
+    totalDrivingTime: '9시간 15분',
+    totalDistance: 78.5,
+    driverName: '김민준'
+  },
+  {
+    historyId: 2,
+    licensePlate: '34나 5678',
+    model: 'K5',
+    carAge: '2년',
+    reservationStatus: '취소',
+    drivingStartedAt: '2023-06-11 09:15',
+    drivingEndedAt: '2023-06-11 16:30',
+    totalDrivingTime: '7시간 15분',
+    totalDistance: 62.3,
+    driverName: '이지은'
+  },
+  {
+    historyId: 3,
+    licensePlate: '56다 7890',
+    model: '코란도',
+    carAge: '5년',
+    reservationStatus: '완료',
+    drivingStartedAt: '2023-06-12 07:45',
+    drivingEndedAt: '2023-06-12 18:20',
+    totalDrivingTime: '10시간 35분',
+    totalDistance: 112.7,
+    driverName: '박준호'
+  },
+  {
+    historyId: 4,
+    licensePlate: '78라 1234',
+    model: '투싼',
+    carAge: '1년',
+    reservationStatus: '대기',
+    drivingStartedAt: '2023-06-13 10:00',
+    drivingEndedAt: '2023-06-13 15:30',
+    totalDrivingTime: '5시간 30분',
+    totalDistance: 45.2,
+    driverName: '최수진'
+  },
+  {
+    historyId: 5,
+    licensePlate: '90마 5678',
+    model: '스포티지',
+    carAge: '4년',
+    reservationStatus: '완료',
+    drivingStartedAt: '2023-06-14 08:15',
+    drivingEndedAt: '2023-06-14 16:45',
+    totalDrivingTime: '8시간 30분',
+    totalDistance: 67.8,
+    driverName: '김유정'
+  }
+]
+
+// ------------------------------
+
 // axios 기본 설정
 axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.headers.common['Content-Type'] = 'application/json'
@@ -19,54 +135,60 @@ axios.defaults.withCredentials = true
 
 function DrivingHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [historyLogs, setHistoryLogs] = useState<DrivingHistoryEntry[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [historyLogs, setHistoryLogs] =
+    useState<DrivingHistoryEntry[]>(HISTORY_LOGS)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [detail, setDetail] = useState<DrivingHistoryDetail | null>(null)
   const [page, setPage] = useState(1)
   const PAGE_SIZE = 10
 
-  useEffect(() => {
-    const fetchHistoryLogs = async () => {
-      try {
-        const response = await axios.get('/api/v1/history/list')
-        console.log('API 응답:', response.data)
-        setHistoryLogs(response.data.data)
-        setError(null)
-      } catch (error) {
-        console.error('운행 기록을 가져오는데 실패했습니다:', error)
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
-            setError(
-              `서버 오류: ${error.response.status} - ${error.response.data.message || '알 수 없는 오류'}`
-            )
-          } else if (error.request) {
-            setError(
-              '서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.'
-            )
-          } else {
-            setError('요청을 보내는 중 오류가 발생했습니다.')
-          }
-        } else {
-          setError('알 수 없는 오류가 발생했습니다.')
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
+  // 임시사용을 위한 주석처리, 변수 호출
 
-    fetchHistoryLogs()
-  }, [])
+  // useEffect(() => {
+  //   const fetchHistoryLogs = async () => {
+  //     try {
+  //       const response = await axios.get('/api/v1/history/list')
+  //       console.log('API 응답:', response.data)
+  //       setHistoryLogs(response.data.data)
+  //       setError(null)
+  //     } catch (error) {
+  //       console.error('운행 기록을 가져오는데 실패했습니다:', error)
+  //       if (axios.isAxiosError(error)) {
+  //         if (error.response) {
+  //           setError(
+  //             `서버 오류: ${error.response.status} - ${error.response.data.message || '알 수 없는 오류'}`
+  //           )
+  //         } else if (error.request) {
+  //           setError(
+  //             '서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.'
+  //           )
+  //         } else {
+  //           setError('요청을 보내는 중 오류가 발생했습니다.')
+  //         }
+  //       } else {
+  //         setError('알 수 없는 오류가 발생했습니다.')
+  //       }
+  //     } finally {
+  //       setIsLoading(false)
+  //     }
+  //   }
+
+  //   fetchHistoryLogs()
+  // }, [])
 
   const handleViewHistoryDetails = async (historyId: number) => {
-    try {
-      const res = await axios.get(`/api/v1/history/${historyId}/detail`)
-      setDetail(res.data.data)
-      setIsModalOpen(true)
-    } catch (error) {
-      console.error('상세 정보 요청 실패:', error)
-    }
+    // try {
+    //   const res = await axios.get(`/api/v1/history/${historyId}/detail`)
+    //   setDetail(res.data.data)
+    //   setIsModalOpen(true)
+    // } catch (error) {
+    //   console.error('상세 정보 요청 실패:', error)
+    // }
+    const detail = DETAIL_DATA.find(d => d.historyId === historyId)
+    if (detail) setDetail(detail)
+    setIsModalOpen(true)
   }
 
   const handleCloseModal = () => {
