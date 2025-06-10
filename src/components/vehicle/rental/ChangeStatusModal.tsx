@@ -1,4 +1,5 @@
 import React from 'react'
+import { VehicleStatus } from '@/types/vehicle'
 
 interface ChangeStatusModalProps {
   carNumber: string
@@ -8,10 +9,10 @@ interface ChangeStatusModalProps {
   onCancel: () => void
 }
 
-const statusList = [
-  { label: '이용 가능', value: '이용가능' },
-  { label: '점검중', value: '점검중' },
-  { label: '파손됨', value: '파손됨' }
+const statusOptions = [
+  { value: VehicleStatus.OPERABLE, label: '운행 가능' },
+  { value: VehicleStatus.UNDER_INSPECTION, label: '점검중' },
+  { value: VehicleStatus.DAMAGED, label: '파손됨' }
 ]
 
 export default function ChangeStatusModal({
@@ -42,17 +43,17 @@ export default function ChangeStatusModal({
         </div>
         {/* 상태 선택 */}
         <div className="mb-8 space-y-3">
-          {statusList.map(status => {
+          {statusOptions.map(option => {
             let selectedClass = ''
-            if (selectedStatus === status.value) {
-              switch (status.value) {
-                case '이용가능':
+            if (selectedStatus === option.value) {
+              switch (option.value) {
+                case VehicleStatus.OPERABLE:
                   selectedClass = 'bg-green-100 text-green-700'
                   break
-                case '점검중':
+                case VehicleStatus.UNDER_INSPECTION:
                   selectedClass = 'bg-yellow-200 text-black-500'
                   break
-                case '파손됨':
+                case VehicleStatus.DAMAGED:
                   selectedClass = 'bg-red-100 text-red-500'
                   break
                 default:
@@ -63,13 +64,13 @@ export default function ChangeStatusModal({
             }
             return (
               <button
-                key={status.value}
+                key={option.value}
                 type="button"
-                onClick={() => onSelect(status.value)}
+                onClick={() => onSelect(option.value)}
                 className={`flex w-full items-center justify-between rounded-xl px-6 py-4 text-lg font-medium transition ${selectedClass}`}>
-                <span>{status.label}</span>
+                <span>{option.label}</span>
                 <span className="ml-2 flex h-6 w-6 items-center justify-center">
-                  {selectedStatus === status.value ? (
+                  {selectedStatus === option.value ? (
                     <svg
                       width="24"
                       height="24"

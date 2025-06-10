@@ -6,7 +6,11 @@ import RentalTopBar from '@/components/vehicle/rental/RentalTopBar'
 import ReturnConfirmModal from '@/components/vehicle/rental/ReturnConfirmModal'
 import SelectCompanyModal from '@/components/vehicle/rental/SelectCompanyModal'
 import ChangeStatusModal from '@/components/vehicle/rental/ChangeStatusModal'
-import { VehicleListResponse } from '@/types/vehicle'
+import {
+  VehicleListResponse,
+  VehicleStatus,
+  updateVehicleStatus
+} from '@/types/vehicle'
 
 const companyListData = ['ABC 렌터카', 'XYZ 렌터카', 'DEF 렌터카', 'GHI 렌터카']
 
@@ -70,15 +74,24 @@ export default function Rental() {
   }
 
   // 상태 변경 모달 핸들러
-  const handleChangeStatusConfirm = () => {
+  const handleChangeStatusConfirm = async () => {
     if (changeStatusVehicle && changeStatusValue) {
-      console.log(
-        '상태 변경:',
-        changeStatusVehicle.licensePlate,
-        '→',
-        changeStatusValue
-      )
-      // TODO: 상태 변경 API 호출
+      try {
+        await updateVehicleStatus({
+          vehicleId: changeStatusVehicle.vehicleId,
+          vehicleStatus: changeStatusValue as VehicleStatus
+        })
+        // 성공 후 목록 새로고침
+        window.location.reload()
+      } catch (error) {
+        console.error('상태 변경 실패:', error)
+        // 서버에서 오는 에러 메시지 사용
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : '차량 상태 변경에 실패했습니다.'
+        alert(errorMessage)
+      }
     }
     setIsChangeStatusModalOpen(false)
     setChangeStatusVehicle(null)

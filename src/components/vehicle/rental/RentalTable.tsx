@@ -81,10 +81,10 @@ export default function RentalTable({
               <th className="w-12 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 No
               </th>
-              <th className="w-32 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+              <th className="w-20 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 차량번호
               </th>
-              <th className="w-40 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+              <th className="w-32 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
                 차종
               </th>
               <th className="w-24 px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
@@ -109,10 +109,10 @@ export default function RentalTable({
                 <td className="h-12 w-12 px-4 py-3 text-center text-gray-500">
                   {startIndex + idx + 1}
                 </td>
-                <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="h-12 w-20 truncate px-4 py-3 whitespace-nowrap text-gray-600">
                   {vehicle.licensePlate}
                 </td>
-                <td className="h-12 w-40 truncate px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
                   {vehicle.model}
                 </td>
                 <td className="h-12 w-24 px-4 py-3 whitespace-nowrap">
@@ -145,7 +145,7 @@ export default function RentalTable({
                     <button
                       className="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
                       onClick={() => onReturn(vehicle)}>
-                      회수(X)
+                      회수
                     </button>
                   )}
                   <button
