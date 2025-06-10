@@ -9,24 +9,9 @@ interface ChangeStatusModalProps {
 }
 
 const statusList = [
-  {
-    label: '이용 가능',
-    value: '이용가능',
-    color: 'bg-green-100 text-green-700',
-    check: true
-  },
-  {
-    label: '점검중',
-    value: '점검중',
-    color: 'bg-gray-100 text-gray-400',
-    check: false
-  },
-  {
-    label: '파손됨',
-    value: '파손됨',
-    color: 'bg-red-100 text-red-500',
-    check: false
-  }
+  { label: '이용 가능', value: '이용가능' },
+  { label: '점검중', value: '점검중' },
+  { label: '파손됨', value: '파손됨' }
 ]
 
 export default function ChangeStatusModal({
@@ -60,12 +45,19 @@ export default function ChangeStatusModal({
           {statusList.map(status => {
             let selectedClass = ''
             if (selectedStatus === status.value) {
-              if (status.value === '이용가능')
-                selectedClass = 'bg-green-100 text-green-700'
-              else if (status.value === '점검중')
-                selectedClass = 'bg-yellow-200 text-black-500'
-              else if (status.value === '파손됨')
-                selectedClass = 'bg-red-100 text-red-500'
+              switch (status.value) {
+                case '이용가능':
+                  selectedClass = 'bg-green-100 text-green-700'
+                  break
+                case '점검중':
+                  selectedClass = 'bg-yellow-200 text-black-500'
+                  break
+                case '파손됨':
+                  selectedClass = 'bg-red-100 text-red-500'
+                  break
+                default:
+                  selectedClass = ''
+              }
             } else {
               selectedClass = 'bg-gray-50 text-gray-400'
             }

@@ -1,49 +1,76 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import {
+  VehicleListResponse,
+  VehicleStatus,
+  getVehicleList
+} from '../../../types/vehicle'
 import Pagination from '../../common/Pagination'
 
-interface VehicleRental {
-  number: string
-  info: string
-  status: string
-  company: string
-  date: string
-  action: string
+interface RentalTableProps {
+  search: string
+  filter: string
+  onReturn: (vehicle: VehicleListResponse) => void
+  onChangeStatus: (vehicle: VehicleListResponse) => void
 }
 
-interface VehicleRentalTableProps {
-  vehicles: VehicleRental[]
-  onAction: (number: string, action: string) => void
-  onChangeStatus: (number: string) => void
-}
-
-function VehicleRentalTable({
-  vehicles,
-  onAction,
+export default function RentalTable({
+  search,
+  filter,
+  onReturn,
   onChangeStatus
-}: VehicleRentalTableProps) {
+}: RentalTableProps) {
+  const [vehicles, setVehicles] = useState<VehicleListResponse[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
-  if (!vehicles || vehicles.length === 0) {
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        setIsLoading(true)
+        const data = await getVehicleList()
+        setVehicles(data)
+        setError(null)
+      } catch (err) {
+        setError('차량 목록을 불러오는데 실패했습니다.')
+        console.error('Error fetching vehicles:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchVehicles()
+  }, [])
+
+  const filteredVehicles = vehicles.filter(vehicle => {
+    const matchesSearch = vehicle.licensePlate
+      .toLowerCase()
+      .includes(search.toLowerCase())
+    const matchesFilter = !filter || vehicle.vehicleStatus === filter
+    return matchesSearch && matchesFilter
+  })
+
+  if (isLoading) {
     return (
-      <p className="py-4 text-center text-gray-500">표시할 차량이 없습니다.</p>
+      <div className="flex h-64 items-center justify-center">
+        <div className="text-lg text-gray-500">로딩 중...</div>
+      </div>
     )
   }
 
-  const statusColor: Record<string, string> = {
-    대여중: 'bg-yellow-100 text-yellow-700',
-    이용가능: 'bg-green-100 text-green-700'
+  if (error) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <div className="text-lg text-red-500">{error}</div>
+      </div>
+    )
   }
 
-  const actionColor: Record<string, string> = {
-    회수: 'bg-red-100 text-red-500',
-    대여: 'bg-blue-100 text-blue-500'
-  }
-
-  const totalPages = Math.ceil(vehicles.length / itemsPerPage)
+  const totalPages = Math.ceil(filteredVehicles.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const currentVehicles = vehicles.slice(startIndex, endIndex)
+  const currentVehicles = filteredVehicles.slice(startIndex, endIndex)
 
   return (
     <div className="flex min-h-[600px] flex-col justify-between rounded-lg border border-gray-200 bg-white">
@@ -77,39 +104,53 @@ function VehicleRentalTable({
           <tbody className="divide-y divide-gray-100 border-b border-gray-200">
             {currentVehicles.map((vehicle, idx) => (
               <tr
-                key={vehicle.number}
+                key={vehicle.vehicleId}
                 className="h-12 hover:bg-gray-50">
                 <td className="h-12 w-12 px-4 py-3 text-center text-gray-500">
                   {startIndex + idx + 1}
                 </td>
                 <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
-                  {vehicle.number}
+                  {vehicle.licensePlate}
                 </td>
                 <td className="h-12 w-40 truncate px-4 py-3 whitespace-nowrap text-gray-600">
-                  {vehicle.info}
+                  {vehicle.model}
                 </td>
                 <td className="h-12 w-24 px-4 py-3 whitespace-nowrap">
                   <span
-                    className={`inline-flex w-20 justify-center rounded-full px-2.5 py-1 text-xs font-medium ${statusColor[vehicle.status] || ''}`}>
-                    {vehicle.status}
+                    className={`inline-flex w-20 justify-center rounded-full px-2.5 py-1 text-xs font-medium ${
+                      vehicle.vehicleStatus === VehicleStatus.OPERABLE
+                        ? 'bg-green-100 text-green-800'
+                        : vehicle.vehicleStatus ===
+                            VehicleStatus.UNDER_INSPECTION
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-red-100 text-red-800'
+                    }`}>
+                    {vehicle.vehicleStatus === VehicleStatus.OPERABLE
+                      ? '이용가능'
+                      : vehicle.vehicleStatus === VehicleStatus.UNDER_INSPECTION
+                        ? '점검중'
+                        : '고장'}
                   </span>
                 </td>
                 <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
-                  {vehicle.company}
+                  {vehicle.rentedCompany || '-'}
                 </td>
                 <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">
-                  {vehicle.date}
+                  {vehicle.rentedAt
+                    ? new Date(vehicle.rentedAt).toLocaleDateString()
+                    : '-'}
                 </td>
                 <td className="flex h-12 w-24 gap-2 px-4 py-2 whitespace-nowrap text-gray-600">
+                  {vehicle.rentedCompany && (
+                    <button
+                      className="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
+                      onClick={() => onReturn(vehicle)}>
+                      회수(X)
+                    </button>
+                  )}
                   <button
-                    onClick={() => onAction(vehicle.number, vehicle.action)}
-                    className={`rounded px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none ${actionColor[vehicle.action] || 'bg-gray-100 text-gray-500'}`}>
-                    {vehicle.action}
-                  </button>
-
-                  <button
-                    onClick={() => onChangeStatus(vehicle.number)}
-                    className={`text-black-500 rounded bg-orange-100 px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none`}>
+                    className="rounded bg-orange-100 px-3 py-1 text-xs text-orange-700 hover:bg-orange-200"
+                    onClick={() => onChangeStatus(vehicle)}>
                     상태 변경
                   </button>
                 </td>
@@ -120,8 +161,8 @@ function VehicleRentalTable({
       </div>
       <div className="my-2 flex h-12 w-full items-center justify-between gap-4 border-t border-gray-100 bg-white px-4">
         <div className="text-sm text-gray-500">
-          총 {vehicles.length}개 중 {startIndex + 1}-
-          {Math.min(endIndex, vehicles.length)} 개 표시
+          총 {filteredVehicles.length}개 중 {startIndex + 1}-
+          {Math.min(endIndex, filteredVehicles.length)} 개 표시
         </div>
         <Pagination
           current={currentPage}
@@ -132,5 +173,3 @@ function VehicleRentalTable({
     </div>
   )
 }
-
-export default VehicleRentalTable
