@@ -3,6 +3,7 @@ import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
 import MapControls from '@/components/tracking/MapControls'
 import type { Company, Car } from '@/types/tracking'
+import axios from 'axios'
 import { useEffect, useMemo, useState } from 'react'
 
 /**
@@ -15,6 +16,15 @@ import { useEffect, useMemo, useState } from 'react'
  * 4. 자식 컴포넌트에 Props 전달: 관리하고 있는 상태나 가공된 데이터를 각 자식 컴포넌트(VehicleFilters, VehicleList, MapControls, KakaoMap)에 필요한 props로 전달
  * 5. 화면 레이아웃 구성: 좌측 패널(필터, 차량 목록)과 우측 패널(지도 컨트롤, 지도)의 전체적인 화면 배치를 담당
  */
+
+// [추가] 1. GPX 파일 ID와 차량 번호를 매핑하는 객체
+const GPX_CAR_MAPPING: { [key: string]: string } = {
+  'track1.gpx': '12가 3456',
+  'track2.gpx': '34나 5678',
+  'track3.gpx': '56다 7890',
+  'track4.gpx': '78라 1234',
+  'track5.gpx': '90마 5678'
+}
 
 const initialCompanies: Company[] = [
   { id: 'all', name: '모든 회사' },
@@ -61,15 +71,6 @@ const initialCars: Car[] = [
   }
 ]
 
-const SIMUL_CAR_NUMBER = '12가 3456'
-const SIMUL_LATLNG = [
-  { lat: 37.6129317, lng: 126.9278844 },
-  { lat: 37.607525, lng: 126.932515 },
-  { lat: 37.602822, lng: 126.935169 },
-  { lat: 37.526039, lng: 126.8351948 }
-]
-const SIMUL_INTEVER = 5000
-
 function TrackingCar() {
   const INIT_CENTER = { lat: 37.5665, lng: 126.978 }
   const INIT_ZOOM_LEVEL = 9
@@ -90,31 +91,50 @@ function TrackingCar() {
   })
   const [mapZoom, setMapZoom] = useState<number>(INIT_ZOOM_LEVEL)
 
-  // --- 차량 위치 시뮬레이션 로직 ---
   useEffect(() => {
-    let currentCoordinateIndex = 0
+    // 1. 웹소켓 서버에 연결
+    const ws = new WebSocket('ws://localhost:8084/connect')
 
-    const intervalId = setInterval(() => {
-      setCars(prevCars =>
-        prevCars.map(car => {
-          if (car.number === SIMUL_CAR_NUMBER) {
-            const newCoords = SIMUL_LATLNG[currentCoordinateIndex]
-            console.log(
-              `차량 [${SIMUL_CAR_NUMBER}] 이동: (${newCoords.lat}, ${newCoords.lng})`
-            )
-            return { ...car, lat: newCoords.lat, lng: newCoords.lng }
-          }
-          return car
+    ws.onopen = () => {
+      console.log('WebSocket 서버에 연결되었습니다.')
+      // axios를 사용하여 스트리밍 시작 요청
+      axios
+        .get('http://localhost:8084/api/v1/trackingcars')
+        .then(response => {
+          console.log('스트리밍 시작 요청 결과 :', response.data.message)
         })
-      )
+        .catch(error => {
+          console.error('스트리밍 시작 요청 오류 :', error)
+        })
+    }
 
-      currentCoordinateIndex =
-        (currentCoordinateIndex + 1) % SIMUL_LATLNG.length // 다음 좌표로 순환
-    }, SIMUL_INTEVER)
+    ws.onmessage = (event: MessageEvent) => {
+      const data = JSON.parse(event.data)
+      console.log('메시지 수신 :', data)
+      const carNumberToUpdate = GPX_CAR_MAPPING[data.id]
+
+      if (carNumberToUpdate) {
+        setCars(prevCars =>
+          prevCars.map(car =>
+            car.number === carNumberToUpdate
+              ? { ...car, lat: data.lat, lng: data.lon }
+              : car
+          )
+        )
+      }
+    }
+
+    ws.onclose = () => {
+      console.log('WebSocket 서버와의 연결이 끊어짐.')
+    }
+
+    ws.onerror = (error: Event) => {
+      console.error('WebSocket 오류:', error)
+    }
 
     return () => {
-      clearInterval(intervalId)
-      console.log('차량 시뮬레이션 인터벌이 정리되었습니다.')
+      console.log('----end-----')
+      ws.close()
     }
   }, [])
 
@@ -135,7 +155,7 @@ function TrackingCar() {
   }, [cars, selectedCompany, searchTerm])
 
   const carMarkers = useMemo(() => {
-    return filteredCars.map((car, index) => ({
+    return filteredCars.map(car => ({
       // 필터된 차량만 마커로 표시
       lat: car.lat,
       lng: car.lng,
