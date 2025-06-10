@@ -18,12 +18,14 @@ declare namespace kakao {
       getCenter(): LatLng
       setCenter(latlng: LatLng): void
       setLevel(level: number): void
+      setBounds(bounds: LatLngBounds): void
     }
 
     export interface MarkerOptions {
       position: LatLng
       map?: Map
       title?: string
+      image?: MarkerImage
     }
 
     export class Marker {
@@ -40,6 +42,16 @@ declare namespace kakao {
     export class CustomOverlay {
       constructor(options: CustomOverlayOptions)
       setMap(map: Map | null): void
+    }
+
+    export class Polyline {
+      constructor(options: PolylineOptions)
+      setMap(map: Map | null): void
+    }
+
+    export class LatLngBounds {
+      constructor()
+      extend(latlng: LatLng): void
     }
 
     // kakao.maps.load 함수 타입 정의 (컴포넌트에서 사용되므로 추가)
@@ -59,6 +71,11 @@ declare global {
         Map: typeof kakao.maps.Map
         Marker: typeof kakao.maps.Marker
         CustomOverlay: typeof kakao.maps.CustomOverlay
+        Polyline: typeof kakao.maps.Polyline
+        LatLngBounds: typeof kakao.maps.LatLngBounds
+        Size: typeof kakao.maps.Size
+        Point: typeof kakao.maps.Point
+        MarkerImage: typeof kakao.maps.MarkerImage
         // kakao.maps.load 함수 참조
         load: typeof kakao.maps.load
       }
