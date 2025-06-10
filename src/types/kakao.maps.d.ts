@@ -42,6 +42,16 @@ declare namespace kakao {
       setMap(map: Map | null): void
     }
 
+    export class Polyline {
+      constructor(options: PolylineOptions)
+      setMap(map: Map | null): void
+    }
+
+    export class LatLngBounds {
+      constructor()
+      extend(latlng: LatLng): void
+    }
+
     // kakao.maps.load 함수 타입 정의 (컴포넌트에서 사용되므로 추가)
     export function load(callback: () => void): void
   }
@@ -59,6 +69,8 @@ declare global {
         Map: typeof kakao.maps.Map
         Marker: typeof kakao.maps.Marker
         CustomOverlay: typeof kakao.maps.CustomOverlay
+        Polyline: typeof kakao.maps.Polyline
+        LatLngBounds: typeof kakao.maps.LatLngBounds
         // kakao.maps.load 함수 참조
         load: typeof kakao.maps.load
       }

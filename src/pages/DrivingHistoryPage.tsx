@@ -11,6 +11,7 @@ import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
 import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
 import DrivingHistoryBottomBar from '@/components/history/DrivingHistoryBottomBar'
+import { gpxPath } from '@/data/gpxPath'
 
 // ------------------------------
 // 임시사용을 위한 주석처리, 변수 선언
@@ -145,6 +146,10 @@ function DrivingHistoryPage() {
   const PAGE_SIZE = 10
 
   // 임시사용을 위한 주석처리, 변수 호출
+  // [추가] 2. 모달에 표시할 이동 경로 데이터를 위한 상태
+  const [detailPath, setDetailPath] = useState<{ lat: number; lng: number }[]>(
+    []
+  )
 
   // useEffect(() => {
   //   const fetchHistoryLogs = async () => {
@@ -186,8 +191,20 @@ function DrivingHistoryPage() {
     // } catch (error) {
     //   console.error('상세 정보 요청 실패:', error)
     // }
-    const detail = DETAIL_DATA.find(d => d.historyId === historyId)
-    if (detail) setDetail(detail)
+    const detailData = DETAIL_DATA.find(d => d.historyId === historyId)
+    if (detailData) {
+      setDetail(detailData)
+
+      // historyId가 1일 경우에만 gpxPath를 경로로 설정
+      if (historyId === 1) {
+        // gpxPath의 lon을 lng로 변환하여 저장
+        const polylinePath = gpxPath.map(p => ({ lat: p.lat, lng: p.lng }))
+        setDetailPath(polylinePath)
+      } else {
+        // 다른 항목의 경우 빈 배열로 설정하여 경로가 표시되지 않도록 함
+        setDetailPath([])
+      }
+    }
     setIsModalOpen(true)
   }
 
@@ -242,6 +259,7 @@ function DrivingHistoryPage() {
           open={isModalOpen}
           onClose={handleCloseModal}
           detail={detail}
+          polylinePath={detailPath}
         />
       </main>
     </div>
