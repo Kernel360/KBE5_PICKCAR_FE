@@ -28,6 +28,18 @@ export interface UpdateVehicleStatusRequest {
   vehicleStatus: VehicleStatus
 }
 
+export interface RegisterVehicleRequest {
+  vehicleInfo: {
+    model: string
+    color: string
+    licensePlate: string
+    carAge: string
+    brandName: string
+    fuelType: string
+  }
+  hasGps: boolean
+}
+
 export const getVehicleList = async (): Promise<VehicleListResponse[]> => {
   const response = await fetch('http://localhost:8080/api/v1/vehicles')
   if (!response.ok) {
@@ -52,6 +64,25 @@ export const updateVehicleStatus = async (
     const errorData = await response.json()
     throw new Error(
       errorData.errorReason?.reason || '차량 상태 변경에 실패했습니다.'
+    )
+  }
+}
+
+export const registerVehicle = async (
+  request: RegisterVehicleRequest
+): Promise<void> => {
+  const response = await fetch('http://localhost:8080/api/v1/vehicles', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(request)
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(
+      errorData.errorReason?.reason || '차량 등록에 실패했습니다.'
     )
   }
 }

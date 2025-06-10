@@ -3,6 +3,7 @@ import Header from '@/components/common/Header'
 import VehicleAsideBar from '@/components/vehicle/common/VehicleAsideBar'
 import RegisterCarInfoSection from '@/components/vehicle/register/RegisterCarInfoSection'
 import RegisterCheckModal from '@/components/vehicle/register/RegisterCheckModal'
+import { registerVehicle } from '@/types/vehicle'
 
 export default function VehicleRegisterPage() {
   const [manufacturer, setManufacturer] = useState('')
@@ -44,11 +45,40 @@ export default function VehicleRegisterPage() {
     setShowConfirmModal(true)
   }
 
-  const handleConfirm = () => {
-    setShowConfirmModal(false)
-    setIsRegistered(true)
-    setTimeout(() => setIsRegistered(false), 1500)
-    // 실제 등록 처리 로직을 이곳에 추가
+  const handleConfirm = async () => {
+    try {
+      // fuelType 매핑
+      const fuelTypeMap: { [key: string]: string } = {
+        LPG: 'LPG',
+        휘발유: 'PETROL',
+        경유: 'DIESEL',
+        전기: 'ELECTRIC',
+        기타: 'PETROL' // 기타는 기본값으로 휘발유로 설정
+      }
+
+      const request = {
+        vehicleInfo: {
+          model: model,
+          color: color,
+          licensePlate: carNumber,
+          carAge: year,
+          brandName:
+            manufacturer === 'custom' ? customManufacturer : manufacturer,
+          fuelType: fuelTypeMap[fuelType] || 'PETROL'
+        },
+        hasGps: hasGps === '예'
+      }
+
+      await registerVehicle(request)
+      setShowConfirmModal(false)
+      setIsRegistered(true)
+      setTimeout(() => setIsRegistered(false), 1500)
+    } catch (error) {
+      console.error('차량 등록 실패:', error)
+      alert(
+        error instanceof Error ? error.message : '차량 등록에 실패했습니다.'
+      )
+    }
   }
 
   return (
