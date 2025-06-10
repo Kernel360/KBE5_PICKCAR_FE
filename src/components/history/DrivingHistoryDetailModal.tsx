@@ -6,7 +6,6 @@ interface Props {
   open: boolean
   onClose: () => void
   detail: DrivingHistoryDetail | null
-  polylinePath: { lat: number; lng: number }[]
 }
 
 const statusMap: Record<string, { label: string; color: string }> = {
@@ -17,14 +16,7 @@ const statusMap: Record<string, { label: string; color: string }> = {
 
 const INIT_CENTER = { lat: 37.5665, lng: 126.978 }
 
-const DrivingHistoryDetailModal = ({
-  open,
-  onClose,
-  detail,
-  polylinePath
-}: Props) => {
-  console.log('Modal received polylinePath:', polylinePath)
-
+const DrivingHistoryDetailModal = ({ open, onClose, detail }: Props) => {
   if (!open || !detail) return null
 
   const status = statusMap[detail.reservationStatus] || {
@@ -116,13 +108,8 @@ const DrivingHistoryDetailModal = ({
           <div className="mb-2 font-semibold text-gray-700">이동 경로</div>
           <div className="flex h-70 items-center justify-center rounded-lg bg-[#eaf3fb] text-gray-400">
             <KakaoMap
-              center={
-                polylinePath && polylinePath.length > 0
-                  ? polylinePath[0]
-                  : INIT_CENTER
-              }
-              // zoom prop을 아예 전달하지 않습니다.
-              polylinePath={polylinePath}
+              center={INIT_CENTER}
+              zoom={3}
             />
           </div>
         </div>

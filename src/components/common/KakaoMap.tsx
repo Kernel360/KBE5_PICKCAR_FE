@@ -1,124 +1,127 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import MarkerComponent from './MarkerComponent'
 
-// 컴포넌트가 받을 props의 타입을 정의
 interface KakaoMapProps {
-  center?: { lat: number; lng: number }
-  zoom?: number
+  center: { lat: number; lng: number }
+  zoom: number
   markers?: { lat: number; lng: number; label: string }[]
-  polylinePath?: { lat: number; lng: number }[]
 }
 
-/**
- * 카카오맵과 마커, Polyline을 렌더링하는 범용적인 지도 컴포넌트.
- */
-function KakaoMap({ center, zoom, markers, polylinePath }: KakaoMapProps) {
-  const mapRef = useRef<HTMLDivElement>(null)
+function KakaoMap({ center, zoom, markers }: KakaoMapProps) {
+  const mapElement = useRef<HTMLDivElement>(null)
+  const mapInstance = useRef<kakao.maps.Map | null>(null)
+  const [isMapReady, setIsMapReady] = useState(false) // 지도 준비 완료 상태
 
   useEffect(() => {
-    // window.kakao와 load 함수, 그리고 지도를 그릴 div가 준비되었는지 확인
-    if (!mapRef.current || !window.kakao?.maps?.load) {
-      return
+    const initializeOrUpdateMap = () => {
+      if (!mapElement.current) {
+        console.error('mapElement ref가 현재 유효하지 않음.')
+        return
+      }
+
+      if (
+        window.kakao &&
+        window.kakao.maps &&
+        window.kakao.maps.LatLng &&
+        window.kakao.maps.Map
+      ) {
+        const kakaoMaps = window.kakao.maps
+        const mapCenter = new kakaoMaps.LatLng(center.lat, center.lng)
+
+        if (!mapInstance.current) {
+          const mapOptions: kakao.maps.MapOptions = {
+            center: mapCenter,
+            level: zoom
+          }
+          try {
+            const newMap = new kakaoMaps.Map(mapElement.current, mapOptions)
+            mapInstance.current = newMap
+            setIsMapReady(true) // 지도 인스턴스 생성 후 상태 업데이트!
+            console.log('Kakao Map instance created:', newMap)
+          } catch (error) {
+            console.error('Kakao Map 인스턴스 생성 중 오류:', error)
+            setIsMapReady(false) // 오류 발생 시 false로 설정 (선택적)
+          }
+        } else {
+          // 이미 인스턴스가 있으면 중심과 줌 레벨만 업데이트
+          mapInstance.current.setCenter(mapCenter)
+          mapInstance.current.setLevel(zoom)
+          if (!isMapReady) setIsMapReady(true) // 혹시 모를 경우 대비
+        }
+      } else {
+        console.error('카카오 지도 API의 객체 없음.')
+        setIsMapReady(false) // API 접근 불가 시 false로 설정 (선택적)
+      }
     }
 
-    // kakao.maps.load를 사용하여 라이브러리가 완전히 로드된 후 지도 관련 로직 실행
-    window.kakao.maps.load(() => {
-      const mapContainer = mapRef.current
-      if (!mapContainer) return
+    // Kakao Maps SDK 로드 로직은 동일하게 유지
+    const scriptId = 'kakao-map-script'
+    const kakaoScript = document.getElementById(
+      scriptId
+    ) as HTMLScriptElement | null
+    console.log('-----')
+    console.log(kakaoScript)
+    let scriptLoadHandler: (() => void) | null = null
 
-      const kakaoMaps = window.kakao.maps
-
-      // 1. 지도 생성
-      const mapOptions = {
-        center: new kakaoMaps.LatLng(
-          center?.lat || 37.5665,
-          center?.lng || 126.978
-        ),
-        level: zoom || 9
+    if (
+      window.kakao &&
+      window.kakao.maps &&
+      typeof window.kakao.maps.load === 'function'
+    ) {
+      window.kakao.maps.load(initializeOrUpdateMap)
+    } else if (kakaoScript) {
+      scriptLoadHandler = () => {
+        if (
+          window.kakao &&
+          window.kakao.maps &&
+          typeof window.kakao.maps.load === 'function'
+        ) {
+          window.kakao.maps.load(initializeOrUpdateMap)
+        } else if (window.kakao && window.kakao.maps) {
+          initializeOrUpdateMap()
+        } else {
+          console.error('스크립트 로드 후에도 kakao.maps API를 사용할 수 없음.')
+          setIsMapReady(false)
+        }
       }
-      const map = new kakaoMaps.Map(mapContainer, mapOptions)
+      console.log(scriptLoadHandler)
+      kakaoScript.addEventListener('load', scriptLoadHandler)
+    } else {
+      console.error(
+        `ID가 '${scriptId}'인 카카오 지도 스크립트 태그를 찾을 수 없습니다. HTML을 확인해주세요.`
+      )
+      setIsMapReady(false)
+    }
 
-      // 2. 마커 표시 로직
-      if (markers && markers.length > 0) {
-        markers.forEach(markerInfo => {
-          new kakaoMaps.Marker({
-            position: new kakaoMaps.LatLng(markerInfo.lat, markerInfo.lng),
-            map: map,
-            title: markerInfo.label
-          })
-        })
+    return () => {
+      if (kakaoScript && scriptLoadHandler) {
+        kakaoScript.removeEventListener('load', scriptLoadHandler)
       }
+    }
+  }, [center, zoom])
 
-      // 3. Polyline(선) 표시 로직
-      if (polylinePath && polylinePath.length > 0) {
-        const linePath = polylinePath.map(
-          pos => new kakaoMaps.LatLng(pos.lat, pos.lng)
-        )
-
-        const polyline = new kakaoMaps.Polyline({
-          path: linePath,
-          strokeWeight: 5,
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.7,
-          strokeStyle: 'solid'
-        })
-        polyline.setMap(map)
-
-        // Todo : 이미지 파일로
-        // 마커 이미지 URL 정의
-        const startMarkerSrc =
-          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png'
-        const endMarkerSrc =
-          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png'
-        const imageSize = new kakaoMaps.Size(20, 34)
-        const imageOption = { offset: new kakaoMaps.Point(10, 34) }
-
-        // [추가] 출발 지점과 도착 지점 좌표 추출
-        const startPoint = linePath[0]
-        const endPoint = linePath[linePath.length - 1]
-
-        // [추가] 출발/도착 마커 이미지 생성
-        const startMarkerImage = new kakaoMaps.MarkerImage(
-          startMarkerSrc,
-          imageSize,
-          imageOption
-        )
-        const endMarkerImage = new kakaoMaps.MarkerImage(
-          endMarkerSrc,
-          imageSize,
-          imageOption
-        )
-
-        // [추가] 출발 마커 생성 및 표시
-        new kakaoMaps.Marker({
-          map: map,
-          position: startPoint,
-          image: startMarkerImage,
-          title: '출발'
-        })
-
-        // [추가] 도착 마커 생성 및 표시
-        new kakaoMaps.Marker({
-          map: map,
-          position: endPoint,
-          image: endMarkerImage,
-          title: '도착'
-        })
-
-        // Polyline이 있을 경우, 지도가 해당 경로를 모두 포함하도록
-        // 경계(bounds)를 조정하여 자동으로 중심과 줌 레벨을 맞춤
-        const bounds = new kakaoMaps.LatLngBounds()
-        linePath.forEach(point => bounds.extend(point))
-        map.setBounds(bounds)
-      }
-    })
-  }, [center, zoom, markers, polylinePath]) // props가 변경될 때마다 이 effect를 다시 실행
-
-  // 지도를 렌더링할 div
   return (
     <div
-      ref={mapRef}
-      style={{ width: '100%', height: '100%' }}
-    />
+      ref={mapElement}
+      className="h-full w-full">
+      {/* isMapReady 상태와 mapInstance.current가 모두 유효할 때만 마커를 렌더링 */}
+      {isMapReady &&
+        mapInstance.current &&
+        markers &&
+        markers.map(
+          (
+            markerInfo // index는 key가 label로 고유하면 불필요
+          ) => (
+            <MarkerComponent
+              key={markerInfo.label} // 차량 번호가 고유하다고 가정
+              map={mapInstance.current!}
+              lat={markerInfo.lat}
+              lng={markerInfo.lng}
+              label={markerInfo.label}
+            />
+          )
+        )}
+    </div>
   )
 }
 
