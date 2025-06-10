@@ -1,9 +1,22 @@
 export interface DrivingHistoryEntry {
-  id: string
-  vehicleNumber: string
-  startTime: string
-  endTime: string
-  duration: string
-  distance: string
-  location: string
+  historyId: number
+  licensePlate: string
+  driverName: string
+  drivingStartedAt: string
+  drivingEndedAt: string
+  totalDrivingTime: string
+  totalDistance: number
+}
+
+export interface DrivingHistoryDetail {
+  historyId: number
+  licensePlate: string
+  model: string
+  carAge: string
+  reservationStatus: string
+  drivingStartedAt: string
+  drivingEndedAt: string
+  totalDrivingTime: string
+  totalDistance: number
+  driverName: string
 }

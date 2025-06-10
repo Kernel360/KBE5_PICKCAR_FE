@@ -1,118 +1,127 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom' // useNavigate 임포트
+import React, { useState, useEffect, useMemo } from 'react'
 import DrivingHistoryTable from '@/components/history/DrivingHistoryTable'
-import type { DrivingHistoryEntry } from '@/types/drivingHistory'
+import type {
+  DrivingHistoryEntry,
+  DrivingHistoryDetail
+} from '@/types/drivingHistory'
+import axios from 'axios'
+import DrivingHistoryDetailModal from '@/components/history/DrivingHistoryDetailModal'
+import Header from '@/components/common/Header'
+import LoadingScreen from '@/components/common/LoadingScreen'
+import ErrorScreen from '@/components/common/ErrorScreen'
+import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
+import DrivingHistoryBottomBar from '@/components/history/DrivingHistoryBottomBar'
 
-const sampleDrivingHistoryData: DrivingHistoryEntry[] = [
-  {
-    id: 'T001',
-    vehicleNumber: '12가 3456',
-    startTime: '2023-06-10 08:30',
-    endTime: '2023-06-10 17:45',
-    duration: '9시간 15분',
-    distance: '78.5 km',
-    location: '서울'
-  },
-  {
-    id: 'T002',
-    vehicleNumber: '34나 5678',
-    startTime: '2023-06-11 09:15',
-    endTime: '2023-06-11 16:30',
-    duration: '7시간 15분',
-    distance: '62.3 km',
-    location: '부산'
-  },
-  {
-    id: 'T003',
-    vehicleNumber: '56다 7890',
-    startTime: '2023-06-12 07:45',
-    endTime: '2023-06-12 18:20',
-    duration: '10시간 35분',
-    distance: '112.7 km',
-    location: '인천'
-  },
-  {
-    id: 'T004',
-    vehicleNumber: '78라 1234',
-    startTime: '2023-06-13 10:00',
-    endTime: '2023-06-13 15:30',
-    duration: '5시간 30분',
-    distance: '45.2 km',
-    location: '대구'
-  },
-  {
-    id: 'T005',
-    vehicleNumber: '90마 5678',
-    startTime: '2023-06-14 08:15',
-    endTime: '2023-06-14 16:45',
-    duration: '8시간 30분',
-    distance: '67.8 km',
-    location: '광주'
-  }
-]
+// axios 기본 설정
+axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.defaults.withCredentials = true
 
 function DrivingHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [historyLogs, setHistoryLogs] = useState<DrivingHistoryEntry[]>(
-    sampleDrivingHistoryData
-  )
-  const navigate = useNavigate()
+  const [historyLogs, setHistoryLogs] = useState<DrivingHistoryEntry[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [detail, setDetail] = useState<DrivingHistoryDetail | null>(null)
+  const [page, setPage] = useState(1)
+  const PAGE_SIZE = 10
 
-  const handleViewHistoryDetails = (logId: string) => {
-    console.log('상세보기 클릭 (라우팅 예정):', logId)
-    navigate(`/driving-history/${logId}`)
+  useEffect(() => {
+    const fetchHistoryLogs = async () => {
+      try {
+        const response = await axios.get('/api/v1/history/list')
+        console.log('API 응답:', response.data)
+        setHistoryLogs(response.data.data)
+        setError(null)
+      } catch (error) {
+        console.error('운행 기록을 가져오는데 실패했습니다:', error)
+        if (axios.isAxiosError(error)) {
+          if (error.response) {
+            setError(
+              `서버 오류: ${error.response.status} - ${error.response.data.message || '알 수 없는 오류'}`
+            )
+          } else if (error.request) {
+            setError(
+              '서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.'
+            )
+          } else {
+            setError('요청을 보내는 중 오류가 발생했습니다.')
+          }
+        } else {
+          setError('알 수 없는 오류가 발생했습니다.')
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchHistoryLogs()
+  }, [])
+
+  const handleViewHistoryDetails = async (historyId: number) => {
+    try {
+      const res = await axios.get(`/api/v1/history/${historyId}/detail`)
+      setDetail(res.data.data)
+      setIsModalOpen(true)
+    } catch (error) {
+      console.error('상세 정보 요청 실패:', error)
+    }
   }
 
-  const filteredHistoryLogs = historyLogs.filter(
-    log =>
-      log.vehicleNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.id.toLowerCase().includes(searchTerm.toLowerCase())
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+  }
+
+  const filteredHistoryLogs = useMemo(
+    () =>
+      historyLogs.filter(
+        log =>
+          log.licensePlate.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          log.driverName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          log.historyId.toString().includes(searchTerm)
+      ),
+    [historyLogs, searchTerm]
   )
 
+  const totalPage = Math.ceil(filteredHistoryLogs.length / PAGE_SIZE)
+  const pagedLogs = useMemo(
+    () => filteredHistoryLogs.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [filteredHistoryLogs, page]
+  )
+
+  if (isLoading) return <LoadingScreen />
+  if (error) return <ErrorScreen message={error} />
+
   return (
-    <div className="min-h-[calc(100vh-96px)] bg-[#f5f8fa] p-6">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">운행 기록</h1>{' '}
-        {/* 타이틀 변경 */}
+    <div className="flex min-h-screen flex-col bg-[#f5f8fa]">
+      <header className="bg-white">
+        <Header activeMenu="driving-history" />
       </header>
-
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <div className="relative flex-grow">
-          <input
-            type="text"
-            placeholder="운행 기록 검색 (차량번호, 위치, ID)..." // 플레이스홀더 변경
-            className="w-full rounded-md border-gray-300 p-2.5 pr-10 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+      <main className="relative flex flex-1 flex-col p-6">
+        <DrivingHistoryTopBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+        <div
+          className={`min-h-[400px] flex-1 flex-col rounded-2xl bg-white p-0 shadow`}>
+          <DrivingHistoryTable
+            logs={pagedLogs}
+            onViewDetails={handleViewHistoryDetails}
           />
-          <span className="pointer-events-none absolute inset-y-0 right-0 grid w-10 place-content-center text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-5 w-5">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-              />
-            </svg>
-          </span>
         </div>
-      </div>
-
-      <DrivingHistoryTable
-        logs={filteredHistoryLogs}
-        onViewDetails={handleViewHistoryDetails}
-      />
-
-      <div className="mt-6 text-sm text-gray-500">
-        총 {filteredHistoryLogs.length}개 중 1-
-        {Math.min(filteredHistoryLogs.length, 10)} 표시
-      </div>
+        <DrivingHistoryBottomBar
+          page={page}
+          setPage={setPage}
+          totalPage={totalPage}
+          filteredCount={filteredHistoryLogs.length}
+        />
+        <DrivingHistoryDetailModal
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          detail={detail}
+        />
+      </main>
     </div>
   )
 }
