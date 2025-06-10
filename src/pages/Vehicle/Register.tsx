@@ -5,6 +5,19 @@ import RegisterCarInfoSection from '@/components/vehicle/register/RegisterCarInf
 import RegisterCheckModal from '@/components/vehicle/register/RegisterCheckModal'
 import { registerVehicle } from '@/types/vehicle'
 
+const FUEL_TYPE_MAP: { [key: string]: string } = {
+  LPG: 'LPG',
+  휘발유: 'PETROL',
+  경유: 'DIESEL',
+  전기: 'ELECTRIC',
+  기타: 'PETROL'
+}
+
+interface FormValidation {
+  value: string | boolean
+  message: string
+}
+
 export default function VehicleRegisterPage() {
   const [manufacturer, setManufacturer] = useState('')
   const [customManufacturer, setCustomManufacturer] = useState('')
@@ -19,9 +32,8 @@ export default function VehicleRegisterPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [isRegistered, setIsRegistered] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const requiredFields = [
+  const validateForm = (): FormValidation | null => {
+    const validations: FormValidation[] = [
       { value: carNumber, message: '차량번호를 입력해 주세요.' },
       { value: model, message: '모델명을 입력해 주세요.' },
       {
@@ -37,9 +49,15 @@ export default function VehicleRegisterPage() {
       { value: fuelType, message: '연료 타입을 선택해 주세요.' },
       { value: hasGps, message: 'GPS 여부를 선택해 주세요.' }
     ]
-    const firstInvalid = requiredFields.find(f => !f.value)
-    if (firstInvalid) {
-      alert(firstInvalid.message)
+
+    return validations.find(v => !v.value) || null
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const invalidField = validateForm()
+    if (invalidField) {
+      alert(invalidField.message)
       return
     }
     setShowConfirmModal(true)
@@ -47,15 +65,6 @@ export default function VehicleRegisterPage() {
 
   const handleConfirm = async () => {
     try {
-      // fuelType 매핑
-      const fuelTypeMap: { [key: string]: string } = {
-        LPG: 'LPG',
-        휘발유: 'PETROL',
-        경유: 'DIESEL',
-        전기: 'ELECTRIC',
-        기타: 'PETROL' // 기타는 기본값으로 휘발유로 설정
-      }
-
       const request = {
         vehicleInfo: {
           model: model,
@@ -64,7 +73,7 @@ export default function VehicleRegisterPage() {
           carAge: year,
           brandName:
             manufacturer === 'custom' ? customManufacturer : manufacturer,
-          fuelType: fuelTypeMap[fuelType] || 'PETROL'
+          fuelType: FUEL_TYPE_MAP[fuelType] || 'PETROL'
         },
         hasGps: hasGps === '예'
       }
@@ -90,7 +99,6 @@ export default function VehicleRegisterPage() {
           <div className="w-full max-w-3xl rounded-2xl bg-white px-14 py-12 shadow-xl">
             <h2 className="mb-8 text-2xl font-bold text-gray-900">차량 등록</h2>
             <form onSubmit={handleSubmit}>
-              {/* 차량 정보 */}
               <RegisterCarInfoSection
                 carNumber={carNumber}
                 setCarNumber={setCarNumber}
@@ -113,7 +121,6 @@ export default function VehicleRegisterPage() {
                 hasGps={hasGps}
                 setHasGps={setHasGps}
               />
-              {/* 버튼 */}
               <div className="flex justify-end gap-3">
                 <button
                   type="submit"
@@ -122,7 +129,6 @@ export default function VehicleRegisterPage() {
                 </button>
               </div>
             </form>
-            {/* 등록 확인 모달 */}
             {showConfirmModal && (
               <RegisterCheckModal
                 carNumber={carNumber}
@@ -139,7 +145,6 @@ export default function VehicleRegisterPage() {
                 onCancel={() => setShowConfirmModal(false)}
               />
             )}
-            {/* 등록 완료 안내 */}
             {isRegistered && (
               <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
                 <div className="rounded-xl bg-white px-8 py-6 text-center text-lg font-semibold text-blue-600 shadow-xl">

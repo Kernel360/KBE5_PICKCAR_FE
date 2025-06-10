@@ -1,5 +1,17 @@
 import React from 'react'
 
+const MODAL_STYLES = {
+  overlay:
+    'bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black',
+  container: 'w-full max-w-md rounded-xl bg-white p-8 shadow-xl',
+  title: 'mb-4 text-lg font-bold text-gray-900',
+  list: 'mb-6 space-y-2 text-sm text-gray-700',
+  buttonContainer: 'flex justify-end gap-2',
+  cancelButton:
+    'rounded border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50',
+  confirmButton: 'rounded bg-blue-600 px-6 py-2 text-white hover:bg-blue-700'
+} as const
+
 interface RegisterCheckModalProps {
   carNumber: string
   model: string
@@ -34,12 +46,12 @@ export default function RegisterCheckModal({
     manufacturer === 'custom' ? customManufacturer : manufacturer
 
   return (
-    <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
-      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-xl">
-        <h3 className="mb-4 text-lg font-bold text-gray-900">
+    <div className={MODAL_STYLES.overlay}>
+      <div className={MODAL_STYLES.container}>
+        <h3 className={MODAL_STYLES.title}>
           입력하신 내용으로 등록하시겠습니까?
         </h3>
-        <ul className="mb-6 space-y-2 text-sm text-gray-700">
+        <ul className={MODAL_STYLES.list}>
           <li>
             <b>차량번호:</b> {carNumber}
           </li>
@@ -65,14 +77,14 @@ export default function RegisterCheckModal({
             <b>GPS 여부:</b> {hasGps}
           </li>
         </ul>
-        <div className="flex justify-end gap-2">
+        <div className={MODAL_STYLES.buttonContainer}>
           <button
-            className="rounded border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50"
+            className={MODAL_STYLES.cancelButton}
             onClick={onCancel}>
             취소
           </button>
           <button
-            className="rounded bg-blue-600 px-6 py-2 text-white hover:bg-blue-700"
+            className={MODAL_STYLES.confirmButton}
             onClick={onConfirm}>
             확인
           </button>

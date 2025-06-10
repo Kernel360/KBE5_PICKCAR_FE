@@ -13,6 +13,18 @@ interface RentalTableProps {
   onChangeStatus: (vehicle: VehicleListResponse) => void
 }
 
+const statusStyles = {
+  [VehicleStatus.OPERABLE]: 'bg-green-100 text-green-800',
+  [VehicleStatus.UNDER_INSPECTION]: 'bg-yellow-100 text-yellow-800',
+  [VehicleStatus.DAMAGED]: 'bg-red-100 text-red-800'
+}
+
+const statusLabels = {
+  [VehicleStatus.OPERABLE]: '이용가능',
+  [VehicleStatus.UNDER_INSPECTION]: '점검중',
+  [VehicleStatus.DAMAGED]: '고장'
+}
+
 export default function RentalTable({
   search,
   filter,
@@ -118,18 +130,9 @@ export default function RentalTable({
                 <td className="h-12 w-24 px-4 py-3 whitespace-nowrap">
                   <span
                     className={`inline-flex w-20 justify-center rounded-full px-2.5 py-1 text-xs font-medium ${
-                      vehicle.vehicleStatus === VehicleStatus.OPERABLE
-                        ? 'bg-green-100 text-green-800'
-                        : vehicle.vehicleStatus ===
-                            VehicleStatus.UNDER_INSPECTION
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
+                      statusStyles[vehicle.vehicleStatus]
                     }`}>
-                    {vehicle.vehicleStatus === VehicleStatus.OPERABLE
-                      ? '이용가능'
-                      : vehicle.vehicleStatus === VehicleStatus.UNDER_INSPECTION
-                        ? '점검중'
-                        : '고장'}
+                    {statusLabels[vehicle.vehicleStatus]}
                   </span>
                 </td>
                 <td className="h-12 w-32 truncate px-4 py-3 whitespace-nowrap text-gray-600">

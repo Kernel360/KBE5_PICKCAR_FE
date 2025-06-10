@@ -1,5 +1,28 @@
 import React from 'react'
 
+const CAR_TYPES = [
+  '소형',
+  '준중형',
+  '중형',
+  '대형 세단',
+  '해치백',
+  'SUV',
+  '밴',
+  'custom'
+] as const
+
+const MANUFACTURERS = ['현대', '기아', '쌍용', 'custom'] as const
+
+const FUEL_TYPES = ['LPG', '휘발유', '경유', '전기', '기타'] as const
+
+const GPS_OPTIONS = ['예', '아니오'] as const
+
+const INPUT_STYLES = {
+  base: 'rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none',
+  select:
+    'rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 focus:outline-none'
+} as const
+
 interface RegisterCarInfoSectionProps {
   carNumber: string
   setCarNumber: (v: string) => void
@@ -58,7 +81,7 @@ export default function RegisterCarInfoSection({
           <input
             id="carNumber"
             name="carNumber"
-            className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none"
+            className={INPUT_STYLES.base}
             placeholder="차량번호 입력"
             value={carNumber}
             onChange={e => setCarNumber(e.target.value)}
@@ -73,7 +96,7 @@ export default function RegisterCarInfoSection({
           <input
             id="model"
             name="model"
-            className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none"
+            className={INPUT_STYLES.base}
             placeholder="모델명 입력 (예: 현대 아반떼, 기아 스포티지)"
             value={model}
             onChange={e => setModel(e.target.value)}
@@ -88,7 +111,7 @@ export default function RegisterCarInfoSection({
           <select
             id="carType"
             name="carType"
-            className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 focus:outline-none"
+            className={INPUT_STYLES.select}
             value={carType}
             onChange={e => setCarType(e.target.value)}>
             <option
@@ -97,20 +120,19 @@ export default function RegisterCarInfoSection({
               hidden={carType !== ''}>
               차종 선택
             </option>
-            <option value="소형">소형</option>
-            <option value="준중형">준중형</option>
-            <option value="중형">중형</option>
-            <option value="대형 세단">대형 세단</option>
-            <option value="해치백">해치백</option>
-            <option value="SUV">SUV</option>
-            <option value="밴">밴</option>
-            <option value="custom">직접 입력</option>
+            {CAR_TYPES.map(type => (
+              <option
+                key={type}
+                value={type}>
+                {type === 'custom' ? '직접 입력' : type}
+              </option>
+            ))}
           </select>
           {carType === 'custom' && (
             <input
               id="customCarType"
               name="customCarType"
-              className="mt-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none"
+              className={`mt-2 ${INPUT_STYLES.base}`}
               placeholder="차종 직접 입력"
               value={customCarType}
               onChange={e => setCustomCarType(e.target.value)}
@@ -126,7 +148,7 @@ export default function RegisterCarInfoSection({
           <select
             id="manufacturer"
             name="manufacturer"
-            className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 focus:outline-none"
+            className={INPUT_STYLES.select}
             value={manufacturer}
             onChange={e => setManufacturer(e.target.value)}>
             <option
@@ -135,16 +157,19 @@ export default function RegisterCarInfoSection({
               hidden={manufacturer !== ''}>
               제조사 선택
             </option>
-            <option value="현대">현대</option>
-            <option value="기아">기아</option>
-            <option value="쌍용">쌍용</option>
-            <option value="custom">직접 입력</option>
+            {MANUFACTURERS.map(maker => (
+              <option
+                key={maker}
+                value={maker}>
+                {maker === 'custom' ? '직접 입력' : maker}
+              </option>
+            ))}
           </select>
           {manufacturer === 'custom' && (
             <input
               id="customManufacturer"
               name="customManufacturer"
-              className="mt-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none"
+              className={`mt-2 ${INPUT_STYLES.base}`}
               placeholder="제조사 직접 입력"
               value={customManufacturer}
               onChange={e => setCustomManufacturer(e.target.value)}
@@ -160,7 +185,7 @@ export default function RegisterCarInfoSection({
           <input
             id="year"
             name="year"
-            className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none"
+            className={INPUT_STYLES.base}
             placeholder="연식 입력 (예: 2023)"
             value={year}
             onChange={e => setYear(e.target.value)}
@@ -175,7 +200,7 @@ export default function RegisterCarInfoSection({
           <input
             id="color"
             name="color"
-            className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none"
+            className={INPUT_STYLES.base}
             placeholder="색상 입력"
             value={color}
             onChange={e => setColor(e.target.value)}
@@ -190,7 +215,7 @@ export default function RegisterCarInfoSection({
           <select
             id="fuelType"
             name="fuelType"
-            className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 focus:outline-none"
+            className={INPUT_STYLES.select}
             value={fuelType}
             onChange={e => setFuelType(e.target.value)}>
             <option
@@ -199,11 +224,13 @@ export default function RegisterCarInfoSection({
               hidden={fuelType !== ''}>
               연료 타입 선택
             </option>
-            <option value="LPG">LPG</option>
-            <option value="휘발유">휘발유</option>
-            <option value="경유">경유</option>
-            <option value="전기">전기</option>
-            <option value="기타">기타</option>
+            {FUEL_TYPES.map(type => (
+              <option
+                key={type}
+                value={type}>
+                {type}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex flex-col gap-1">
@@ -215,7 +242,7 @@ export default function RegisterCarInfoSection({
           <select
             id="hasGps"
             name="hasGps"
-            className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 focus:outline-none"
+            className={INPUT_STYLES.select}
             value={hasGps}
             onChange={e => setHasGps(e.target.value)}>
             <option
@@ -224,8 +251,13 @@ export default function RegisterCarInfoSection({
               hidden={hasGps !== ''}>
               GPS 여부 선택
             </option>
-            <option value="예">예</option>
-            <option value="아니오">아니오</option>
+            {GPS_OPTIONS.map(option => (
+              <option
+                key={option}
+                value={option}>
+                {option}
+              </option>
+            ))}
           </select>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { VehicleStatus } from '@/types/vehicle'
 
 interface RentalTopBarProps {
   search: string
@@ -8,6 +9,12 @@ interface RentalTopBarProps {
 }
 
 const inputStyles = 'rounded border border-gray-300 bg-white px-3 py-2 text-sm'
+
+const statusOptions = [
+  { value: VehicleStatus.OPERABLE, label: '이용가능' },
+  { value: VehicleStatus.UNDER_INSPECTION, label: '점검중' },
+  { value: VehicleStatus.DAMAGED, label: '고장' }
+]
 
 export default function RentalTopBar({
   search,
@@ -45,8 +52,13 @@ export default function RentalTopBar({
             value={filter}
             onChange={e => setFilter(e.target.value)}>
             <option value="">상태 필터</option>
-            <option value="대여중">대여중</option>
-            <option value="이용가능">이용가능</option>
+            {statusOptions.map(option => (
+              <option
+                key={option.value}
+                value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
       </div>
