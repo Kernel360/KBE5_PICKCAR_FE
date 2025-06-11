@@ -1,4 +1,3 @@
-import React from 'react'
 import type { DrivingHistoryEntry } from '@/types/drivingHistory'
 
 interface DrivingHistoryTableProps {

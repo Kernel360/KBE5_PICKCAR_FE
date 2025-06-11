@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import DrivingHistoryTable from '@/components/history/DrivingHistoryTable'
 import type {
   DrivingHistoryEntry,
@@ -136,10 +136,9 @@ axios.defaults.withCredentials = true
 
 function DrivingHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [historyLogs, setHistoryLogs] =
-    useState<DrivingHistoryEntry[]>(HISTORY_LOGS)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [historyLogs] = useState<DrivingHistoryEntry[]>(HISTORY_LOGS)
+  const [isLoading] = useState(false)
+  const [error] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [detail, setDetail] = useState<DrivingHistoryDetail | null>(null)
   const [page, setPage] = useState(1)

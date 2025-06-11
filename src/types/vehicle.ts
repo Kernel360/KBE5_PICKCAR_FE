@@ -1,3 +1,5 @@
+import type { ApiResponse } from './common/ApiResponse'
+
 export enum VehicleStatus {
   OPERABLE = 'OPERABLE',
   UNDER_INSPECTION = 'UNDER_INSPECTION',
@@ -12,15 +14,6 @@ export interface VehicleListResponse {
   vehicleStatus: VehicleStatus
   rentedCompany: string | null
   rentedAt: string | null
-}
-
-export interface ApiResponse<T> {
-  responseInfo: {
-    isSuccess: boolean
-    statusCode: number
-    timeStamp: string
-  }
-  data: T
 }
 
 export interface UpdateVehicleStatusRequest {

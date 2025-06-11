@@ -1,7 +1,12 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import type {
+  KakaoMap,
+  KakaoMarker,
+  KakaoCustomOverlay
+} from '../../types/kakao'
 
 interface MarkerComponentProps {
-  map: kakao.maps.Map
+  map: KakaoMap
   lat: number
   lng: number
   label: string
@@ -9,8 +14,8 @@ interface MarkerComponentProps {
 
 function MarkerComponent({ map, lat, lng, label }: MarkerComponentProps): null {
   // 마커와 커스텀 오버레이 인스턴스를 ref로 관리
-  const markerRef = useRef<kakao.maps.Marker | null>(null)
-  const customOverlayRef = useRef<kakao.maps.CustomOverlay | null>(null)
+  const markerRef = useRef<KakaoMarker | null>(null)
+  const customOverlayRef = useRef<KakaoCustomOverlay | null>(null)
 
   useEffect(() => {
     // 카카오맵 API가 로드되었는지 확인
