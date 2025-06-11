@@ -22,10 +22,13 @@ axios.defaults.withCredentials = true
 function DrivingHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
 <<<<<<< HEAD
+<<<<<<< HEAD
   const [historyLogs] = useState<DrivingHistoryEntry[]>(HISTORY_LOGS)
   const [isLoading] = useState(false)
   const [error] = useState<string | null>(null)
 =======
+=======
+>>>>>>> 7e0f2801ab6113db843b99233a218f5c70025801
   const [historyLogs, setHistoryLogs] = useState<DrivingHistoryEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
