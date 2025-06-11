@@ -3,7 +3,8 @@ import Header from '@/components/common/Header'
 import VehicleAsideBar from '@/components/vehicle/common/VehicleAsideBar'
 import RegisterCarInfoSection from '@/components/vehicle/register/RegisterCarInfoSection'
 import RegisterCheckModal from '@/components/vehicle/register/RegisterCheckModal'
-import { registerVehicle } from '@/types/vehicle'
+import { RegisterVehicleRequest } from '@/types/vehicle'
+import axios from 'axios'
 
 const FUEL_TYPE_MAP: { [key: string]: string } = {
   LPG: 'LPG',
@@ -11,6 +12,25 @@ const FUEL_TYPE_MAP: { [key: string]: string } = {
   경유: 'DIESEL',
   전기: 'ELECTRIC',
   기타: 'PETROL'
+}
+
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
+axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.defaults.withCredentials = true
+
+const registerVehicle = async (
+  request: RegisterVehicleRequest
+): Promise<void> => {
+  try {
+    await axios.post('/api/v1/vehicles', request)
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data) {
+      throw new Error(
+        error.response.data.errorReason?.reason || '차량 등록에 실패했습니다.'
+      )
+    }
+    throw new Error('차량 등록에 실패했습니다.')
+  }
 }
 
 interface FormValidation {

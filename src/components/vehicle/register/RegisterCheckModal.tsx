@@ -1,5 +1,3 @@
-import React from 'react'
-
 const MODAL_STYLES = {
   overlay:
     'bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black',

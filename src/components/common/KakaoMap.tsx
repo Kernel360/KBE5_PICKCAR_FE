@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 // 컴포넌트가 받을 props의 타입을 정의
 interface KakaoMapProps {
@@ -23,7 +23,7 @@ function KakaoMap({ center, zoom, markers, polylinePath }: KakaoMapProps) {
     // kakao.maps.load를 사용하여 라이브러리가 완전히 로드된 후 지도 관련 로직 실행
     window.kakao.maps.load(() => {
       const mapContainer = mapRef.current
-      if (!mapContainer) return
+      if (!mapContainer || !window.kakao?.maps) return
 
       const kakaoMaps = window.kakao.maps
 

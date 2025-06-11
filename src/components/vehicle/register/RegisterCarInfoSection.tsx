@@ -1,5 +1,3 @@
-import React from 'react'
-
 const CAR_TYPES = [
   '소형',
   '준중형',

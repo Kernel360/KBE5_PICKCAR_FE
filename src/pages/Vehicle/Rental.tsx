@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Header from '@/components/common/Header'
 import RentalTable from '@/components/vehicle/rental/RentalTable'
 import ManagementAsideBar from '@/components/vehicle/common/VehicleAsideBar'
@@ -9,14 +9,35 @@ import ChangeStatusModal from '@/components/vehicle/rental/ChangeStatusModal'
 import {
   VehicleListResponse,
   VehicleStatus,
-  updateVehicleStatus
+  UpdateVehicleStatusRequest
 } from '@/types/vehicle'
+import axios from 'axios'
 
 const COMPANY_LIST = ['ABC 렌터카', 'XYZ 렌터카', 'DEF 렌터카', 'GHI 렌터카']
 
 interface ModalState {
   isOpen: boolean
   vehicle: VehicleListResponse | null
+}
+
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
+axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.defaults.withCredentials = true
+
+const updateVehicleStatus = async (
+  request: UpdateVehicleStatusRequest
+): Promise<void> => {
+  try {
+    await axios.patch('/api/v1/vehicles', request)
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data) {
+      throw new Error(
+        error.response.data.errorReason?.reason ||
+          '차량 상태 변경에 실패했습니다.'
+      )
+    }
+    throw new Error('차량 상태 변경에 실패했습니다.')
+  }
 }
 
 export default function Rental() {
