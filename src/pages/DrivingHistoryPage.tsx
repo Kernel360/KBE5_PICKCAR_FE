@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import DrivingHistoryTable from '@/components/history/DrivingHistoryTable'
 import type {
   DrivingHistoryEntry,
@@ -12,7 +12,6 @@ import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
 import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
 import DrivingHistoryBottomBar from '@/components/history/DrivingHistoryBottomBar'
-import { gpxPath } from '@/data/gpxPath'
 
 // axios 기본 설정
 axios.defaults.baseURL = 'http://localhost:8080'
@@ -21,18 +20,9 @@ axios.defaults.withCredentials = true
 
 function DrivingHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
-<<<<<<< HEAD
-<<<<<<< HEAD
-  const [historyLogs] = useState<DrivingHistoryEntry[]>(HISTORY_LOGS)
-  const [isLoading] = useState(false)
-  const [error] = useState<string | null>(null)
-=======
-=======
->>>>>>> 7e0f2801ab6113db843b99233a218f5c70025801
   const [historyLogs, setHistoryLogs] = useState<DrivingHistoryEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
->>>>>>> 7e0f2801ab6113db843b99233a218f5c70025801
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [detail, setDetail] = useState<DrivingHistoryDetail | null>(null)
   const [page, setPage] = useState(1)
