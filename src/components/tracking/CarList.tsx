@@ -9,12 +9,12 @@ import type { Car } from '@/types/tracking'
 
 interface CarListProps {
   cars: Car[]
-  selectedCarNumber: string | null
-  onSelectCar: (carNumber: string) => void
+  selectedVehicleId: number | null
+  onSelectCar: (vehicleId: number) => void
 }
 function CarList({
   cars,
-  selectedCarNumber,
+  selectedVehicleId,
   onSelectCar
 }: CarListProps): React.ReactElement {
   return (
@@ -26,10 +26,10 @@ function CarList({
       ) : (
         cars.map(car => (
           <CarListItem
-            key={car.number} // 차량 번호가 고유하다고 가정
+            key={car.vehicleId} // 차량 번호가 고유하다고 가정
             car={car}
-            isSelected={selectedCarNumber === car.number}
-            onViewDetails={onSelectCar}
+            isSelected={selectedVehicleId === car.vehicleId}
+            onSelectCar={onSelectCar}
           />
         ))
       )}
