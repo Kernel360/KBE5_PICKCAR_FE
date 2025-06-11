@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import TrackingCar from './pages/TrackingCar'
 import DrivingHistoryPage from './pages/DrivingHistoryPage'
+import VehicleManagement from './pages/Vehicle/Rental'
+import Rental from './pages/Vehicle/Rental'
+import VehicleRegisterPage from '@/pages/Vehicle/Register'
 
 function App() {
   return (
@@ -20,6 +23,16 @@ function App() {
         <Route
           path="/driving-history"
           element={<DrivingHistoryPage />}
+        />
+
+        <Route
+          path="/vehicle/rental"
+          element={<Rental />}
+        />
+
+        <Route
+          path="/vehicle/register"
+          element={<VehicleRegisterPage />}
         />
       </Routes>
     </BrowserRouter>
