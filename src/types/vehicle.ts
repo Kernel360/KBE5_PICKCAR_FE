@@ -1,5 +1,3 @@
-import type { ApiResponse } from './common/ApiResponse'
-
 export enum VehicleStatus {
   OPERABLE = 'OPERABLE',
   UNDER_INSPECTION = 'UNDER_INSPECTION',
@@ -33,15 +31,6 @@ export interface RegisterVehicleRequest {
   hasGps: boolean
 }
 
-export const getVehicleList = async (): Promise<VehicleListResponse[]> => {
-  const response = await fetch('http://localhost:8080/api/v1/vehicles')
-  if (!response.ok) {
-    throw new Error('차량 목록을 불러오는데 실패했습니다.')
-  }
-  const result: ApiResponse<VehicleListResponse[]> = await response.json()
-  return result.data
-}
-
 export const updateVehicleStatus = async (
   request: UpdateVehicleStatusRequest
 ): Promise<void> => {
@@ -57,25 +46,6 @@ export const updateVehicleStatus = async (
     const errorData = await response.json()
     throw new Error(
       errorData.errorReason?.reason || '차량 상태 변경에 실패했습니다.'
-    )
-  }
-}
-
-export const registerVehicle = async (
-  request: RegisterVehicleRequest
-): Promise<void> => {
-  const response = await fetch('http://localhost:8080/api/v1/vehicles', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(request)
-  })
-
-  if (!response.ok) {
-    const errorData = await response.json()
-    throw new Error(
-      errorData.errorReason?.reason || '차량 등록에 실패했습니다.'
     )
   }
 }
