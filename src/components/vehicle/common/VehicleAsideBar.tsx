@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom'
 
 const MENU_LIST = [
-  { to: '/vehicle/rental', label: '차량 대여/회수' },
-  { to: '/vehicle/register', label: '차량 등록/해지' },
-  { to: '/vehicle/assign', label: '차량 할당/해지' },
-  { to: '/vehicle/status', label: '차량 상태변경' }
+  { to: '/vehicle/rental', label: '차량 대여/회수', disabled: false },
+  { to: '/vehicle/register', label: '차량 등록/해지', disabled: false },
+  { to: '/vehicle/assign', label: '차량 할당/해지', disabled: true },
+  { to: '/vehicle/status', label: '차량 상태변경', disabled: true }
 ] as const
 
 const STYLES = {
@@ -12,7 +12,8 @@ const STYLES = {
   title: 'mb-8 text-lg font-bold',
   nav: 'flex flex-col gap-2 text-gray-600',
   link: 'rounded px-3 py-2 hover:bg-gray-100',
-  activeLink: 'bg-blue-50 font-semibold text-blue-600'
+  activeLink: 'bg-blue-50 font-semibold text-blue-600',
+  disabledLink: 'rounded px-3 py-2 text-gray-400 cursor-not-allowed'
 } as const
 
 export default function VehicleAsideBar() {
@@ -24,16 +25,25 @@ export default function VehicleAsideBar() {
       <nav
         className={STYLES.nav}
         aria-label="차량 관리 메뉴">
-        {MENU_LIST.map(menu => (
-          <NavLink
-            key={menu.to}
-            to={menu.to}
-            className={({ isActive }) =>
-              `${STYLES.link} ${isActive ? STYLES.activeLink : ''}`
-            }>
-            {menu.label}
-          </NavLink>
-        ))}
+        {MENU_LIST.map(menu =>
+          menu.disabled ? (
+            <div
+              key={menu.label}
+              className={STYLES.disabledLink}>
+              {menu.label}
+            </div>
+          ) : (
+            <NavLink
+              key={menu.to}
+              to={menu.to}
+              end
+              className={({ isActive }) =>
+                `${STYLES.link} ${isActive ? STYLES.activeLink : ''}`
+              }>
+              {menu.label}
+            </NavLink>
+          )
+        )}
       </nav>
     </aside>
   )
