@@ -7,5 +7,10 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: [{ find: '@', replacement: '/src' }]
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 3000,
+    allowedHosts: ['pickcar.online']
   }
 })
