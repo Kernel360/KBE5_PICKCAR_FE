@@ -9,6 +9,20 @@ import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
 
+// 1. 서버(8080)용 인스턴스
+const mainApi = axios.create({
+  baseURL: import.meta.env.VITE_MAIN_API_URL,
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true
+})
+
+// 2. 서버(8081)용 인스턴스
+const trackingApi = axios.create({
+  baseURL: import.meta.env.VITE_TRACKING_API_URL,
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true
+})
+
 /**
  * 실시간 차량 관제 페이지 컴포넌트.
  * API와 WebSocket을 통해 동적으로 데이터를 관리
@@ -41,8 +55,8 @@ function TrackingCar() {
     const fetchInitialData = async () => {
       try {
         const [companiesResponse, carsResponse] = await Promise.all([
-          axios.get('http://localhost:8080/api/v1/companies'),
-          axios.get('http://localhost:8080/api/v1/vehicles')
+          mainApi.get('/api/v1/companies'),
+          mainApi.get('/api/v1/vehicles')
         ])
 
         const allCompaniesOption: Company = { id: 'all', name: '모든 회사' }
@@ -65,12 +79,14 @@ function TrackingCar() {
       return
     }
 
-    const ws = new WebSocket('ws://localhost:8081/connect') // 백엔드 포트에 맞게 수정
+    const trackingBaseURL = import.meta.env.VITE_TRACKING_API_URL
+    const wsURL = `${trackingBaseURL.replace(/^http/, 'ws')}/connect`
+    const ws = new WebSocket(wsURL)
 
     ws.onopen = () => {
       console.log('WebSocket 서버에 연결되었습니다.')
-      axios
-        .get('http://localhost:8081/api/v1/trackingcars')
+      trackingApi
+        .get('/api/v1/trackingcars')
         .then(response =>
           console.log('스트리밍 시작 요청 결과:', response.data.message)
         )
