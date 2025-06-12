@@ -21,7 +21,7 @@ function KakaoMap({ center, zoom, markers, polylinePath }: KakaoMapProps) {
 
     window.kakao.maps.load(() => {
       const mapContainer = mapRef.current
-      if (!mapContainer) return
+      if (!mapContainer || !window.kakao?.maps) return
 
       const kakaoMaps = window.kakao.maps
       const mapOptions = {

@@ -1,9 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-interface Window {
-  kakao: any
-}
-
 interface MapProps {
   center?: { lat: number; lng: number }
   level?: number
@@ -28,6 +24,7 @@ function Map({ center = { lat: 37.5665, lng: 126.978 }, level = 7 }: MapProps) {
     if (!isLoaded || !mapRef.current) return
 
     window.kakao.maps.load(() => {
+      if (!mapRef.current) return
       const mapCenter = new window.kakao.maps.LatLng(center.lat, center.lng)
       new window.kakao.maps.Map(mapRef.current, {
         center: mapCenter,

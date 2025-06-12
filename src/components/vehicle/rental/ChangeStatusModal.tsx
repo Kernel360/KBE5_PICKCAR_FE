@@ -1,4 +1,3 @@
-import React from 'react'
 import { VehicleStatus } from '@/types/vehicle'
 
 interface ChangeStatusModalProps {

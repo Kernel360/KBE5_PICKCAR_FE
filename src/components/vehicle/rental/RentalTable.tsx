@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import {
-  VehicleListResponse,
-  VehicleStatus,
-  getVehicleList
-} from '../../../types/vehicle'
+import { useEffect, useState } from 'react'
+import { VehicleListResponse, VehicleStatus } from '../../../types/vehicle'
 import Pagination from '../../common/Pagination'
+import { ApiResponse } from '@/types/common/ApiResponse'
+import axios from 'axios'
 
 interface RentalTableProps {
   search: string
@@ -23,6 +21,21 @@ const statusLabels = {
   [VehicleStatus.OPERABLE]: '이용가능',
   [VehicleStatus.UNDER_INSPECTION]: '점검중',
   [VehicleStatus.DAMAGED]: '고장'
+}
+
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
+axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.defaults.withCredentials = true
+
+const getVehicleList = async (): Promise<VehicleListResponse[]> => {
+  try {
+    const response =
+      await axios.get<ApiResponse<VehicleListResponse[]>>('/api/v1/vehicles')
+    return response.data.data
+  } catch (error) {
+    console.error('Error fetching vehicles:', error)
+    throw new Error('차량 목록을 불러오는데 실패했습니다.')
+  }
 }
 
 export default function RentalTable({

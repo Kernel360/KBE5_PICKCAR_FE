@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import DrivingHistoryTable from '@/components/history/DrivingHistoryTable'
 import type {
   DrivingHistoryEntry,
@@ -12,10 +12,9 @@ import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
 import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
 import DrivingHistoryBottomBar from '@/components/history/DrivingHistoryBottomBar'
-import { gpxPath } from '@/data/gpxPath'
 
 // axios 기본 설정
-axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 axios.defaults.withCredentials = true
 
@@ -39,7 +38,6 @@ function DrivingHistoryPage() {
     const fetchHistoryLogs = async () => {
       try {
         const response = await axios.get('/api/v1/history/list')
-        console.log('API 응답:', response.data)
         setHistoryLogs(response.data.data || [])
         setError(null)
       } catch (error) {
