@@ -30,22 +30,3 @@ export interface RegisterVehicleRequest {
   }
   hasGps: boolean
 }
-
-export const updateVehicleStatus = async (
-  request: UpdateVehicleStatusRequest
-): Promise<void> => {
-  const response = await fetch('http://localhost:8080/api/v1/vehicles', {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(request)
-  })
-
-  if (!response.ok) {
-    const errorData = await response.json()
-    throw new Error(
-      errorData.errorReason?.reason || '차량 상태 변경에 실패했습니다.'
-    )
-  }
-}
