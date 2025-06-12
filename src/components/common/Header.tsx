@@ -44,12 +44,24 @@ function Header({ activeMenu }: HeaderProps) {
 
       {/* 우측: 유저 정보 */}
       <div className="flex items-center">
-        <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-300 text-xl font-bold text-white">
-          JH
+        <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 text-xl font-bold text-white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.5a7.5 7.5 0 1115 0v.75a.75.75 0 01-.75.75h-13.5a.75.75 0 01-.75-.75v-.75z"
+            />
+          </svg>
         </div>
         <div className="flex flex-col items-start">
-          <span className="text-sm font-bold text-gray-800">임재현</span>
-          <span className="text-xs text-gray-500">관리자</span>
+          <span className="text-sm font-extrabold text-gray-500">관리자</span>
         </div>
       </div>
     </header>
