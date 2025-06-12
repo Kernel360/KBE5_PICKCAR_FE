@@ -1,6 +1,5 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-// 컴포넌트가 받을 props의 타입을 정의
 interface KakaoMapProps {
   center?: { lat: number; lng: number }
   zoom?: number
@@ -9,111 +8,124 @@ interface KakaoMapProps {
 }
 
 /**
- * 카카오맵과 마커, Polyline을 렌더링하는 범용적인 지도 컴포넌트.
+ * 카카오맵과 오버레이를 렌더링하는 범용 지도 컴포넌트.
  */
 function KakaoMap({ center, zoom, markers, polylinePath }: KakaoMapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
+  const [map, setMap] = useState<any>(null) // 지도 인스턴스를 state로 관리
+  const overlaysRef = useRef<any[]>([]) // 마커, 폴리라인 등 오버레이를 저장할 ref
 
+  // 1: 지도 인스턴스 생성 (최초 한 번만 실행)
   useEffect(() => {
-    // window.kakao와 load 함수, 그리고 지도를 그릴 div가 준비되었는지 확인
-    if (!mapRef.current || !window.kakao?.maps?.load) {
-      return
-    }
+    if (!mapRef.current || !window.kakao?.maps?.load) return
 
-    // kakao.maps.load를 사용하여 라이브러리가 완전히 로드된 후 지도 관련 로직 실행
     window.kakao.maps.load(() => {
       const mapContainer = mapRef.current
       if (!mapContainer || !window.kakao?.maps) return
 
       const kakaoMaps = window.kakao.maps
-
-      // 1. 지도 생성
       const mapOptions = {
-        center: new kakaoMaps.LatLng(
-          center?.lat || 37.5665,
-          center?.lng || 126.978
-        ),
-        level: zoom || 9
+        center: new kakaoMaps.LatLng(37.5665, 126.978),
+        level: 9
       }
-      const map = new kakaoMaps.Map(mapContainer, mapOptions)
+      const newMap = new kakaoMaps.Map(mapContainer, mapOptions)
+      setMap(newMap)
+    })
+  }, []) // 의존성 배열이 비어있어 최초 1회만 실행
 
-      // 2. 마커 표시 로직
-      if (markers && markers.length > 0) {
-        markers.forEach(markerInfo => {
-          new kakaoMaps.Marker({
-            position: new kakaoMaps.LatLng(markerInfo.lat, markerInfo.lng),
-            map: map,
-            title: markerInfo.label
-          })
-        })
-      }
+  // 2: 지도 중심과 줌 레벨 제어 (center, zoom prop이 명시적으로 바뀔 때만 실행)
+  useEffect(() => {
+    if (!map || !center || !zoom) return
 
-      // 3. Polyline(선) 표시 로직
-      if (polylinePath && polylinePath.length > 0) {
-        const linePath = polylinePath.map(
-          pos => new kakaoMaps.LatLng(pos.lat, pos.lng)
-        )
+    const newCenter = new window.kakao.maps.LatLng(center.lat, center.lng)
+    map.setCenter(newCenter)
+    map.setLevel(zoom)
+  }, [map, center, zoom])
 
-        const polyline = new kakaoMaps.Polyline({
-          path: linePath,
-          strokeWeight: 5,
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.7,
-          strokeStyle: 'solid'
-        })
-        polyline.setMap(map)
+  // 3: 마커와 Polyline 등 오버레이 제어 (markers, polylinePath prop이 바뀔 때만 실행)
+  useEffect(() => {
+    if (!map) return
 
-        // Todo : 이미지 파일로
-        // 마커 이미지 URL 정의
-        const startMarkerSrc =
-          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png'
-        const endMarkerSrc =
-          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png'
-        const imageSize = new kakaoMaps.Size(20, 34)
-        const imageOption = { offset: new kakaoMaps.Point(10, 34) }
+    const kakaoMaps = window.kakao.maps
 
-        // [추가] 출발 지점과 도착 지점 좌표 추출
-        const startPoint = linePath[0]
-        const endPoint = linePath[linePath.length - 1]
+    // --- 1. 기존 오버레이 모두 제거 (클린업) ---
+    overlaysRef.current.forEach(overlay => overlay.setMap(null))
+    overlaysRef.current = []
 
-        // [추가] 출발/도착 마커 이미지 생성
-        const startMarkerImage = new kakaoMaps.MarkerImage(
-          startMarkerSrc,
-          imageSize,
-          imageOption
-        )
-        const endMarkerImage = new kakaoMaps.MarkerImage(
-          endMarkerSrc,
-          imageSize,
-          imageOption
-        )
+    const newOverlays: any[] = []
 
-        // [추가] 출발 마커 생성 및 표시
-        new kakaoMaps.Marker({
+    // --- 2. 새로운 마커 생성 ---
+    if (markers && markers.length > 0) {
+      markers.forEach(markerInfo => {
+        const marker = new kakaoMaps.Marker({
+          position: new kakaoMaps.LatLng(markerInfo.lat, markerInfo.lng),
           map: map,
-          position: startPoint,
-          image: startMarkerImage,
-          title: '출발'
+          title: markerInfo.label
         })
+        newOverlays.push(marker)
+      })
+    }
 
-        // [추가] 도착 마커 생성 및 표시
-        new kakaoMaps.Marker({
-          map: map,
-          position: endPoint,
-          image: endMarkerImage,
-          title: '도착'
-        })
+    // --- 3. 새로운 Polyline 및 출발/도착 마커 생성 ---
+    if (polylinePath && polylinePath.length > 0) {
+      const linePath = polylinePath.map(
+        pos => new kakaoMaps.LatLng(pos.lat, pos.lng)
+      )
 
-        // Polyline이 있을 경우, 지도가 해당 경로를 모두 포함하도록
-        // 경계(bounds)를 조정하여 자동으로 중심과 줌 레벨을 맞춤
+      const polyline = new kakaoMaps.Polyline({
+        path: linePath,
+        strokeWeight: 5,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.7,
+        strokeStyle: 'solid'
+      })
+      polyline.setMap(map)
+      newOverlays.push(polyline)
+
+      // 출발/도착 마커 로직... (이전 코드와 동일)
+      const startMarkerSrc =
+        'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png'
+      const endMarkerSrc =
+        'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png'
+      const imageSize = new kakaoMaps.Size(20, 34)
+      const imageOption = { offset: new kakaoMaps.Point(10, 34) }
+      const startMarkerImage = new kakaoMaps.MarkerImage(
+        startMarkerSrc,
+        imageSize,
+        imageOption
+      )
+      const endMarkerImage = new kakaoMaps.MarkerImage(
+        endMarkerSrc,
+        imageSize,
+        imageOption
+      )
+
+      const startMarker = new kakaoMaps.Marker({
+        map,
+        position: linePath[0],
+        image: startMarkerImage,
+        title: '출발'
+      })
+      const endMarker = new kakaoMaps.Marker({
+        map,
+        position: linePath[linePath.length - 1],
+        image: endMarkerImage,
+        title: '도착'
+      })
+      newOverlays.push(startMarker, endMarker)
+
+      // 부모가 zoom을 직접 제어하고 있지 않을 때만 자동 경계 조절 실행
+      if (!zoom) {
         const bounds = new kakaoMaps.LatLngBounds()
         linePath.forEach(point => bounds.extend(point))
         map.setBounds(bounds)
       }
-    })
-  }, [center, zoom, markers, polylinePath]) // props가 변경될 때마다 이 effect를 다시 실행
+    }
 
-  // 지도를 렌더링할 div
+    // 새로 그린 오버레이들을 ref에 저장
+    overlaysRef.current = newOverlays
+  }, [map, markers, polylinePath])
+
   return (
     <div
       ref={mapRef}

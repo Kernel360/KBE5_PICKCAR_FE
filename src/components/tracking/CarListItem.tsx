@@ -9,13 +9,13 @@ import type { Car } from '@/types/tracking'
 interface CarListItemProps {
   car: Car
   isSelected: boolean
-  onViewDetails: (carNumber: string) => void // void 반환
+  onSelectCar: (carNumber: number) => void
 }
 
 function CarListItem({
   car,
   isSelected,
-  onViewDetails
+  onSelectCar
 }: CarListItemProps): React.ReactElement {
   const baseClasses =
     'flex cursor-pointer items-center justify-between rounded p-3'
@@ -29,10 +29,15 @@ function CarListItem({
   return (
     <div
       className={`${baseClasses} ${isSelected ? selectedClasses : hoverClasses}`}
-      onClick={() => onViewDetails(car.number)} // 항목 클릭 시에도 상세보기 호출 가능
-    >
+      onClick={() => {
+        console.log(
+          `[CarListItem] div 클릭! 전달할 차량 번호: ${car.vehicleId}`
+        )
+
+        onSelectCar(car.vehicleId)
+      }}>
       <div>
-        <div className="font-semibold">{car.number}</div>
+        <div className="font-semibold">{car.licensePlate}</div>
         <div className="text-xs text-gray-400">
           {car.model} · {car.location}
         </div>
@@ -40,7 +45,11 @@ function CarListItem({
       <button
         onClick={e => {
           e.stopPropagation() // div의 onClick 이벤트 전파 방지
-          onViewDetails(car.number)
+          console.log(
+            `[CarListItem] 버튼 클릭! 전달할 차량 번호: ${car.vehicleId}`
+          )
+
+          onSelectCar(car.vehicleId)
         }}
         className={`${buttonBaseClasses} ${isSelected ? buttonSelectedClasses : buttonNormalClasses}`}>
         상세보기

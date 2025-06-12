@@ -6,13 +6,14 @@ import React from 'react'
 
 interface MapControlsProps {
   title: string
+  onReset: () => void
   // 필요에 따라 필터 옵션, 현재 필터 값, 이벤트 핸들러 등을 props로 추가
   // onFilterChange?: (filterValue: string) => void;
   // onZoomIn?: () => void;
   // onZoomOut?: () => void;
 }
 
-function MapControls({ title }: MapControlsProps): React.ReactElement {
+function MapControls({ title, onReset }: MapControlsProps): React.ReactElement {
   return (
     <div className="mb-4 flex items-center justify-between">
       <span className="text-lg font-bold">{title}</span>
@@ -24,9 +25,9 @@ function MapControls({ title }: MapControlsProps): React.ReactElement {
           <option>전체 지역</option>
         </select>
         <button
+          onClick={onReset}
           className="rounded border p-2 text-gray-400 hover:text-blue-500"
-          title="기능 없음"
-          disabled>
+          title="초기화">
           <svg
             width="16"
             height="16"

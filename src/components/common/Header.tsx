@@ -7,17 +7,21 @@ interface HeaderProps {
 
 function Header({ activeMenu }: HeaderProps) {
   const menus = [
-    { name: '차량', url: '#' },
-    { name: '실시간 관제', url: '#' },
-    { name: '운행일지', url: '#', target: 'driving-history' },
+    { name: '차량', url: '/vehicle/rental' },
+    { name: '실시간 관제', url: '/tracking' },
+    { name: '운행일지', url: '/driving-history', target: 'driving-history' },
     { name: '회원', url: '#' }
   ]
 
   return (
     <header className="flex h-16 w-full items-center bg-white px-6 shadow">
       <div className="flex items-center">
-        <Logo />
-        <span className="ml-2 text-lg font-medium text-gray-700">홈</span>
+        <Link
+          to="/vehicle/rental"
+          className="flex items-center hover:opacity-80">
+          <Logo />
+          <span className="ml-2 text-lg font-medium text-gray-700">홈</span>
+        </Link>
       </div>
 
       <nav className="flex flex-1 justify-center">
