@@ -2,6 +2,7 @@ import KakaoMap from '@/components/common/KakaoMap'
 import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
 import MapControls from '@/components/tracking/MapControls'
+import Header from '@/components/common/Header'
 import type { Company, Car } from '@/types/tracking'
 import axios from 'axios'
 import { useEffect, useMemo, useState } from 'react'
@@ -155,41 +156,44 @@ function TrackingCar() {
 
   // 6. 화면 렌더링
   return (
-    <div className="flex min-h-[calc(100vh-96px)] flex-col gap-6 bg-[#f5f8fa] p-6 md:flex-row">
-      <div className="flex w-full flex-col rounded-2xl bg-white p-6 shadow md:w-96">
-        <div className="mb-4 text-lg font-bold">
-          운행 중인 차량 ({filteredCars.length})
-        </div>
-        <CarFilters
-          companies={companies}
-          selectedCompany={selectedCompany}
-          searchTerm={searchTerm}
-          onCompanyChange={setSelectedCompany}
-          onSearchTermChange={setSearchTerm}
-        />
-        <CarList
-          cars={filteredCars}
-          selectedVehicleId={selectedVehicleId}
-          onSelectCar={handleSelectCar}
-        />
-      </div>
-      <div className="flex flex-1 flex-col rounded-2xl bg-[#eaf1fb] p-6 shadow">
-        <MapControls
-          title={mapTitle}
-          onReset={handleFilterReset}
-        />
-        <div className="relative min-h-[300px] flex-1 md:min-h-0">
-          <KakaoMap
-            center={mapCenter}
-            zoom={mapZoom}
-            markers={carMarkers}
+    <>
+      <Header activeMenu="실시간 관제" />
+      <div className="flex min-h-[calc(100vh-96px)] flex-col gap-6 bg-[#f5f8fa] p-6 md:flex-row">
+        <div className="flex w-full flex-col rounded-2xl bg-white p-6 shadow md:w-96">
+          <div className="mb-4 text-lg font-bold">
+            운행 중인 차량 ({filteredCars.length})
+          </div>
+          <CarFilters
+            companies={companies}
+            selectedCompany={selectedCompany}
+            searchTerm={searchTerm}
+            onCompanyChange={setSelectedCompany}
+            onSearchTermChange={setSearchTerm}
           />
-          <span className="absolute right-4 bottom-2 text-xs text-gray-400">
-            {`[${mapTitle} 지도]`}
-          </span>
+          <CarList
+            cars={filteredCars}
+            selectedVehicleId={selectedVehicleId}
+            onSelectCar={handleSelectCar}
+          />
+        </div>
+        <div className="flex flex-1 flex-col rounded-2xl bg-[#eaf1fb] p-6 shadow">
+          <MapControls
+            title={mapTitle}
+            onReset={handleFilterReset}
+          />
+          <div className="relative min-h-[300px] flex-1 md:min-h-0">
+            <KakaoMap
+              center={mapCenter}
+              zoom={mapZoom}
+              markers={carMarkers}
+            />
+            <span className="absolute right-4 bottom-2 text-xs text-gray-400">
+              {`[${mapTitle} 지도]`}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
