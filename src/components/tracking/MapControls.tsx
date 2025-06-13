@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * 지도 위에 표시될 간단한 조작
  */
