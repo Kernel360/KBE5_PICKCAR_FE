@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * 지도 위에 표시될 간단한 조작
  */
@@ -19,7 +17,7 @@ function MapControls({ title, onReset }: MapControlsProps): React.ReactElement {
       <span className="text-lg font-bold">{title}</span>
       <div className="flex items-center gap-2">
         {/** todo: 동적으로 구현  */}
-        {/* <select
+        <select
           className="rounded border p-2 text-sm"
           disabled>
           <option>전체 지역</option>
@@ -41,7 +39,7 @@ function MapControls({ title, onReset }: MapControlsProps): React.ReactElement {
               strokeLinejoin="round"
             />
           </svg>
-        </button> */}
+        </button>
       </div>
     </div>
   )
