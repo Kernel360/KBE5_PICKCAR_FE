@@ -15,7 +15,7 @@ const DrivingHistoryTopBar = ({ searchTerm, setSearchTerm }: TopBarProps) => (
         style={{ minWidth: 200 }}
       />
       <select className="rounded border border-gray-300 bg-white px-3 py-3 text-sm">
-        <option>모든 차량</option>
+        <option>모든 차량12313</option>
       </select>
     </div>
   </div>
