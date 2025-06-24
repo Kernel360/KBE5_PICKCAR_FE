@@ -3,15 +3,24 @@ import type { DrivingHistoryEntry } from '@/types/drivingHistory'
 interface DrivingHistoryTableProps {
   logs: DrivingHistoryEntry[]
   onViewDetails: (logId: number) => void
+  error?: string | null
 }
 
 function DrivingHistoryTable({
   logs,
-  onViewDetails
+  onViewDetails,
+  error
 }: DrivingHistoryTableProps) {
+  if (error) {
+    return (
+      <p className="py-12 text-center text-lg font-semibold text-red-300">
+        {error}
+      </p>
+    )
+  }
   if (!logs || logs.length === 0) {
     return (
-      <p className="py-4 text-center text-gray-500">
+      <p className="items-center justify-center py-4 text-center text-gray-500">
         표시할 운행 기록이 없습니다.
       </p>
     )

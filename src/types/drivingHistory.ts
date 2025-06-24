@@ -1,3 +1,5 @@
+import type { PaginationState } from '@/types/common/Pagination'
+
 export interface DrivingHistoryEntry {
   historyId: number
   licensePlate: string
@@ -30,4 +32,15 @@ export interface CycleInfo {
   angle: number
   speed: number
   battery: number
+}
+
+export interface DrivingHistoryFilter {
+  from: string
+  to: string
+  driverName: string
+}
+
+export interface DrivingHistoryListResponse {
+  content: DrivingHistoryEntry[]
+  pagination: PaginationState
 }
