@@ -1,2 +1,12 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+
+@font-face {
+  font-family: 'Paperlogy-5Meduium';
+  font-weight: normal;
+  src: url('./src/fonts/Paperlogy-5Meduium.ttf') format('truetype');
+}
+
+body {
+  font-family: 'Paperlogy-5Meduium';
+}

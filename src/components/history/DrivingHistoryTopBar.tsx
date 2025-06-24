@@ -15,7 +15,7 @@ const DrivingHistoryTopBar = ({ filter, setFilter, onSearch }: TopBarProps) => (
         onChange={e =>
           setFilter({ ...filter, from: e.target.value + 'T00:00:00' })
         }
-        className="rounded border border-gray-300 bg-white px-3 py-3 text-sm"
+        className="input rounded border px-3 py-3 text-sm"
       />
       <input
         type="date"
@@ -23,17 +23,17 @@ const DrivingHistoryTopBar = ({ filter, setFilter, onSearch }: TopBarProps) => (
         onChange={e =>
           setFilter({ ...filter, to: e.target.value + 'T23:59:59' })
         }
-        className="rounded border border-gray-300 bg-white px-3 py-3 text-sm"
+        className="input rounded border px-3 py-3 text-sm"
       />
       <input
         type="text"
         placeholder="운전자명"
         value={filter.driverName}
         onChange={e => setFilter({ ...filter, driverName: e.target.value })}
-        className="min-w-20 rounded border border-gray-300 bg-white px-3 py-3 text-sm"
+        className="input min-w-10 rounded border px-3 py-3 text-sm"
       />
       <button
-        className="rounded border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+        className="btn btn-outline btn-default rounded border px-4 py-2 text-sm font-semibold"
         type="button"
         onClick={onSearch}>
         검색

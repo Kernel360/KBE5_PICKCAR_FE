@@ -7,16 +7,16 @@ interface PaginationProps {
 const Pagination = ({ current, total, onChange }: PaginationProps) => (
   <div className="flex gap-2">
     <button
-      className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50"
+      className="btn btn-soft btn-primary flex h-10 w-17 items-center justify-center rounded-xl text-base"
       onClick={() => onChange(current - 1)}
       disabled={current === 0}>
-      &lt;
+      이전
     </button>
     <button
-      className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f7f9fb] text-base text-gray-500 hover:bg-blue-50"
+      className="btn btn-soft btn-primary flex h-10 w-17 items-center justify-center rounded-xl text-base"
       onClick={() => onChange(current + 1)}
       disabled={current >= total - 1}>
-      &gt;
+      다음
     </button>
   </div>
 )

@@ -43,7 +43,7 @@ function DrivingHistoryTable({
 
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-      <table className="min-w-full divide-y divide-gray-200 text-sm">
+      <table className="table-zebra text-m table min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
             <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
@@ -101,7 +101,7 @@ function DrivingHistoryTable({
               <td className="px-4 py-3 whitespace-nowrap text-gray-600">
                 <button
                   onClick={() => onViewDetails(log.historyId)}
-                  className="rounded bg-blue-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none">
+                  className="badge badge-info rounded px-3 py-3.5 text-xs font-medium focus:ring-offset-2 focus:outline-none">
                   상세보기
                 </button>
               </td>
