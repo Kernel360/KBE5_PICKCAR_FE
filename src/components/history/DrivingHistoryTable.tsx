@@ -46,31 +46,31 @@ function DrivingHistoryTable({
 
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-      <table className="table-zebra text-m table min-w-full divide-y divide-gray-200">
+      <table className="table-zebra text-m table">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               ID
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               차량번호
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               운전자
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               시작 시간
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               종료 시간
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               운행 시간
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               이동 거리
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               작업
             </th>
           </tr>

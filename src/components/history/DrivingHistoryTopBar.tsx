@@ -49,6 +49,12 @@ const DrivingHistoryTopBar = ({ filter, setFilter, onSearch }: TopBarProps) => (
         onChange={e => setFilter({ ...filter, driverName: e.target.value })}
         className="input w-40 rounded border px-3 py-3 text-sm"
       />
+      <input
+        type="text"
+        placeholder="예약 기반 조회"
+        className="input w-40"
+        disabled
+      />
       <button
         className="btn btn-outline btn-default rounded border px-4 py-2 text-sm font-semibold"
         type="button"
