@@ -13,6 +13,7 @@ import Header from '@/components/common/Header'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
 import DrivingHistoryBottomBar from '@/components/history/DrivingHistoryBottomBar'
+import SideMenuBar from '@/components/common/SideMenuBar'
 
 // axios 기본 설정
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
@@ -56,6 +57,8 @@ function DrivingHistoryPage() {
   const fetchHistoryLogs = async (pageParam = page) => {
     setIsLoading(true)
     try {
+      console.log(filter.driverName)
+
       const response = await axios.get('/api/v1/history/list', {
         params: {
           from: filter.from,
@@ -65,6 +68,7 @@ function DrivingHistoryPage() {
           size
         }
       })
+
       const resData = response.data.data
       setHistoryLogs(resData.content || [])
       setPagination({
@@ -166,39 +170,44 @@ function DrivingHistoryPage() {
   return (
     <div className="flex min-h-screen flex-col bg-[#f5f8fa]">
       <header className="bg-white">
-        <Header activeMenu="driving-history" />
+        <Header />
       </header>
-      <main className="relative flex flex-1 flex-col p-6">
-        <DrivingHistoryTopBar
-          filter={filter}
-          setFilter={setFilter}
-          onSearch={handleSearch}
-        />
-        <div
-          className={`min-h-[400px] flex-1 flex-col rounded-2xl bg-white p-0 shadow`}>
-          {isLoading ? (
-            <LoadingScreen />
-          ) : (
-            <DrivingHistoryTable
-              logs={historyLogs}
-              onViewDetails={handleViewHistoryDetails}
-              error={error}
-            />
-          )}
-        </div>
-        <DrivingHistoryBottomBar
-          page={pagination?.page ?? 1}
-          setPage={handlePageChange}
-          totalPage={pagination?.totalPages ?? 1}
-          totalElements={pagination?.totalElements ?? 0}
-        />
-        <DrivingHistoryDetailModal
-          open={isModalOpen}
-          onClose={handleCloseModal}
-          detail={detail}
-          polylinePath={detailPath}
-        />
-      </main>
+
+      <div className="flex">
+        <SideMenuBar />
+
+        <main className="relative mx-3 flex flex-1 flex-col p-6">
+          <DrivingHistoryTopBar
+            filter={filter}
+            setFilter={setFilter}
+            onSearch={handleSearch}
+          />
+          <div
+            className={`min-h-[400px] flex-1 flex-col rounded-2xl bg-white p-0 shadow`}>
+            {isLoading ? (
+              <LoadingScreen />
+            ) : (
+              <DrivingHistoryTable
+                logs={historyLogs}
+                onViewDetails={handleViewHistoryDetails}
+                error={error}
+              />
+            )}
+          </div>
+          <DrivingHistoryBottomBar
+            page={pagination?.page ?? 1}
+            setPage={handlePageChange}
+            totalPage={pagination?.totalPages ?? 1}
+            totalElements={pagination?.totalElements ?? 0}
+          />
+          <DrivingHistoryDetailModal
+            open={isModalOpen}
+            onClose={handleCloseModal}
+            detail={detail}
+            polylinePath={detailPath}
+          />
+        </main>
+      </div>
     </div>
   )
 }

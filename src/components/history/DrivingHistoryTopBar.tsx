@@ -12,15 +12,14 @@ const minDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   .slice(0, 10)
 
 const DrivingHistoryTopBar = ({ filter, setFilter, onSearch }: TopBarProps) => (
-  <div className="mb-4 flex flex-row items-center justify-between">
+  <div className="my-2 flex flex-row items-center justify-between">
     <div className="justify-start">
-      <h1 className="text-2xl font-bold text-gray-800">운행일지</h1>
-    </div>
-
-    <div className="flex flex-1 items-center justify-end gap-3">
       <h3 className="text-sm text-gray-950">
         조회 가능 기간은 최대 30일 입니다
       </h3>
+    </div>
+
+    <div className="flex flex-1 items-center justify-end gap-3">
       <input
         type="date"
         value={filter.from.slice(0, 10)}
