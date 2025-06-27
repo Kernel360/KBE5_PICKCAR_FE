@@ -1,4 +1,7 @@
 import { VehicleStatus } from '@/types/vehicle'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import { faSquarePlus } from '@fortawesome/free-solid-svg-icons'
 
 interface RentalTopBarProps {
   search: string
@@ -22,9 +25,17 @@ export default function RentalTopBar({
   setFilter
 }: RentalTopBarProps) {
   return (
-    <div className="mb-6 flex items-center justify-between gap-4">
-      <h2 className="text-xl font-bold">차량 대여/회수</h2>
+    <div className="my-5 flex flex-row items-center justify-between">
+      <div className="justify-start">
+        <h1 className="text-xl font-bold">차량 등록/관리</h1>
+      </div>
       <div className="flex items-center gap-4">
+        <FontAwesomeIcon
+          icon={faSquarePlus as IconProp}
+          size="2xl"
+          color="green"
+        />
+
         <div className="relative">
           <label
             htmlFor="vehicle-search"

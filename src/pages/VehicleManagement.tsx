@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '@/components/common/Header'
 import RentalTable from '@/components/vehicle/rental/RentalTable'
 import RentalTopBar from '@/components/vehicle/rental/RentalTopBar'
-import ReturnConfirmModal from '@/components/vehicle/rental/ReturnConfirmModal'
 import ChangeStatusModal from '@/components/vehicle/rental/ChangeStatusModal'
 import {
   VehicleListResponse,
@@ -40,10 +39,6 @@ const updateVehicleStatus = async (
 export default function Rental() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
-  const [returnModal, setReturnModal] = useState<ModalState>({
-    isOpen: false,
-    vehicle: null
-  })
   const [changeStatusModal, setChangeStatusModal] = useState<
     ModalState & { status: string }
   >({
@@ -51,21 +46,27 @@ export default function Rental() {
     vehicle: null,
     status: ''
   })
-  const handleReturn = (vehicle: VehicleListResponse) => {
-    setReturnModal({ isOpen: true, vehicle })
-  }
+  const [vehicles, setVehicles] = useState<VehicleListResponse[]>([])
 
-  const handleReturnConfirm = () => {
-    if (returnModal.vehicle) {
-      console.log('회수 처리:', returnModal.vehicle)
-      // TODO: 회수 API 호출
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const response = await axios.get('/api/v1/vehicles')
+        setVehicles(response.data.data)
+      } catch {
+        // 에러 무시 (필요시 alert 등 처리 가능)
+      }
     }
-    setReturnModal({ isOpen: false, vehicle: null })
-  }
+    fetchVehicles()
+  }, [])
 
-  const handleReturnCancel = () => {
-    setReturnModal({ isOpen: false, vehicle: null })
-  }
+  const filteredVehicles = vehicles.filter(vehicle => {
+    const matchesSearch = vehicle.licensePlate
+      .toLowerCase()
+      .includes(search.toLowerCase())
+    const matchesFilter = !filter || vehicle.vehicleStatus === filter
+    return matchesSearch && matchesFilter
+  })
 
   const handleChangeStatusConfirm = async () => {
     if (changeStatusModal.vehicle && changeStatusModal.status) {
@@ -74,10 +75,8 @@ export default function Rental() {
           vehicleId: changeStatusModal.vehicle.vehicleId,
           vehicleStatus: changeStatusModal.status as VehicleStatus
         })
-        // 성공 후 목록 새로고침
         window.location.reload()
       } catch (error) {
-        console.error('상태 변경 실패:', error)
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -101,40 +100,31 @@ export default function Rental() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#f7f9fb]">
-      <Header />
+    <div className="flex flex-col bg-[#f5f8fa]">
+      <header className="flex bg-white">
+        <Header />
+      </header>
 
-      <div className="flex min-h-0 flex-1">
+      <div className="flex flex-1">
         <SideMenuBar />
-        <main className="mx-10 flex min-h-0 flex-1 flex-col px-12 py-10">
+        <main className="relative mx-2 flex h-[calc(100vh-64px)] min-h-0 flex-1 flex-col p-6">
           <RentalTopBar
             search={search}
             setSearch={setSearch}
             filter={filter}
             setFilter={setFilter}
           />
-          <div className="flex min-h-0 flex-1">
-            <div className="max-w-8xl w-full">
-              <RentalTable
-                search={search}
-                filter={filter}
-                onReturn={handleReturn}
-                onChangeStatus={handleChangeStatus}
-              />
-            </div>
+
+          <div className="h-full min-h-0 flex-1">
+            <RentalTable
+              search={search}
+              filter={filter}
+              onChangeStatus={handleChangeStatus}
+              vehicles={filteredVehicles}
+            />
           </div>
         </main>
       </div>
-      {/* 회수 모달 */}
-      {returnModal.isOpen && returnModal.vehicle && (
-        <ReturnConfirmModal
-          company={returnModal.vehicle.rentedCompany || ''}
-          number={returnModal.vehicle.licensePlate}
-          info={returnModal.vehicle.model}
-          onConfirm={handleReturnConfirm}
-          onCancel={handleReturnCancel}
-        />
-      )}
       {/* 상태 변경 모달 */}
       {changeStatusModal.isOpen && changeStatusModal.vehicle && (
         <ChangeStatusModal

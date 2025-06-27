@@ -13,7 +13,7 @@ function Header() {
           className="flex items-center hover:opacity-80">
           <Logo />
           <span className="ml-2 text-lg font-medium text-gray-700">
-            What say something
+            Pickcar
           </span>
         </Link>
       </div>
