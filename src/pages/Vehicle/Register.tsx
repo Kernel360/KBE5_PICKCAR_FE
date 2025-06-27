@@ -5,6 +5,7 @@ import RegisterCarInfoSection from '@/components/vehicle/register/RegisterCarInf
 import RegisterCheckModal from '@/components/vehicle/register/RegisterCheckModal'
 import { RegisterVehicleRequest } from '@/types/vehicle'
 import axios from 'axios'
+import SideMenuBar from '@/components/common/SideMenuBar'
 
 const FUEL_TYPE_MAP: { [key: string]: string } = {
   LPG: 'LPG',
@@ -112,7 +113,8 @@ export default function VehicleRegisterPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f7f9fb]">
-      <Header activeMenu="vehicle" />
+      <Header />
+      <SideMenuBar></SideMenuBar>
       <div className="flex min-h-0 flex-1">
         <VehicleAsideBar />
         <main className="flex flex-1 items-center justify-center px-12 py-10">

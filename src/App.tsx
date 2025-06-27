@@ -2,8 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import TrackingCar from './pages/TrackingCar'
 import DrivingHistoryPage from './pages/DrivingHistoryPage'
-import Rental from './pages/Vehicle/Rental'
-import VehicleRegisterPage from '@/pages/Vehicle/Register'
+import VehicleManagement from './pages/VehicleManagement'
 
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
@@ -17,12 +16,12 @@ function App() {
           path="/"
           element={<Login />}
         />
+
         <Route
           path="/tracking"
           element={<TrackingCar />}
         />
 
-        {/* 운행 기록 목록 페이지 */}
         <Route
           path="/driving-history"
           element={<DrivingHistoryPage />}
@@ -30,12 +29,7 @@ function App() {
 
         <Route
           path="/vehicle/rental"
-          element={<Rental />}
-        />
-
-        <Route
-          path="/vehicle/register"
-          element={<VehicleRegisterPage />}
+          element={<VehicleManagement />}
         />
       </Routes>
     </BrowserRouter>
