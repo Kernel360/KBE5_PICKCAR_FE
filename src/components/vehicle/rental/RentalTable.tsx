@@ -114,7 +114,7 @@ export default function RentalTable({
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600">
                   <FontAwesomeIcon
-                    className="rounded p-2 hover:bg-gray-200"
+                    className="rounded p-1 hover:bg-gray-200"
                     icon={faWrench as IconProp}
                     size="lg"
                     color="black"

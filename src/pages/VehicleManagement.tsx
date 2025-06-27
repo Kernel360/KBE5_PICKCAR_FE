@@ -6,10 +6,13 @@ import ChangeStatusModal from '@/components/vehicle/rental/ChangeStatusModal'
 import {
   VehicleListResponse,
   VehicleStatus,
-  UpdateVehicleStatusRequest
+  UpdateVehicleStatusRequest,
+  RegisterVehicleRequest
 } from '@/types/vehicle'
 import axios from 'axios'
 import SideMenuBar from '@/components/common/SideMenuBar'
+import RegisterCarInfoSection from '@/components/vehicle/register/RegisterCarInfoSection'
+import RegisterCheckModal from '@/components/vehicle/register/RegisterCheckModal'
 
 interface ModalState {
   isOpen: boolean
@@ -36,6 +39,30 @@ const updateVehicleStatus = async (
   }
 }
 
+// 차량 등록용 fuelType 변환 맵
+const FUEL_TYPE_MAP: { [key: string]: string } = {
+  LPG: 'LPG',
+  휘발유: 'PETROL',
+  경유: 'DIESEL',
+  전기: 'ELECTRIC',
+  기타: 'PETROL'
+}
+
+const registerVehicle = async (
+  request: RegisterVehicleRequest
+): Promise<void> => {
+  try {
+    await axios.post('/api/v1/vehicles', request)
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data) {
+      throw new Error(
+        error.response.data.errorReason?.reason || '차량 등록에 실패했습니다.'
+      )
+    }
+    throw new Error('차량 등록에 실패했습니다.')
+  }
+}
+
 export default function Rental() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
@@ -47,6 +74,21 @@ export default function Rental() {
     status: ''
   })
   const [vehicles, setVehicles] = useState<VehicleListResponse[]>([])
+  // 차량 등록 모달 상태 및 입력값 상태
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showCheckModal, setShowCheckModal] = useState(false)
+  const [registering, setRegistering] = useState(false)
+  const [registerSuccess, setRegisterSuccess] = useState(false)
+  const [carNumber, setCarNumber] = useState('')
+  const [model, setModel] = useState('')
+  const [carType, setCarType] = useState('')
+  const [customCarType, setCustomCarType] = useState('')
+  const [manufacturer, setManufacturer] = useState('')
+  const [customManufacturer, setCustomManufacturer] = useState('')
+  const [year, setYear] = useState('')
+  const [color, setColor] = useState('')
+  const [fuelType, setFuelType] = useState('')
+  const [hasGps, setHasGps] = useState('')
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -58,7 +100,7 @@ export default function Rental() {
       }
     }
     fetchVehicles()
-  }, [])
+  }, [registerSuccess])
 
   const filteredVehicles = vehicles.filter(vehicle => {
     const matchesSearch = vehicle.licensePlate
@@ -113,6 +155,7 @@ export default function Rental() {
             setSearch={setSearch}
             filter={filter}
             setFilter={setFilter}
+            onClickAddCar={() => setShowRegisterModal(true)}
           />
 
           <div className="h-full min-h-0 flex-1">
@@ -123,6 +166,118 @@ export default function Rental() {
               vehicles={filteredVehicles}
             />
           </div>
+          {/* 차량 등록 모달 */}
+          {showRegisterModal && (
+            <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
+              <div className="relative w-full max-w-2xl rounded-2xl bg-white px-8 py-8 shadow-xl">
+                <h2 className="mb-6 text-xl font-bold text-gray-900">
+                  차량 등록
+                </h2>
+                <RegisterCarInfoSection
+                  carNumber={carNumber}
+                  setCarNumber={setCarNumber}
+                  model={model}
+                  setModel={setModel}
+                  carType={carType}
+                  setCarType={setCarType}
+                  customCarType={customCarType}
+                  setCustomCarType={setCustomCarType}
+                  manufacturer={manufacturer}
+                  setManufacturer={setManufacturer}
+                  customManufacturer={customManufacturer}
+                  setCustomManufacturer={setCustomManufacturer}
+                  year={year}
+                  setYear={setYear}
+                  color={color}
+                  setColor={setColor}
+                  fuelType={fuelType}
+                  setFuelType={setFuelType}
+                  hasGps={hasGps}
+                  setHasGps={setHasGps}
+                />
+                <div className="mt-4 flex justify-end gap-3">
+                  <button
+                    className="rounded border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50"
+                    onClick={() => setShowRegisterModal(false)}
+                    disabled={registering}>
+                    취소
+                  </button>
+                  <button
+                    className="rounded bg-blue-600 px-6 py-2 text-white hover:bg-blue-700"
+                    onClick={() => setShowCheckModal(true)}
+                    disabled={registering}>
+                    등록
+                  </button>
+                </div>
+                {/* 확인 모달 */}
+                {showCheckModal && (
+                  <RegisterCheckModal
+                    carNumber={carNumber}
+                    model={model}
+                    carType={carType}
+                    customCarType={customCarType}
+                    manufacturer={manufacturer}
+                    customManufacturer={customManufacturer}
+                    year={year}
+                    color={color}
+                    fuelType={fuelType}
+                    hasGps={hasGps}
+                    onCancel={() => setShowCheckModal(false)}
+                    onConfirm={async () => {
+                      setRegistering(true)
+                      try {
+                        await registerVehicle({
+                          vehicleInfo: {
+                            model: model,
+                            color: color,
+                            licensePlate: carNumber,
+                            carAge: year,
+                            brandName:
+                              manufacturer === 'custom'
+                                ? customManufacturer
+                                : manufacturer,
+                            fuelType: FUEL_TYPE_MAP[fuelType] || 'PETROL'
+                          },
+                          hasGps: hasGps === '예'
+                        })
+                        setShowCheckModal(false)
+                        setShowRegisterModal(false)
+                        setRegisterSuccess(true)
+                        // 입력값 초기화
+                        setCarNumber('')
+                        setModel('')
+                        setCarType('')
+                        setCustomCarType('')
+                        setManufacturer('')
+                        setCustomManufacturer('')
+                        setYear('')
+                        setColor('')
+                        setFuelType('')
+                        setHasGps('')
+                        setTimeout(() => setRegisterSuccess(false), 1500)
+                      } catch (error) {
+                        alert(
+                          error instanceof Error
+                            ? error.message
+                            : '차량 등록에 실패했습니다.'
+                        )
+                      } finally {
+                        setRegistering(false)
+                      }
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+          {/* 등록 성공 안내 */}
+          {registerSuccess && (
+            <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
+              <div className="rounded-xl bg-white px-8 py-6 text-center text-lg font-semibold text-blue-600 shadow-xl">
+                등록이 완료되었습니다!
+              </div>
+            </div>
+          )}
         </main>
       </div>
       {/* 상태 변경 모달 */}

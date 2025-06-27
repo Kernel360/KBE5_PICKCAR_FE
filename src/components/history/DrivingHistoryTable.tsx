@@ -106,7 +106,7 @@ function DrivingHistoryTable({
                   icon={faFileLines as IconProp}
                   size="lg"
                   onClick={() => onViewDetails(log.historyId)}
-                  className="rounded p-2 hover:bg-gray-200"
+                  className="rounded p-1 hover:bg-gray-200"
                 />
               </td>
             </tr>
