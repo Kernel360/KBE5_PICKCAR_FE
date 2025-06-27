@@ -154,14 +154,6 @@ function TrackingCar() {
     }
   }
 
-  const handleFilterReset = () => {
-    setSelectedCompany('all')
-    setSearchTerm('')
-    setSelectedVehicleId(null) // [수정]
-    setMapCenter(INIT_CENTER)
-    setMapZoom(INIT_ZOOM_LEVEL)
-  }
-
   const mapTitle = useMemo(() => {
     const company = companies.find(c => c.id === selectedCompany)
     const companyName = company && company.id !== 'all' ? company.name : '전체'
@@ -179,7 +171,7 @@ function TrackingCar() {
         <SideMenuBar />
 
         <div className="my-10 flex flex-1 flex-col rounded-2xl bg-[#eaf1fb] p-6 shadow">
-          <div className="relative min-h-[300px] flex-1 md:min-h-0">
+          <div className="relative flex-1 md:min-h-0">
             <KakaoMap
               center={mapCenter}
               zoom={mapZoom}
@@ -191,10 +183,12 @@ function TrackingCar() {
           </div>
         </div>
 
-        <div className="my-10 flex w-full flex-col rounded-2xl bg-white p-6 shadow md:w-96">
+        <div className="my-10 flex w-96 flex-col rounded-2xl bg-white p-6 shadow">
           <div className="mb-4 text-lg font-bold">
             운행 중인 차량 ({filteredCars.length})
           </div>
+
+          {/* FIXME: company 삭제 내용 적용 필요 */}
           <CarFilters
             companies={companies}
             selectedCompany={selectedCompany}
@@ -202,6 +196,8 @@ function TrackingCar() {
             onCompanyChange={setSelectedCompany}
             onSearchTermChange={setSearchTerm}
           />
+
+          {/* TODO: 내부 스크롤 추가 */}
           <CarList
             cars={filteredCars}
             selectedVehicleId={selectedVehicleId}
