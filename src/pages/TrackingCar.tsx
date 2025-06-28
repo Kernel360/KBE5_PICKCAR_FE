@@ -170,6 +170,7 @@ function TrackingCar() {
         <SideMenuBar />
 
         <div className="my-10 flex flex-1 flex-col rounded-2xl bg-[#eaf1fb] p-6 shadow">
+          <h1 className="mb-5 text-xl font-bold">실시간 관제</h1>
           <div className="relative flex-1 md:min-h-0">
             <KakaoMap
               center={mapCenter}
