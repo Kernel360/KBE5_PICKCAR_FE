@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react'
 import { VehicleListResponse, VehicleStatus } from '../../../types/vehicle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faWrench } from '@fortawesome/free-solid-svg-icons'
+import {
+  faWrench,
+  faHammer,
+  faTriangleExclamation
+} from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck } from '@fortawesome/free-regular-svg-icons'
 
 interface RentalTableProps {
   search: string
@@ -12,15 +17,21 @@ interface RentalTableProps {
 }
 
 const statusStyles = {
-  [VehicleStatus.OPERABLE]: 'bg-green-100 text-green-800',
-  [VehicleStatus.UNDER_INSPECTION]: 'bg-yellow-100 text-yellow-800',
-  [VehicleStatus.DAMAGED]: 'bg-red-100 text-red-800'
+  [VehicleStatus.OPERABLE]: 'badge badge-success',
+  [VehicleStatus.UNDER_INSPECTION]: 'badge badge-warning',
+  [VehicleStatus.DAMAGED]: 'badge badge-error'
 }
 
 const statusLabels = {
-  [VehicleStatus.OPERABLE]: '이용가능',
+  [VehicleStatus.OPERABLE]: '정상',
   [VehicleStatus.UNDER_INSPECTION]: '점검중',
   [VehicleStatus.DAMAGED]: '고장'
+}
+
+const statusIcon = {
+  [VehicleStatus.OPERABLE]: faCircleCheck,
+  [VehicleStatus.UNDER_INSPECTION]: faHammer,
+  [VehicleStatus.DAMAGED]: faTriangleExclamation
 }
 
 export default function RentalTable({
@@ -101,6 +112,9 @@ export default function RentalTable({
                     className={`inline-flex w-20 justify-center rounded-full px-2.5 py-1 text-xs font-medium ${
                       statusStyles[vehicle.vehicleStatus]
                     }`}>
+                    <FontAwesomeIcon
+                      icon={statusIcon[vehicle.vehicleStatus] as IconProp}
+                    />
                     {statusLabels[vehicle.vehicleStatus]}
                   </span>
                 </td>

@@ -168,7 +168,7 @@ export default function Rental() {
           </div>
           {/* 차량 등록 모달 */}
           {showRegisterModal && (
-            <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
               <div className="relative w-full max-w-2xl rounded-2xl bg-white px-8 py-8 shadow-xl">
                 <h2 className="mb-6 text-xl font-bold text-gray-900">
                   차량 등록
@@ -197,13 +197,13 @@ export default function Rental() {
                 />
                 <div className="mt-4 flex justify-end gap-3">
                   <button
-                    className="rounded border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50"
+                    className="btn btn-default btn-soft rounded-2xl px-6 py-2"
                     onClick={() => setShowRegisterModal(false)}
                     disabled={registering}>
                     취소
                   </button>
                   <button
-                    className="rounded bg-blue-600 px-6 py-2 text-white hover:bg-blue-700"
+                    className="btn rounded-2xl bg-blue-500 px-6 py-2 text-white"
                     onClick={() => setShowCheckModal(true)}
                     disabled={registering}>
                     등록
@@ -272,7 +272,7 @@ export default function Rental() {
           )}
           {/* 등록 성공 안내 */}
           {registerSuccess && (
-            <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
               <div className="rounded-xl bg-white px-8 py-6 text-center text-lg font-semibold text-blue-600 shadow-xl">
                 등록이 완료되었습니다!
               </div>

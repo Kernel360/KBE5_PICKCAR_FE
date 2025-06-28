@@ -5,9 +5,8 @@ const MODAL_STYLES = {
   title: 'mb-4 text-lg font-bold text-gray-900',
   list: 'mb-6 space-y-2 text-sm text-gray-700',
   buttonContainer: 'flex justify-end gap-2',
-  cancelButton:
-    'rounded border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50',
-  confirmButton: 'rounded bg-blue-600 px-6 py-2 text-white hover:bg-blue-700'
+  cancelButton: 'rounded px-6 py-2 btn btn-default btn-soft rounded-2xl',
+  confirmButton: 'rounded px-6 py-2 btn bg-blue-500 text-white rounded-2xl'
 } as const
 
 interface RegisterCheckModalProps {
@@ -44,7 +43,7 @@ export default function RegisterCheckModal({
     manufacturer === 'custom' ? customManufacturer : manufacturer
 
   return (
-    <div className={MODAL_STYLES.overlay}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
       <div className={MODAL_STYLES.container}>
         <h3 className={MODAL_STYLES.title}>
           입력하신 내용으로 등록하시겠습니까?

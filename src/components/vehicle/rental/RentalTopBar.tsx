@@ -1,7 +1,7 @@
 import { VehicleStatus } from '@/types/vehicle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faSquarePlus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faCarRear } from '@fortawesome/free-solid-svg-icons'
 
 interface RentalTopBarProps {
   search: string
@@ -25,11 +25,16 @@ export default function RentalTopBar({
       </div>
       <div className="flex items-center gap-4">
         <button
+          className="btn btn-sm flex gap-3 outline"
           type="button"
           onClick={onClickAddCar}>
           <FontAwesomeIcon
-            icon={faSquarePlus as IconProp}
-            size="2xl"
+            icon={faPlus as IconProp}
+            size="xl"
+          />
+          <FontAwesomeIcon
+            icon={faCarRear as IconProp}
+            size="xl"
           />
         </button>
 
@@ -41,13 +46,13 @@ export default function RentalTopBar({
           </label>
           <input
             id="vehicle-search"
-            className="input ml-8 rounded border border-gray-300 bg-white px-3 py-2 text-sm"
+            className="input ml-4 rounded border border-gray-300 bg-white px-3 py-2 text-sm"
             placeholder="차량번호 검색"
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-        <div className="relative mx-5">
+        <div className="relative mx-4">
           <div className="flex gap-3 filter">
             <input
               className={`btn filter-reset ${filter === '' ? 'btn-active' : ''}`}
@@ -58,15 +63,15 @@ export default function RentalTopBar({
               onChange={() => setFilter('')}
             />
             <input
-              className={`btn btn-soft btn-success btn-sm mt-1 outline ${filter === VehicleStatus.OPERABLE ? 'btn-active' : ''}`}
+              className={`btn btn-success btn-sm mt-1 ${filter === VehicleStatus.OPERABLE ? 'btn-active' : ''}`}
               type="radio"
               name="statusFilter"
-              aria-label="이용가능"
+              aria-label="정상"
               checked={filter === VehicleStatus.OPERABLE}
               onChange={() => setFilter(VehicleStatus.OPERABLE)}
             />
             <input
-              className={`btn btn-soft btn-secondary btn-sm mt-1 outline ${filter === VehicleStatus.UNDER_INSPECTION ? 'btn-active' : ''}`}
+              className={`btn btn-warning btn-sm mt-1 ${filter === VehicleStatus.UNDER_INSPECTION ? 'btn-active' : ''}`}
               type="radio"
               name="statusFilter"
               aria-label="점검중"
@@ -74,13 +79,12 @@ export default function RentalTopBar({
               onChange={() => setFilter(VehicleStatus.UNDER_INSPECTION)}
             />
             <input
-              className={`btn btn-error btn-soft btn-sm mt-1 outline ${filter === VehicleStatus.DAMAGED ? 'btn-active' : ''}`}
+              className={`btn btn-error btn-sm mt-1 ${filter === VehicleStatus.DAMAGED ? 'btn-active' : ''}`}
               type="radio"
               name="statusFilter"
               aria-label="고장"
               checked={filter === VehicleStatus.DAMAGED}
-              onChange={() => setFilter(VehicleStatus.DAMAGED)}
-            />
+              onChange={() => setFilter(VehicleStatus.DAMAGED)}></input>
           </div>
         </div>
       </div>
