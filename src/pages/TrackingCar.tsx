@@ -1,7 +1,6 @@
 import KakaoMap from '@/components/common/KakaoMap'
 import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
-import MapControls from '@/components/tracking/MapControls'
 import Header from '@/components/common/Header'
 import type { Company, Car } from '@/types/tracking'
 import axios from 'axios'
