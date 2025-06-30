@@ -5,6 +5,10 @@ import DrivingHistoryPage from './pages/DrivingHistoryPage'
 import Rental from './pages/Vehicle/Rental'
 import VehicleRegisterPage from '@/pages/Vehicle/Register'
 
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
+
 function App() {
   return (
     <BrowserRouter>

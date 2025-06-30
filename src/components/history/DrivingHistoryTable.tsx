@@ -1,17 +1,29 @@
 import type { DrivingHistoryEntry } from '@/types/drivingHistory'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import { faFileLines } from '@fortawesome/free-regular-svg-icons'
 
 interface DrivingHistoryTableProps {
   logs: DrivingHistoryEntry[]
   onViewDetails: (logId: number) => void
+  error?: string | null
 }
 
 function DrivingHistoryTable({
   logs,
-  onViewDetails
+  onViewDetails,
+  error
 }: DrivingHistoryTableProps) {
+  if (error) {
+    return (
+      <p className="py-12 text-center text-lg font-semibold text-red-300">
+        {error}
+      </p>
+    )
+  }
   if (!logs || logs.length === 0) {
     return (
-      <p className="py-4 text-center text-gray-500">
+      <p className="items-center justify-center py-4 text-center text-gray-500">
         표시할 운행 기록이 없습니다.
       </p>
     )
@@ -34,31 +46,31 @@ function DrivingHistoryTable({
 
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-      <table className="min-w-full divide-y divide-gray-200 text-sm">
+      <table className="table-zebra text-m table">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               ID
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               차량번호
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               운전자
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               시작 시간
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               종료 시간
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               운행 시간
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               이동 거리
             </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap text-gray-700">
+            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
               작업
             </th>
           </tr>
@@ -90,11 +102,12 @@ function DrivingHistoryTable({
                 {formatDistance(log.totalDistance)}
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                <button
+                <FontAwesomeIcon
+                  icon={faFileLines as IconProp}
+                  size="lg"
                   onClick={() => onViewDetails(log.historyId)}
-                  className="rounded bg-blue-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none">
-                  상세보기
-                </button>
+                  className="rounded px-3 py-3 outline hover:bg-gray-500"
+                />
               </td>
             </tr>
           ))}

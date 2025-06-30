@@ -10,9 +10,9 @@ interface Props {
 }
 
 const statusMap: Record<string, { label: string; color: string }> = {
-  RESERVED: { label: '운행 중', color: 'bg-green-100 text-green-600' },
-  RETURNED: { label: '반납 완료', color: 'bg-red-100 text-black-600' },
-  CANCELLED: { label: '취소됨', color: 'bg-gray-100 text-gray-600' }
+  RESERVED: { label: '운행 중', color: 'badge badge-success' },
+  RETURNED: { label: '반납 완료', color: 'badge badge-primary' },
+  CANCELLED: { label: '취소됨', color: 'badge badge-error' }
 }
 
 const INIT_CENTER = { lat: 37.5665, lng: 126.978 }
