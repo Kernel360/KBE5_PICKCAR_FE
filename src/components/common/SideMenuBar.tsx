@@ -15,7 +15,7 @@ const MENU_LIST = [
   { to: '/tracking', label: '실시간 관제', icon: faRoute },
   { to: '/vehicle/rental', label: '차량 등록/관리', icon: faCar },
   { to: '/driving-history', label: '운행일지', icon: faClipboard },
-  { to: '/user/register', label: '사원 등록', icon: faUserTie },
+  { to: '/employee/management', label: '사원 등록/관리', icon: faUserTie },
   { to: '/reservation', label: '차량 할당', icon: faCalendarDays }
 ] as const
 
