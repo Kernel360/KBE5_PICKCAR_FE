@@ -20,7 +20,7 @@ const MENU_LIST = [
 ] as const
 
 const STYLES = {
-  aside: 'my-10 w-60 rounded-2xl bg-white px-6 py-8 shadow gap-2',
+  aside: 'my-10 w-72 rounded-2xl bg-white px-6 py-8 shadow gap-2',
   title: 'mb-8 text-lg font-bold',
   nav: 'flex flex-col gap-2 text-gray-600',
   link: 'rounded px-3 py-2 hover:bg-gray-100',

@@ -1,5 +1,8 @@
 import React from 'react' // JSX 사용 및 React 타입 참조를 위해 import
 import type { Car } from '@/types/tracking'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import { faLocationDot, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 /**
  * 개별 차량 정보
@@ -22,10 +25,6 @@ function CarListItem({
   const selectedClasses = 'bg-blue-50'
   const hoverClasses = 'hover:bg-blue-50'
 
-  const buttonBaseClasses = 'rounded px-3 py-1 text-sm'
-  const buttonSelectedClasses = 'bg-blue-500 text-white'
-  const buttonNormalClasses = 'bg-blue-100 text-blue-500 hover:bg-blue-200'
-
   return (
     <div
       className={`${baseClasses} ${isSelected ? selectedClasses : hoverClasses}`}
@@ -42,18 +41,32 @@ function CarListItem({
           {car.model} · {car.location}
         </div>
       </div>
-      <button
-        onClick={e => {
-          e.stopPropagation() // div의 onClick 이벤트 전파 방지
-          console.log(
-            `[CarListItem] 버튼 클릭! 전달할 차량 번호: ${car.vehicleId}`
-          )
-
-          onSelectCar(car.vehicleId)
-        }}
-        className={`${buttonBaseClasses} ${isSelected ? buttonSelectedClasses : buttonNormalClasses}`}>
-        상세보기
-      </button>
+      <div>
+        <button
+          onClick={e => {
+            e.stopPropagation() // div의 onClick 이벤트 전파 방지
+            console.log(
+              `[CarListItem] 버튼 클릭! 전달할 차량 번호: ${car.vehicleId}`
+            )
+            onSelectCar(car.vehicleId)
+          }}
+          className="hover-gray-500">
+          <FontAwesomeIcon
+            icon={faLocationDot as IconProp}
+            size="lg"
+            color="#5e8db0"
+            className="rounded px-3 py-3"
+          />
+        </button>
+        <button>
+          <FontAwesomeIcon
+            icon={faCircleInfo as IconProp}
+            size="lg"
+            color="#4c7b6d"
+            className="rounded px-3 py-3"
+          />
+        </button>
+      </div>
     </div>
   )
 }

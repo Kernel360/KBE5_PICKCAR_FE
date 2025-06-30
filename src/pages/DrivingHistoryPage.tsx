@@ -168,15 +168,15 @@ function DrivingHistoryPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#f5f8fa]">
+    <div className="flex flex-col bg-[#f5f8fa]">
       <header className="bg-white">
         <Header />
       </header>
 
-      <div className="flex">
+      <div className="flex flex-1">
         <SideMenuBar />
 
-        <main className="relative mx-3 flex flex-1 flex-col p-6">
+        <main className="relative mx-3 flex h-[calc(100vh-64px)] min-h-0 flex-1 flex-col p-6">
           <DrivingHistoryTopBar
             filter={filter}
             setFilter={setFilter}

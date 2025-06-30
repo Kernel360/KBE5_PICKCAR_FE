@@ -13,12 +13,20 @@ function Header() {
           className="flex items-center hover:opacity-80">
           <Logo />
           <span className="ml-2 text-lg font-medium text-gray-700">
-            What say something
+            PickCar
           </span>
         </Link>
       </div>
 
       <div className="flex items-center">
+        <div className="mx-10 flex flex-row">
+          <div className="mx-2 mt-2 inline-grid *:[grid-area:1/1]">
+            <div className="status status-success animate-ping"></div>
+            <div className="status status-success"></div>
+          </div>{' '}
+          <p className="text-gray-500">관제 시스템 정상</p>
+        </div>
+
         <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 text-xl font-bold text-white">
           <FontAwesomeIcon
             icon={faUser as IconProp}

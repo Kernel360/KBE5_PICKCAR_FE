@@ -15,12 +15,6 @@ const FUEL_TYPES = ['LPG', '휘발유', '경유', '전기', '기타'] as const
 
 const GPS_OPTIONS = ['예', '아니오'] as const
 
-const INPUT_STYLES = {
-  base: 'rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none',
-  select:
-    'rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 focus:outline-none'
-} as const
-
 interface RegisterCarInfoSectionProps {
   carNumber: string
   setCarNumber: (v: string) => void
@@ -68,7 +62,6 @@ export default function RegisterCarInfoSection({
 }: RegisterCarInfoSectionProps) {
   return (
     <div className="mb-8">
-      <div className="mb-4 text-lg font-semibold text-gray-900">차량 정보</div>
       <div className="grid grid-cols-2 gap-x-6 gap-y-5">
         <div className="flex flex-col gap-1">
           <label
@@ -77,9 +70,10 @@ export default function RegisterCarInfoSection({
             차량번호 <span className="text-blue-600">*</span>
           </label>
           <input
+            type="text"
             id="carNumber"
             name="carNumber"
-            className={INPUT_STYLES.base}
+            className="input"
             placeholder="차량번호 입력"
             value={carNumber}
             onChange={e => setCarNumber(e.target.value)}
@@ -94,7 +88,7 @@ export default function RegisterCarInfoSection({
           <input
             id="model"
             name="model"
-            className={INPUT_STYLES.base}
+            className="input"
             placeholder="모델명 입력 (예: 현대 아반떼, 기아 스포티지)"
             value={model}
             onChange={e => setModel(e.target.value)}
@@ -109,7 +103,7 @@ export default function RegisterCarInfoSection({
           <select
             id="carType"
             name="carType"
-            className={INPUT_STYLES.select}
+            className="select"
             value={carType}
             onChange={e => setCarType(e.target.value)}>
             <option
@@ -130,7 +124,7 @@ export default function RegisterCarInfoSection({
             <input
               id="customCarType"
               name="customCarType"
-              className={`mt-2 ${INPUT_STYLES.base}`}
+              className="input"
               placeholder="차종 직접 입력"
               value={customCarType}
               onChange={e => setCustomCarType(e.target.value)}
@@ -146,7 +140,7 @@ export default function RegisterCarInfoSection({
           <select
             id="manufacturer"
             name="manufacturer"
-            className={INPUT_STYLES.select}
+            className="select"
             value={manufacturer}
             onChange={e => setManufacturer(e.target.value)}>
             <option
@@ -167,7 +161,7 @@ export default function RegisterCarInfoSection({
             <input
               id="customManufacturer"
               name="customManufacturer"
-              className={`mt-2 ${INPUT_STYLES.base}`}
+              className="input"
               placeholder="제조사 직접 입력"
               value={customManufacturer}
               onChange={e => setCustomManufacturer(e.target.value)}
@@ -183,7 +177,7 @@ export default function RegisterCarInfoSection({
           <input
             id="year"
             name="year"
-            className={INPUT_STYLES.base}
+            className="input"
             placeholder="연식 입력 (예: 2023)"
             value={year}
             onChange={e => setYear(e.target.value)}
@@ -198,7 +192,7 @@ export default function RegisterCarInfoSection({
           <input
             id="color"
             name="color"
-            className={INPUT_STYLES.base}
+            className="input"
             placeholder="색상 입력"
             value={color}
             onChange={e => setColor(e.target.value)}
@@ -213,7 +207,7 @@ export default function RegisterCarInfoSection({
           <select
             id="fuelType"
             name="fuelType"
-            className={INPUT_STYLES.select}
+            className="select"
             value={fuelType}
             onChange={e => setFuelType(e.target.value)}>
             <option
@@ -240,7 +234,7 @@ export default function RegisterCarInfoSection({
           <select
             id="hasGps"
             name="hasGps"
-            className={INPUT_STYLES.select}
+            className="select"
             value={hasGps}
             onChange={e => setHasGps(e.target.value)}>
             <option
