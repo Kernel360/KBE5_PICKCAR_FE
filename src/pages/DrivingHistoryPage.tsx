@@ -3,7 +3,6 @@ import DrivingHistoryTable from '@/components/history/DrivingHistoryTable'
 import type {
   DrivingHistoryEntry,
   DrivingHistoryDetail,
-  CycleInfo,
   DrivingHistoryFilter
 } from '@/types/drivingHistory'
 import type { PaginationState } from '@/types/common/Pagination'
