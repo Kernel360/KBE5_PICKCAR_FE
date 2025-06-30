@@ -3,9 +3,11 @@ import Login from './pages/Login'
 import TrackingCar from './pages/TrackingCar'
 import DrivingHistoryPage from './pages/DrivingHistoryPage'
 import VehicleManagement from './pages/VehicleManagement'
+import DashBoard from './pages/DashBoard'
 
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+
 config.autoAddCss = false
 
 function App() {
@@ -30,6 +32,11 @@ function App() {
         <Route
           path="/vehicle/rental"
           element={<VehicleManagement />}
+        />
+
+        <Route
+          path="/dashboard"
+          element={<DashBoard />}
         />
       </Routes>
     </BrowserRouter>
