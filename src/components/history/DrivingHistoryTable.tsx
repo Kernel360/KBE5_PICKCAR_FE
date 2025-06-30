@@ -1,7 +1,7 @@
 import type { DrivingHistoryEntry } from '@/types/drivingHistory'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faFileLines } from '@fortawesome/free-regular-svg-icons'
+import { faCompass } from '@fortawesome/free-regular-svg-icons'
 
 interface DrivingHistoryTableProps {
   logs: DrivingHistoryEntry[]
@@ -103,10 +103,11 @@ function DrivingHistoryTable({
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-gray-600">
                 <FontAwesomeIcon
-                  icon={faFileLines as IconProp}
-                  size="lg"
+                  icon={faCompass as IconProp}
+                  size="xl"
+                  color="#111111"
                   onClick={() => onViewDetails(log.historyId)}
-                  className="rounded px-3 py-3 outline hover:bg-gray-500"
+                  className="rounded-2xl p-1 hover:bg-gray-200"
                 />
               </td>
             </tr>

@@ -22,7 +22,7 @@ export default function ChangeStatusModal({
   onCancel
 }: ChangeStatusModalProps) {
   return (
-    <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
@@ -37,7 +37,7 @@ export default function ChangeStatusModal({
           </button>
         </div>
         {/* 차량 번호 */}
-        <div className="mb-6 text-base text-gray-400">
+        <div className="mb-6 font-bold text-gray-500">
           차량 번호: {carNumber}
         </div>
         {/* 상태 선택 */}
@@ -92,12 +92,12 @@ export default function ChangeStatusModal({
         {/* 하단 버튼 */}
         <div className="flex justify-end gap-2">
           <button
-            className="rounded border border-gray-300 bg-white px-8 py-3 text-lg text-gray-700 hover:bg-gray-50"
+            className="btn btn-default btn-soft btn-md rounded-2xl"
             onClick={onCancel}>
             취소
           </button>
           <button
-            className="rounded bg-blue-600 px-8 py-3 text-lg text-white hover:bg-blue-700 disabled:bg-blue-200"
+            className="btn btn-md rounded-2xl bg-blue-500 text-white"
             onClick={onConfirm}
             disabled={!selectedStatus}>
             확인
