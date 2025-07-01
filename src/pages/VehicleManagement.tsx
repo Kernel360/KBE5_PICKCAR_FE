@@ -42,25 +42,6 @@ axios.interceptors.request.use(
   error => Promise.reject(error)
 )
 
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()!.split(';').shift() || null
-  return null
-}
-
-axios.interceptors.request.use(
-  config => {
-    const token = getCookie('accessToken')
-    if (token) {
-      config.headers = config.headers || {}
-      config.headers['Authorization'] = `Bearer ${token}`
-    }
-    return config
-  },
-  error => Promise.reject(error)
-)
-
 const updateVehicleStatus = async (
   request: UpdateVehicleStatusRequest
 ): Promise<void> => {
