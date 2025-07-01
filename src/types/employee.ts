@@ -21,6 +21,13 @@ export enum EmployeePosition {
   GENERAL_MANAGER = '부장'
 }
 
+export interface AvailableVehicleResponse {
+  vehicleId: number
+  model: string
+  licensePlate: string
+  status: string
+}
+
 export interface EmployeeListResponse {
   content: Employee[]
   page: {
