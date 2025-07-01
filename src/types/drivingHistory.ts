@@ -21,17 +21,12 @@ export interface DrivingHistoryDetail {
   totalDrivingTime: string
   totalDistance: number
   driverName: string
-  path: CycleInfo[]
+  path: GpsData[]
 }
 
-export interface CycleInfo {
-  second: string
-  gps_status: string
+export interface GpsData {
   latitude: number
   longitude: number
-  angle: number
-  speed: number
-  battery: number
 }
 
 export interface DrivingHistoryFilter {
