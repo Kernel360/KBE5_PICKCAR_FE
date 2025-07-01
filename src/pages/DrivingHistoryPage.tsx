@@ -3,7 +3,6 @@ import DrivingHistoryTable from '@/components/history/DrivingHistoryTable'
 import type {
   DrivingHistoryEntry,
   DrivingHistoryDetail,
-  CycleInfo,
   DrivingHistoryFilter
 } from '@/types/drivingHistory'
 import type { PaginationState } from '@/types/common/Pagination'
@@ -165,11 +164,15 @@ function DrivingHistoryPage() {
 
       // 3. [수정] 응답의 path (CycleInfo 객체 배열)에서 위도/경도를 추출하여
       //    지도(KakaoMap)가 필요로 하는 { lat, lng } 형태의 배열로 변환합니다.
+
+      console.log(responseData.paths)
       const polylineData =
-        responseData.path?.map((cycle: CycleInfo) => ({
-          lat: cycle.latitude,
-          lng: cycle.longitude
-        })) || []
+        responseData.paths?.map(
+          (point: { latitude: number; longitude: number }) => ({
+            lat: point.latitude,
+            lng: point.longitude
+          })
+        ) || []
 
       // 4. 변환된 경로 데이터를 detailPath state에 저장합니다.
       setDetailPath(polylineData)
