@@ -1,8 +1,8 @@
 export interface Employee {
-  id: number
-  employeeId: string
+  userId: number
   name: string
-  position: string
+  status: string // UserStatus
+  role: string // UserRole
 }
 
 export interface EmployeeFormData {
