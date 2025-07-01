@@ -14,7 +14,6 @@ export interface EmployeeFormData {
   position: string
 }
 
-// Todo : 직책 관련하여 회의 필요
 export enum EmployeePosition {
   EMPLOYEE = '사원',
   ASSISTANT_MANAGER = '대리',

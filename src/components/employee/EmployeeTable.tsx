@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Employee } from '@/types/employee'
+import { Employee, AvailableVehicleResponse } from '@/types/employee'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faCarSide } from '@fortawesome/free-solid-svg-icons'
+import ReservationVehicleListModal from '@/components/employee/ReservationModal'
 
 interface EmployeeTableProps {
   refreshKey: number
@@ -37,6 +38,11 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [employees, setEmployees] = useState<Employee[]>([])
+  const [vehicleList, setVehicleList] = useState<AvailableVehicleResponse[]>([])
+  const [isVehicleModalOpen, setIsVehicleModalOpen] = useState(false)
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(
+    null
+  )
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -55,6 +61,12 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
     }
     fetchEmployees()
   }, [refreshKey])
+
+  useEffect(() => {
+    axios.get('/api/v1/reservation/vehicles').then(res => {
+      setVehicleList(res.data.data)
+    })
+  }, [])
 
   if (isLoading) {
     return <LoadingScreen />
@@ -120,6 +132,10 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
                   <FontAwesomeIcon
                     icon={faCarSide as IconProp}
                     className="btn p-3"
+                    onClick={() => {
+                      setSelectedEmployeeId(employee.userId)
+                      setIsVehicleModalOpen(true)
+                    }}
                   />
                 </td>
               </tr>
@@ -127,6 +143,13 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
           </tbody>
         </table>
       </div>
+      {isVehicleModalOpen && selectedEmployeeId && (
+        <ReservationVehicleListModal
+          vehicles={vehicleList}
+          employeeId={selectedEmployeeId}
+          onClose={() => setIsVehicleModalOpen(false)}
+        />
+      )}
     </div>
   )
 }
