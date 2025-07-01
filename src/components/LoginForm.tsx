@@ -2,6 +2,7 @@ import Logo from './common/Logo'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import SignUpModal from './SignUpModal'
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 axios.defaults.headers.common['Content-Type'] = 'application/json'
@@ -13,6 +14,7 @@ function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [showSignUpModal, setShowSignUpModal] = useState(false)
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,9 +30,10 @@ function LoginForm() {
         password
       })
       const result = response.data
-      if (result?.data?.data === 'success') {
+      console.log(result)
+      if (result?.responseInfo?.isSuccess) {
         navigate('/tracking')
-      } else if (result?.data?.data !== 'success') {
+      } else if (result?.responseInfo?.isSuccess == false) {
         setError('이메일 또는 비밀번호를 재확인 해주세요.')
       } else {
         setError('로그인에 실패했습니다. 다시 시도해주세요.')
@@ -72,11 +75,21 @@ function LoginForm() {
           {error && <div className="mb-2 text-sm text-red-500">{error}</div>}
           <button
             type="submit"
-            className="mt-4 w-full rounded-lg bg-blue-500 py-3 text-lg font-semibold text-white transition-colors hover:bg-blue-700">
+            className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white">
             로그인
           </button>
         </form>
+
+        <button
+          className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white"
+          onClick={() => setShowSignUpModal(true)}>
+          회원가입
+        </button>
       </div>
+
+      {showSignUpModal && (
+        <SignUpModal onClose={() => setShowSignUpModal(false)} />
+      )}
     </div>
   )
 }

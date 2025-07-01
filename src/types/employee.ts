@@ -1,8 +1,9 @@
 export interface Employee {
-  id: number
-  employeeId: string
+  userId: number
   name: string
-  position: string
+  status: string // UserStatus
+  role: string // UserRole
+  email: string
 }
 
 export interface EmployeeFormData {
@@ -13,12 +14,18 @@ export interface EmployeeFormData {
   position: string
 }
 
-// Todo : 직책 관련하여 회의 필요
 export enum EmployeePosition {
   EMPLOYEE = '사원',
   ASSISTANT_MANAGER = '대리',
   MANAGER = '과장',
   GENERAL_MANAGER = '부장'
+}
+
+export interface AvailableVehicleResponse {
+  vehicleId: number
+  model: string
+  licensePlate: string
+  status: string
 }
 
 export interface EmployeeListResponse {

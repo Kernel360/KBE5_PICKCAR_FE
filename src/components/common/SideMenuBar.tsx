@@ -6,8 +6,7 @@ import {
   faCar,
   faRoute,
   faClipboard,
-  faUserTie,
-  faCalendarDays
+  faUserTie
 } from '@fortawesome/free-solid-svg-icons'
 
 const MENU_LIST = [
@@ -15,8 +14,7 @@ const MENU_LIST = [
   { to: '/tracking', label: '실시간 관제', icon: faRoute },
   { to: '/vehicle/rental', label: '차량 등록/관리', icon: faCar },
   { to: '/driving-history', label: '운행일지', icon: faClipboard },
-  { to: '/employee/management', label: '사원 등록/관리', icon: faUserTie },
-  { to: '/reservation', label: '차량 할당', icon: faCalendarDays }
+  { to: '/employee/management', label: '사원 차량 할당', icon: faUserTie }
 ] as const
 
 const STYLES = {
