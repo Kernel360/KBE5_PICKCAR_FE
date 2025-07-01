@@ -110,15 +110,25 @@ export default function AddEmployeeModal({
   }
 
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-        <h2 className="mb-4 text-lg font-bold text-gray-800">사원 추가</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
+        {/* 헤더 */}
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-extrabold text-gray-900">사원 추가</h2>
+          <button
+            className="text-2xl text-gray-400 hover:text-gray-600"
+            onClick={onCancel}
+            aria-label="닫기">
+            &times;
+          </button>
+        </div>
 
+        {/* 폼 */}
         <form
           onSubmit={handleSubmit}
           className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               아이디
             </label>
             <input
@@ -126,13 +136,12 @@ export default function AddEmployeeModal({
               name="employeeId"
               value={formData.employeeId}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
               placeholder="아이디를 입력하세요"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               비밀번호
             </label>
             <input
@@ -140,13 +149,12 @@ export default function AddEmployeeModal({
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
               placeholder="비밀번호를 입력하세요"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               비밀번호 확인
             </label>
             <input
@@ -154,13 +162,12 @@ export default function AddEmployeeModal({
               name="passwordConfirm"
               value={formData.passwordConfirm}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
               placeholder="비밀번호를 다시 입력하세요"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               이름
             </label>
             <input
@@ -168,20 +175,19 @@ export default function AddEmployeeModal({
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
               placeholder="이름을 입력하세요"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               직책
             </label>
             <select
               name="position"
               value={formData.position}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none">
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none">
               <option value={EmployeePosition.EMPLOYEE}>
                 {EmployeePosition.EMPLOYEE}
               </option>
@@ -196,20 +202,24 @@ export default function AddEmployeeModal({
               </option>
             </select>
           </div>
-
-          {error && <div className="text-sm text-red-600">{error}</div>}
-
-          <div className="flex justify-end space-x-2 pt-4">
+          {error && (
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-500">
+              {error}
+            </div>
+          )}
+          {/* 하단 버튼 */}
+          <div className="flex justify-end gap-2 pt-4">
             <button
               type="button"
+              className="btn btn-default btn-soft btn-md rounded-2xl"
               onClick={onCancel}
-              className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+              disabled={isLoading}>
               취소
             </button>
             <button
               type="submit"
-              disabled={isLoading}
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+              className="btn btn-md rounded-2xl bg-blue-500 text-white"
+              disabled={isLoading}>
               {isLoading ? '등록 중...' : '등록'}
             </button>
           </div>

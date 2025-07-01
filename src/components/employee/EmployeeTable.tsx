@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { Employee } from '@/types/employee'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import { faCarSide } from '@fortawesome/free-solid-svg-icons'
 
 interface EmployeeTableProps {
-  onEditEmployee: (employee: Employee) => void
-  onDeleteEmployee: (employee: Employee) => void
   refreshKey: number
 }
 
@@ -46,8 +47,8 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
         setEmployees(response.data.data)
         setError(null)
       } catch (err) {
+        console.log(err)
         setError('사원 목록을 불러오는데 실패했습니다.')
-        console.error('Error fetching employees:', err)
       } finally {
         setIsLoading(false)
       }
@@ -68,53 +69,64 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-      <table className="table-zebra text-m table">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
-              No
-            </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
-              이름
-            </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
-              상태
-            </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
-              권한
-            </th>
-            <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
-              작업
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100 border-b border-gray-200">
-          {employees.map((employee, idx) => (
-            <tr
-              key={employee.userId}
-              className="h-12 hover:bg-gray-50">
-              <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                {idx + 1}
-              </td>
-              <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                {employee.name}
-              </td>
-              <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                {employee.status}
-              </td>
-              <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                {employee.role}
-              </td>
-              <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                <div className="btn btn-primary rounded-2xl p-1 hover:bg-gray-200">
-                  버튼
-                </div>
-              </td>
+    <div className="h-full min-h-0 flex-1 overflow-x-auto rounded-lg border border-gray-200 bg-white">
+      <div
+        className="h-full overflow-y-auto"
+        style={{ overflowX: 'auto', overflowY: 'auto' }}>
+        <table className="table-zebra text-m table">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                No
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                이름
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                상태
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                권한
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                이메일
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                작업
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-100 border-b border-gray-200">
+            {employees.map((employee, idx) => (
+              <tr
+                key={employee.userId}
+                className="h-12 hover:bg-gray-50">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                  {idx + 1}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                  {employee.name}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                  {employee.status}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                  {employee.role}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                  {employee.email}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                  <FontAwesomeIcon
+                    icon={faCarSide as IconProp}
+                    className="btn p-3"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

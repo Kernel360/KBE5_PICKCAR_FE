@@ -3,6 +3,7 @@ export interface Employee {
   name: string
   status: string // UserStatus
   role: string // UserRole
+  email: string
 }
 
 export interface EmployeeFormData {

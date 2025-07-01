@@ -14,17 +14,25 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
     email: '',
     password: '',
     name: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    isAdmin: false
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    const { name, value, type } = e.target
+    if (type === 'radio' && name === 'isAdmin') {
+      setFormData(prev => ({
+        ...prev,
+        isAdmin: value === 'true'
+      }))
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }))
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,13 +52,12 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
 
     setIsLoading(true)
     try {
-      const response = await axios.post('/api/v1/auth/sign-up/admins', {
-        params: {
-          email: formData.email,
-          password: formData.password,
-          name: formData.name,
-          phoneNumber: formData.phoneNumber
-        }
+      const response = await axios.post('/api/v1/auth/sign-up', {
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        phoneNumber: formData.phoneNumber,
+        isAdmin: formData.isAdmin
       })
       console.log('회원가입 성공:', response)
       alert('회원가입이 완료되었습니다.')
@@ -147,6 +154,36 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               placeholder="전화번호를 입력하세요"
               className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
             />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              권한 선택
+            </label>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="isAdmin"
+                  value="true"
+                  checked={formData.isAdmin === true}
+                  onChange={handleInputChange}
+                  className="radio radio-primary"
+                />
+                <span>관리자</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="isAdmin"
+                  value="false"
+                  checked={formData.isAdmin === false}
+                  onChange={handleInputChange}
+                  className="radio radio-primary"
+                />
+                <span>사원</span>
+              </label>
+            </div>
           </div>
 
           {error && (
