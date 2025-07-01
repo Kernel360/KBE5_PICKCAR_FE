@@ -2,21 +2,14 @@ import KakaoMap from '@/components/common/KakaoMap'
 import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
 import Header from '@/components/common/Header'
-import type { Company, Car } from '@/types/tracking'
+import type { Car } from '@/types/tracking'
 import axios from 'axios'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
 import SideMenuBar from '@/components/common/SideMenuBar'
 
-// 1. 서버(8080)용 인스턴스
-const mainApi = axios.create({
-  baseURL: import.meta.env.VITE_MAIN_API_URL,
-  headers: { 'Content-Type': 'application/json' },
-  withCredentials: true
-})
-
-// 2. 서버(8081)용 인스턴스
+// 2. 애뮬레이터 (sse) (8081)용 인스턴스 - FIXME: 8081이 아니면 환경변수 바꿀 것
 const trackingApi = axios.create({
   baseURL: import.meta.env.VITE_TRACKING_API_URL,
   headers: { 'Content-Type': 'application/json' },
@@ -25,9 +18,6 @@ const trackingApi = axios.create({
 
 function getCookie(name: string): string | null {
   const value = `; ${document.cookie}`
-  console.log('document.cookie:', document.cookie)
-
-  console.log(value)
   const parts = value.split(`; ${name}=`)
   if (parts.length === 2) return parts.pop()!.split(';').shift() || null
   return null
@@ -36,8 +26,6 @@ function getCookie(name: string): string | null {
 axios.interceptors.request.use(
   config => {
     const token = getCookie('accessToken')
-
-    console.log('accessToken = ' + token)
     if (token) {
       config.headers = config.headers || {}
       config.headers['Authorization'] = `Bearer ${token}`
@@ -58,13 +46,11 @@ function TrackingCar() {
   const DETAIL_ZOOM_LEVEL = 5
 
   // 데이터 관련 상태
-  const [companies, setCompanies] = useState<Company[]>([])
   const [cars, setCars] = useState<Car[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   // 사용자 인터랙션 관련 상태
-  const [selectedCompany, setSelectedCompany] = useState<string>('all')
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [selectedVehicleId, setSelectedVehicleId] = useState<number | null>(
     null
@@ -78,14 +64,12 @@ function TrackingCar() {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [companiesResponse, carsResponse] = await Promise.all([
-          mainApi.get('/api/v1/companies'),
-          mainApi.get('/api/v1/vehicles')
-        ])
+        const response = await axios.get('/api/v1/vehicles')
+        console.log(response.data.data)
 
-        const allCompaniesOption: Company = { id: 'all', name: '모든 회사' }
-        setCompanies([allCompaniesOption, ...companiesResponse.data.data])
-        setCars(carsResponse.data.data || [])
+        setCars(response.data.data || [])
+
+        console.log(cars)
       } catch (err) {
         console.error('초기 데이터 로딩 실패:', err)
         setError('데이터를 불러오는 데 실패했습니다. 서버 상태를 확인해주세요.')
@@ -146,18 +130,14 @@ function TrackingCar() {
   // 4. 데이터 가공 (필터링된 차량, 지도 마커)
   const filteredCars = useMemo(() => {
     return cars.filter(car => {
-      const companyMatch =
-        selectedCompany === 'all' || car.companyId === selectedCompany
-
       const term = searchTerm.toLowerCase()
-      const termMatch =
+      return (
         term === '' ||
         car.licensePlate.toLowerCase().includes(term) ||
         car.model.toLowerCase().includes(term)
-
-      return companyMatch && termMatch
+      )
     })
-  }, [cars, selectedCompany, searchTerm, companies])
+  }, [cars, searchTerm])
 
   const carMarkers = useMemo(() => {
     return filteredCars.map(car => ({
@@ -177,11 +157,7 @@ function TrackingCar() {
     }
   }
 
-  const mapTitle = useMemo(() => {
-    const company = companies.find(c => c.id === selectedCompany)
-    const companyName = company && company.id !== 'all' ? company.name : '전체'
-    return `차량 위치 - ${companyName}`
-  }, [selectedCompany, companies])
+  const mapTitle = '전체'
 
   if (isLoading) return <LoadingScreen />
   if (error) return <ErrorScreen message={error} />
@@ -212,12 +188,8 @@ function TrackingCar() {
             운행 중인 차량 ({filteredCars.length})
           </div>
 
-          {/* FIXME: company 삭제 내용 적용 필요 */}
           <CarFilters
-            companies={companies}
-            selectedCompany={selectedCompany}
             searchTerm={searchTerm}
-            onCompanyChange={setSelectedCompany}
             onSearchTermChange={setSearchTerm}
           />
 

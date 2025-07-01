@@ -1,34 +1,21 @@
-import React from 'react'
-import type { Company } from '@/types/tracking'
-
-/**
- * 차량 검색 필터
- * 차량목록을 필터링 하도록 ( 회사 선택, 검색어 입력)
- */
-
 interface CarFiltersProps {
-  companies: Company[]
-  selectedCompany: string
   searchTerm: string
-  onCompanyChange: (companyId: string) => void
   onSearchTermChange: (term: string) => void
 }
 
-function CarFilters({
+export default function CarFilters({
   searchTerm,
   onSearchTermChange
-}: CarFiltersProps): React.ReactElement {
+}: CarFiltersProps) {
   return (
-    <div className="mb-3 flex gap-2">
+    <div className="mb-4 flex gap-2">
       <input
         type="text"
-        className="input flex-1 rounded border p-2 text-sm"
-        placeholder="차량번호 또는 모델 검색..."
+        placeholder="차량번호 또는 모델명 검색"
         value={searchTerm}
         onChange={e => onSearchTermChange(e.target.value)}
+        className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm"
       />
     </div>
   )
 }
-
-export default CarFilters
