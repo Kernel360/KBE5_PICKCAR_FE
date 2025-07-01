@@ -23,6 +23,30 @@ const trackingApi = axios.create({
   withCredentials: true
 })
 
+function getCookie(name: string): string | null {
+  const value = `; ${document.cookie}`
+  console.log('document.cookie:', document.cookie)
+
+  console.log(value)
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()!.split(';').shift() || null
+  return null
+}
+
+axios.interceptors.request.use(
+  config => {
+    const token = getCookie('accessToken')
+
+    console.log('accessToken = ' + token)
+    if (token) {
+      config.headers = config.headers || {}
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
+  error => Promise.reject(error)
+)
+
 /**
  * 실시간 차량 관제 페이지 컴포넌트.
  * API와 WebSocket을 통해 동적으로 데이터를 관리

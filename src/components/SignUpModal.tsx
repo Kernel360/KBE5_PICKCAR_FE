@@ -1,0 +1,178 @@
+import { useState } from 'react'
+import axios from 'axios'
+
+interface SignUpModalProps {
+  onClose: () => void
+}
+
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
+axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.defaults.withCredentials = true
+
+export default function SignUpModal({ onClose }: SignUpModalProps) {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+    phoneNumber: ''
+  })
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+
+    // 필수 필드 검증
+    if (
+      !formData.email ||
+      !formData.password ||
+      !formData.name ||
+      !formData.phoneNumber
+    ) {
+      setError('모든 필드를 입력해주세요.')
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const response = await axios.post('/api/v1/auth/sign-up/admins', {
+        params: {
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+          phoneNumber: formData.phoneNumber
+        }
+      })
+      console.log('회원가입 성공:', response)
+      alert('회원가입이 완료되었습니다.')
+      onClose()
+    } catch (error: unknown) {
+      console.error('회원가입 실패:', error)
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as {
+          response?: { data?: { message?: string } }
+        }
+        console.error('에러 응답:', axiosError.response)
+        if (axiosError.response?.data?.message) {
+          setError(axiosError.response.data.message)
+        } else {
+          setError('회원가입에 실패했습니다. 다시 시도해주세요.')
+        }
+      } else {
+        setError('회원가입에 실패했습니다. 다시 시도해주세요.')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
+        {/* 헤더 */}
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-extrabold text-gray-900">회원가입</h2>
+          <button
+            className="text-2xl text-gray-400 hover:text-gray-600"
+            onClick={onClose}
+            aria-label="닫기">
+            &times;
+          </button>
+        </div>
+
+        {/* 폼 */}
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              이메일 *
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="이메일을 입력하세요"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              비밀번호 *
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="비밀번호를 입력하세요 (6자 이상)"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              이름 *
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="이름을 입력하세요"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              전화번호 *
+            </label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              placeholder="전화번호를 입력하세요"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          {error && (
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-500">
+              {error}
+            </div>
+          )}
+
+          {/* 하단 버튼 */}
+          <div className="flex justify-end gap-2 pt-4">
+            <button
+              type="button"
+              className="btn btn-default btn-soft btn-md rounded-2xl"
+              onClick={onClose}
+              disabled={isLoading}>
+              취소
+            </button>
+            <button
+              type="submit"
+              className="btn btn-md rounded-2xl bg-blue-500 text-white"
+              disabled={isLoading}>
+              {isLoading ? '처리중...' : '가입하기'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
