@@ -3,6 +3,7 @@ import axios from 'axios'
 import Header from '@/components/common/Header'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
+const API_URL = import.meta.env.VITE_EMULATOR_API_URL
 
 function getUserIdFromToken(): string | null {
   const token = localStorage.getItem('accessToken');
@@ -44,7 +45,7 @@ export default function EmployeeHome() {
     const accessToken = localStorage.getItem('accessToken');
     setMessage('실행 중...');
     try {
-      const res = await fetch('http://localhost:4000/run-emulator', {
+      const res = await fetch(API_URL + '/run-emulator', {
        method: 'POST',
        headers: {
         'Content-Type': 'application/json',
