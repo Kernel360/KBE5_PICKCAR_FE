@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const path = require('path');
 
 // 실행 환경에 따라 알맞은 .env 파일 로드
@@ -31,21 +31,18 @@ app.post('/run-emulator', (req, res) => {
   }
 
   const pythonScriptPath = path.join(EMULATOR_PATH, 'emulator.py');
-  const command = process.env.NODE_ENV === 'production'
-  ? `PYTHON_ENV=production python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`
-  : `PYTHON_ENV=development python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`;
-  
-  console.log(`실행 명령어: ${command}`);
+  const env = { ...process.env, PYTHON_ENV: process.env.NODE_ENV };
 
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error('Python 실행 오류:', stderr);
-      return res.status(500).send(stderr);
-    }
-
-    console.log('Python 실행 성공:', stdout);
-    res.send(stdout);
+  const child = spawn('python3', [pythonScriptPath, accessToken, vehicleId], {
+    env,
+    detached: true,
+    stdio: 'ignore' // 터미널 연결 끊음
   });
+
+  child.unref(); // 부모 프로세스와 연결 끊기
+
+  console.log('Python GUI 백그라운드 실행 시작됨');
+  res.status(200).send('에뮬레이터 실행 요청 완료');
 });
 
 const PORT = 4000;
