@@ -24,7 +24,7 @@ export default function EmployeeHome() {
   useEffect(() => {
     async function fetchAllocation() {
       try {
-        const response = await axios.post(BASE_URL + '/api/v1/vehicles/allocation', userId);
+        const response = await axios.get(BASE_URL + '/api/v1/vehicles/allocation/' + userId);
         const vehicleId = response.data.data;
         setVehicleId(vehicleId);
         setHasCar(!!vehicleId);
