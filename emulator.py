@@ -17,10 +17,6 @@ load_dotenv(dotenv_file)
 
 api_base_url = os.getenv("API_BASE_URL", "http://localhost:8080")
 
-# 경고창을 띄우기 위한 tkinter import
-import tkinter as tk
-from tkinter import messagebox
-
 if platform.system() == 'Linux':
     font_regular = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
     font_bold = '/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf'
@@ -37,18 +33,12 @@ LabelBase.register(
 if len(sys.argv) > 1:
     access_token = sys.argv[1]
 else:
-    # 경고창 띄우기
-    root = tk.Tk()
-    root.withdraw()  # 메인 윈도우 숨기기
-    messagebox.showerror("오류", "인증된 토큰이 없습니다.")
+    print("인증된 토큰이 없습니다. 프로그램 종료.")
     sys.exit(0)  # 프로그램 종료
 if len(sys.argv) > 2:
     vehicle_id = sys.argv[2]
 else:
-    # 경고창 띄우기
-    root = tk.Tk()
-    root.withdraw()  # 메인 윈도우 숨기기
-    messagebox.showerror("오류", "할당된 차량이 없습니다.")
+    print("할당된 차량이 없습니다. 프로그램 종료.")
     sys.exit(0)  # 프로그램 종료
 
 from kivy.app import App
