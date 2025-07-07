@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { spawn } = require('child_process');
+const { exec } = require('child_process');
 const path = require('path');
 
 // 실행 환경에 따라 알맞은 .env 파일 로드
@@ -9,17 +9,9 @@ require('dotenv').config({ path: envFile });
 
 const EMULATOR_PATH = process.env.EMULATOR_PATH;
 
-// 로그로 확인
-console.log('NODE_ENV:', process.env.NODE_ENV);
-console.log('EMULATOR_PATH:', EMULATOR_PATH);
-
 const app = express();
-
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
-app.use(cors({
-  origin: 'https://pickcar.online',
-  credentials: true
-}));
 
 app.post('/run-emulator', (req, res) => {
   console.log('POST /run-emulator 요청 받음');
@@ -31,18 +23,21 @@ app.post('/run-emulator', (req, res) => {
   }
 
   const pythonScriptPath = path.join(EMULATOR_PATH, 'emulator.py');
-  const env = { ...process.env, PYTHON_ENV: process.env.NODE_ENV };
+  const command = process.env.NODE_ENV === 'production'
+  ? `PYTHON_ENV=production python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`
+  : `PYTHON_ENV=development python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`;
+  
+  console.log(`실행 명령어: ${command}`);
 
-  const child = spawn('python3', [pythonScriptPath, accessToken, vehicleId], {
-    env,
-    detached: true,
-    stdio: 'ignore' // 터미널 연결 끊음
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Python 실행 오류:', stderr);
+      return res.status(500).send(stderr);
+    }
+
+    console.log('Python 실행 성공:', stdout);
+    res.send(stdout);
   });
-
-  child.unref(); // 부모 프로세스와 연결 끊기
-
-  console.log('Python GUI 백그라운드 실행 시작됨');
-  res.status(200).send('에뮬레이터 실행 요청 완료');
 });
 
 const PORT = 4000;
