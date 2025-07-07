@@ -9,10 +9,16 @@ require('dotenv').config({ path: envFile });
 
 const EMULATOR_PATH = process.env.EMULATOR_PATH;
 
-const app = express();
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
+// 로그로 확인
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('EMULATOR_PATH:', EMULATOR_PATH);
 
+const app = express();
+
+app.use(cors({
+  origin: 'https://pickcar.online',
+  credentials: true
+}));
 app.post('/run-emulator', (req, res) => {
   console.log('POST /run-emulator 요청 받음');
 
