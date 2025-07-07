@@ -4,13 +4,24 @@ const { exec } = require('child_process');
 const path = require('path');
 
 // 실행 환경에 따라 알맞은 .env 파일 로드
-const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
-require('dotenv').config({ path: envFile });
+require('dotenv').config({ path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development' });
 
 const EMULATOR_PATH = process.env.EMULATOR_PATH;
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+
+// CORS 설정 분기
+if (process.env.NODE_ENV === 'production') {
+  app.use(cors({
+    origin: 'https://pickcar.online',
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+} else {
+  app.use(cors({ origin: true, credentials: true }));
+}
+
 app.use(express.json());
 
 app.post('/run-emulator', (req, res) => {
