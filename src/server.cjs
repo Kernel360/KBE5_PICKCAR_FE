@@ -35,7 +35,7 @@ app.post('/run-emulator', (req, res) => {
 
   const pythonScriptPath = path.join(EMULATOR_PATH, 'emulator.py');
   const command = process.env.NODE_ENV === 'production'
-  ? `PYTHON_ENV=production /home/ubuntu/KBE5_PICKCAR_FE/.venv/bin/python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`
+  ? `PYTHON_ENV=production nohup /home/ubuntu/KBE5_PICKCAR_FE/.venv/bin/python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}" > /dev/null 2>&1 &`
   : `PYTHON_ENV=development python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`;
   
   console.log(`실행 명령어: ${command}`);
@@ -43,12 +43,12 @@ app.post('/run-emulator', (req, res) => {
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error('Python 실행 오류:', stderr);
-      return res.status(500).send(stderr);
+    } else {
+      console.log('Python 실행 성공:', stdout);
     }
-
-    console.log('Python 실행 성공:', stdout);
-    res.send(stdout);
   });
+
+  res.status(200).send("Emulator launched");
 });
 
 const PORT = 4000;
