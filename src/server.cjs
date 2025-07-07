@@ -35,7 +35,7 @@ app.post('/run-emulator', (req, res) => {
 
   const pythonScriptPath = path.join(EMULATOR_PATH, 'emulator.py');
   const command = process.env.NODE_ENV === 'production'
-  ? `PYTHON_ENV=production python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`
+  ? `PYTHON_ENV=production /home/ubuntu/KBE5_PICKCAR_FE/.venv/bin/python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`
   : `PYTHON_ENV=development python3 "${pythonScriptPath}" "${accessToken}" "${vehicleId}"`;
   
   console.log(`실행 명령어: ${command}`);
