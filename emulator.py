@@ -6,6 +6,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from dotenv import load_dotenv
+import platform
 import os
 import requests
 import sys
@@ -20,12 +21,12 @@ api_base_url = os.getenv("API_BASE_URL", "http://localhost:8080")
 import tkinter as tk
 from tkinter import messagebox
 
-if env == "development":
-    font_regular = '/Users/park/Library/Fonts/NanumGothic-Regular.ttf'
-    font_bold = '/Users/park/Library/Fonts/NanumGothic-Bold.ttf'
-else:
+if platform.system() == 'Linux':
     font_regular = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
     font_bold = '/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf'
+else:
+    font_regular = '/Users/park/Library/Fonts/NanumGothic-Regular.ttf'
+    font_bold = '/Users/park/Library/Fonts/NanumGothic-Bold.ttf'
 
 LabelBase.register(
     name='NanumGothic',
