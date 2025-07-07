@@ -15,10 +15,12 @@ console.log('EMULATOR_PATH:', EMULATOR_PATH);
 
 const app = express();
 
+app.use(express.json());
 app.use(cors({
   origin: 'https://pickcar.online',
   credentials: true
 }));
+
 app.post('/run-emulator', (req, res) => {
   console.log('POST /run-emulator 요청 받음');
 
