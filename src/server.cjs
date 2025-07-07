@@ -43,12 +43,12 @@ app.post('/run-emulator', (req, res) => {
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error('Python 실행 오류:', stderr);
-    } else {
-      console.log('Python 실행 성공:', stdout);
+      return res.status(500).send(stderr);
     }
-  });
 
-  res.status(200).send("Emulator launched");
+    console.log('Python 실행 성공:', stdout);
+    res.send(stdout);
+  });
 });
 
 const PORT = 4000;
