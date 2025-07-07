@@ -57,6 +57,8 @@ export default function EmployeeHome() {
       });
       if (res.ok) {
         setMessage('반납 완료!');
+        setHasCar(false);         // 차량 없음 상태로 전환(임시처리)
+        setVehicleId(null);       // <- vehicleId도 초기화 (임시처리)
       } else {
         setMessage('실행 실패');
       }
