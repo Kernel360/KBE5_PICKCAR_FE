@@ -35,7 +35,7 @@ export default function Emulator() {
   }, [userId]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: number;
     if (engineOn && vehicleId) {
       interval = setInterval(() => {
         axios.post(
