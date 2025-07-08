@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import EmployeeHome from './pages/EmployeeHome';
+import Emulator from './pages/Emulator'
 import Login from './pages/Login'
 import TrackingCar from './pages/TrackingCar'
 import DrivingHistoryPage from './pages/DrivingHistoryPage'
@@ -55,8 +55,8 @@ function App() {
 
         {/* 시동 페이지(사원전용) */}
         <Route
-          path="/employee/home"
-          element={<EmployeeHome />}
+          path="/emulator"
+          element={<Emulator />}
         />
       </Routes>
     </BrowserRouter>

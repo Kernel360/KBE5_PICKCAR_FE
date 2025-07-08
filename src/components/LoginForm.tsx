@@ -40,6 +40,7 @@ function LoginForm() {
         }
 
         // 3. localStorage에 저장
+        localStorage.removeItem('accessToken');
         localStorage.setItem('accessToken', accessToken)
 
         // 4. 권한 확인
@@ -55,7 +56,7 @@ function LoginForm() {
 
         // 5. 권한에 따라 페이지 이동
         if (userRole.data === "EMPLOYEE") {
-          navigate('/employee/home')
+          navigate('/emulator')
         } else {
           navigate('/dashboard')
         }
