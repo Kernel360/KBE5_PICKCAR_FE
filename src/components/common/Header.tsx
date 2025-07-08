@@ -12,7 +12,7 @@ interface HeaderProps {
 function Header({ userRole }: HeaderProps) {
   const navigate = useNavigate();
   const displayRole = userRole === 'EMPLOYEE' ? '사원' : '관리자';
-  const linkTo = userRole === 'EMPLOYEE' ? '/employee/home' : '/dashboard';
+  const linkTo = userRole === 'EMPLOYEE' ? '/emulator' : '/dashboard';
   
   // accessToken 확인
   const accessToken = localStorage.getItem('accessToken');
