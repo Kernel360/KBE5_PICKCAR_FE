@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import SignUpModal from './SignUpModal'
+import { getErrorMessage } from './common/getErrorMessage'
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 axios.defaults.headers.common['Content-Type'] = 'application/json'
@@ -31,41 +32,39 @@ function LoginForm() {
       })
       const result = response.data
 
-      // 2. 로그인 성공 시 처리
-      if (result?.responseInfo?.isSuccess) {
-        const accessToken = result?.data?.accessToken
-        if (!accessToken) {
-          setError('AccessToken이 응답에 없습니다.')
-          return;
-        }
-
-        // 3. localStorage에 저장
-        localStorage.setItem('accessToken', accessToken)
-
-        // 4. 권한 확인
-        const res = await fetch(BASE_URL + '/api/v1/auth/authority', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        const userRole = await res.json()
-
-        // 5. 권한에 따라 페이지 이동
-        if (userRole.data === "EMPLOYEE") {
-          navigate('/employee/home')
-        } else {
-          navigate('/dashboard')
-        }
-
-      } else {
-        setError('이메일 또는 비밀번호를 재확인 해주세요.')
+      // 로그인 성공 시 로직
+      const accessToken = result?.data?.accessToken
+      if (!accessToken) {
+        setError('AccessToken이 응답에 없습니다. 관리자에게 문의해 주세요.')
+        return
       }
+
+      // localStorage에 저장
+      localStorage.setItem('accessToken', accessToken)
+
+      // 권한 확인 
+      const res = await fetch(BASE_URL + '/api/v1/auth/authority', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      const userRole = await res.json()
+
+      // 5. 권한에 따라 페이지 이동
+      if (userRole.data === 'EMPLOYEE') {
+        navigate('/employee/home')
+      } else {
+        navigate('/dashboard')
+      }
+
     } catch (err) {
-      console.error(err)
-      setError('서버와의 연결에 실패했습니다.')
+      const msg = getErrorMessage(err)
+      if (msg) {
+        setError(msg)
+      }
     }
   }
 
@@ -98,7 +97,11 @@ function LoginForm() {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-          {error && <div className="mb-2 text-sm text-red-500">{error}</div>}
+          {error && (
+            <div className="mt-1 mb-2 text-[11px] font-normal text-red-500">
+              {error}
+            </div>
+          )}
           <button
             type="submit"
             className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white">

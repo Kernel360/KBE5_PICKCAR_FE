@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { getErrorMessage } from '../utils/getErrorMessage'
+import { getErrorMessage } from './common/getErrorMessage'
 
 interface SignUpModalProps {
   onClose: () => void
