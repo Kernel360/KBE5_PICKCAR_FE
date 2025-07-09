@@ -44,29 +44,23 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
     null
   )
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        setIsLoading(true)
-        const response = await axios.get('/api/v1/auth/employees')
-        console.log(response)
-        setEmployees(response.data.data)
-        setError(null)
-      } catch (err) {
-        console.log(err)
-        setError('사원 목록을 불러오는데 실패했습니다.')
-      } finally {
-        setIsLoading(false)
-      }
+  const fetchPreInfo = async () => {
+    setIsLoading(true)
+    try {
+      const res = await axios.get('/api/v1/reservation/pre-info')
+      setEmployees(res.data.data.employeeResponses)
+      setVehicleList(res.data.data.vehicleResponses)
+      setError(null)
+    } catch {
+      setError('사전 정보를 불러오는데 실패했습니다.')
+    } finally {
+      setIsLoading(false)
     }
-    fetchEmployees()
-  }, [refreshKey])
+  }
 
   useEffect(() => {
-    axios.get('/api/v1/reservation/vehicles').then(res => {
-      setVehicleList(res.data.data)
-    })
-  }, [])
+    fetchPreInfo()
+  }, [refreshKey])
 
   if (isLoading) {
     return <LoadingScreen />
@@ -148,6 +142,10 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
           vehicles={vehicleList}
           employeeId={selectedEmployeeId}
           onClose={() => setIsVehicleModalOpen(false)}
+          onAssigned={() => {
+            fetchPreInfo()
+            setIsVehicleModalOpen(false)
+          }}
         />
       )}
     </div>

@@ -6,12 +6,14 @@ interface ReservationModalProps {
   vehicles: AvailableVehicleResponse[]
   employeeId: number
   onClose: () => void
+  onAssigned: () => void // 추가
 }
 
 export default function ReservationModal({
   vehicles,
   employeeId,
-  onClose
+  onClose,
+  onAssigned // 추가
 }: ReservationModalProps) {
   const [selectedVehicleId, setSelectedVehicleId] = useState<number | null>(
     null
@@ -41,7 +43,7 @@ export default function ReservationModal({
       })
 
       alert('할당에 성공하였습니다')
-      onClose()
+      onAssigned() // 데이터 새로고침
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
         const errorMsg =
