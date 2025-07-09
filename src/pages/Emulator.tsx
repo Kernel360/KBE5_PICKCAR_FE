@@ -1,14 +1,53 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '@/components/common/Header';
+import gpx01 from '@/gpx/gpx01.json';
+import gpx02 from '@/gpx/gpx02.json';
+import gpx03 from '@/gpx/gpx03.json';
+import gpx04 from '@/gpx/gpx04.json';
+import gpx05 from '@/gpx/gpx05.json';
+import gpx06 from '@/gpx/gpx06.json';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_URL = import.meta.env.VITE_EMULATOR_API_URL;
+
+const random = Math.floor(Math.random() * 6); // 0, 1, 2
+
+let allGpx = gpx01;
+
+switch (random) {
+  case 0:
+    allGpx = gpx01;
+    break;
+  case 1:
+    allGpx = gpx02;
+    break;
+  case 2:
+    allGpx = gpx03;
+    break;
+  case 3:
+    allGpx = gpx04;
+    break;
+  case 4:
+    allGpx = gpx05;
+    break;
+  case 5:
+    allGpx = gpx06;
+    break;
+}
+
+const CYCLE_SIZE = 60; // 한 번에 보낼 경로 개수
+const CYCLE_IDX_KEY = 'emulator_cycle_idx';
 
 export default function Emulator() {
   const [engineOn, setEngineOn] = useState(false);
   const [message, setMessage] = useState('');
   const [vehicleId, setVehicleId] = useState<string | null>(null);
+  const [cycleStartIdx, setCycleStartIdx] = useState(() => {
+    // localStorage에서 이전 인덱스 불러오기(없으면 0)
+    const saved = localStorage.getItem(CYCLE_IDX_KEY);
+    return saved ? parseInt(saved, 10) : 0;
+  });
 
   const accessToken = localStorage.getItem('accessToken');
   const userId = (() => {
@@ -22,6 +61,7 @@ export default function Emulator() {
     }
   })();
 
+  // 할당 API 호출 시마다 gpx 인덱스 증가(0→1→2→0 순환)
   useEffect(() => {
     if (!userId) return;
     axios
@@ -34,148 +74,46 @@ export default function Emulator() {
       });
   }, [userId]);
 
+  // 엔진 ON 시 cycle_infos에 gpx 데이터 사용
   useEffect(() => {
     let interval: number;
     if (engineOn && vehicleId) {
       interval = setInterval(() => {
+        // 현재 구간 추출
+        const cycle_infos = allGpx.slice(cycleStartIdx, cycleStartIdx + CYCLE_SIZE);
+        // 만약 남은 데이터가 부족하면 처음부터 이어붙임(순환)
+        const actualCycleInfos =
+          cycle_infos.length === CYCLE_SIZE
+            ? cycle_infos
+            : [
+                ...cycle_infos,
+                ...allGpx.slice(0, CYCLE_SIZE - cycle_infos.length),
+              ];
+
         axios.post(
           API_URL + '/api/v1/cycle',
           {
             vehicle_id: vehicleId,
-            cycle_cnt: 60,
+            cycle_cnt: CYCLE_SIZE,
             occurred_at: '20250630123001',
             distance: 100,
-            cycle_infos: [
-                {"second": "20241130000119", "gps_status": "NORMAL", "latitude": 35.624439, "longitude": 129.335991,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000120", "gps_status": "NORMAL", "latitude": 35.624403, "longitude": 129.335968,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000121", "gps_status": "NORMAL", "latitude": 35.624352, "longitude": 129.335945,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000122", "gps_status": "NORMAL", "latitude": 35.624305, "longitude": 129.335930,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000123", "gps_status": "NORMAL", "latitude": 35.624252, "longitude": 129.335918,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000124", "gps_status": "NORMAL", "latitude": 35.624190, "longitude": 129.335906,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000125", "gps_status": "NORMAL", "latitude": 35.624126, "longitude": 129.335896,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000126", "gps_status": "NORMAL", "latitude": 35.624064, "longitude": 129.335891,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000127", "gps_status": "NORMAL", "latitude": 35.624004, "longitude": 129.335893,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000128", "gps_status": "NORMAL", "latitude": 35.623948, "longitude": 129.335896,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000129", "gps_status": "NORMAL", "latitude": 35.623891, "longitude": 129.335906,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000130", "gps_status": "NORMAL", "latitude": 35.623838, "longitude": 129.335918,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000131", "gps_status": "NORMAL", "latitude": 35.623784, "longitude": 129.335935,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000132", "gps_status": "NORMAL", "latitude": 35.623723, "longitude": 129.335950,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000133", "gps_status": "NORMAL", "latitude": 35.623652, "longitude": 129.335961,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000134", "gps_status": "NORMAL", "latitude": 35.623589, "longitude": 129.335991,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000135", "gps_status": "NORMAL", "latitude": 35.623576, "longitude": 129.336083,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000136", "gps_status": "NORMAL", "latitude": 35.623535, "longitude": 129.336153,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000137", "gps_status": "NORMAL", "latitude": 35.623489, "longitude": 129.336208,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000138", "gps_status": "NORMAL", "latitude": 35.623444, "longitude": 129.336255,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000139", "gps_status": "NORMAL", "latitude": 35.623393, "longitude": 129.336275,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000140", "gps_status": "NORMAL", "latitude": 35.623365, "longitude": 129.336296,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000141", "gps_status": "NORMAL", "latitude": 35.623349, "longitude": 129.336286,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000142", "gps_status": "NORMAL", "latitude": 35.623338, "longitude": 129.336268,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000143", "gps_status": "NORMAL", "latitude": 35.623331, "longitude": 129.336263,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000144", "gps_status": "NORMAL", "latitude": 35.623330, "longitude": 129.336263,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000145", "gps_status": "NORMAL", "latitude": 35.623332, "longitude": 129.336265,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000146", "gps_status": "NORMAL", "latitude": 35.623335, "longitude": 129.336266,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000147", "gps_status": "NORMAL", "latitude": 35.623338, "longitude": 129.336266,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000148", "gps_status": "NORMAL", "latitude": 35.623339, "longitude": 129.336266,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000149", "gps_status": "NORMAL", "latitude": 35.623340, "longitude": 129.336268,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000150", "gps_status": "NORMAL", "latitude": 35.623341, "longitude": 129.336268,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000151", "gps_status": "NORMAL", "latitude": 35.623341, "longitude": 129.336268,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000152", "gps_status": "NORMAL", "latitude": 35.623337, "longitude": 129.336265,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000153", "gps_status": "NORMAL", "latitude": 35.623333, "longitude": 129.336256,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000154", "gps_status": "NORMAL", "latitude": 35.623317, "longitude": 129.336240,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000155", "gps_status": "NORMAL", "latitude": 35.623291, "longitude": 129.336220,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000156", "gps_status": "NORMAL", "latitude": 35.623262, "longitude": 129.336203,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000157", "gps_status": "NORMAL", "latitude": 35.623227, "longitude": 129.336204,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000158", "gps_status": "NORMAL", "latitude": 35.623194, "longitude": 129.336228,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000159", "gps_status": "NORMAL", "latitude": 35.623171, "longitude": 129.336271,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000200", "gps_status": "NORMAL", "latitude": 35.623161, "longitude": 129.336333,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000201", "gps_status": "NORMAL", "latitude": 35.623151, "longitude": 129.336408,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000202", "gps_status": "NORMAL", "latitude": 35.623150, "longitude": 129.336498,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000203", "gps_status": "NORMAL", "latitude": 35.623147, "longitude": 129.336601,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000204", "gps_status": "NORMAL", "latitude": 35.623145, "longitude": 129.336716,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000205", "gps_status": "NORMAL", "latitude": 35.623142, "longitude": 129.336836,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000206", "gps_status": "NORMAL", "latitude": 35.623143, "longitude": 129.336955,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000207", "gps_status": "NORMAL", "latitude": 35.623144, "longitude": 129.337074,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000208", "gps_status": "NORMAL", "latitude": 35.623148, "longitude": 129.337205,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000209", "gps_status": "NORMAL", "latitude": 35.623156, "longitude": 129.337345,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000210", "gps_status": "NORMAL", "latitude": 35.623163, "longitude": 129.337490,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000211", "gps_status": "NORMAL", "latitude": 35.623170, "longitude": 129.337640,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000212", "gps_status": "NORMAL", "latitude": 35.623174, "longitude": 129.337793,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000213", "gps_status": "NORMAL", "latitude": 35.623195, "longitude": 129.337968,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000214", "gps_status": "NORMAL", "latitude": 35.623206, "longitude": 129.338140,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000215", "gps_status": "NORMAL", "latitude": 35.623215, "longitude": 129.338313,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000216", "gps_status": "NORMAL", "latitude": 35.623221, "longitude": 129.338486,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000217", "gps_status": "NORMAL", "latitude": 35.623225, "longitude": 129.338660,
-                 "angle": 0, "speed": 30, "battery": 128},
-                {"second": "20241130000218", "gps_status": "NORMAL", "latitude": 35.623229, "longitude": 129.338836,
-                 "angle": 0, "speed": 30, "battery": 128}
-            ],
+            cycle_infos: actualCycleInfos,
           },
           {
             headers: { Authorization: `Bearer ${accessToken}` },
           }
         );
-      }, 6000); // 10분 주기
+
+        // 다음 구간 인덱스 갱신 (순환) + localStorage에 저장
+        setCycleStartIdx((prev) => {
+          const next = (prev + CYCLE_SIZE) % allGpx.length;
+          localStorage.setItem(CYCLE_IDX_KEY, next.toString());
+          return next;
+        });
+      }, 10000); // 1분 주기(여야 하지만 답답하니까 우선은 10초)
     }
     return () => clearInterval(interval);
-  }, [engineOn, vehicleId]);
+  }, [engineOn, vehicleId, cycleStartIdx]);
 
   const postApi = async (endpoint: string, payload: object) => {
     try {
@@ -198,7 +136,7 @@ export default function Emulator() {
       vehicle_id: vehicleId,
       mdn: '01234567890',
       event_status: 'ON',
-      engine_on_time: '20240601123000',
+      engine_on_time: '20250709103601',
       engine_off_time: '',
       gps_status: 'NORMAL',
       latitude: 37.4418038,
@@ -213,8 +151,8 @@ export default function Emulator() {
       vehicle_id: vehicleId,
       mdn: '01234567890',
       event_status: 'OFF',
-      engine_on_time: '20250630123000',
-      engine_off_time: '20250630123100',
+      engine_on_time: '20250709103601',
+      engine_off_time: '20250709103700',
       gps_status: 'NORMAL',
       latitude: 37.4418097,
       longitude: 12.7244062,
@@ -235,14 +173,16 @@ export default function Emulator() {
       vehicle_id: vehicleId,
       mdn: '01234567890',
       event_status: 'RETURNED',
-      engine_on_time: '20240601123000',
-      engine_off_time: '20240601123100',
+      engine_on_time: '20250709103601',
+      engine_off_time: '20250709103700',
       gps_status: 'NORMAL',
       latitude: 37.4418097,
       longitude: 12.7244062,
     });
 
     setVehicleId(null);
+    localStorage.removeItem(CYCLE_IDX_KEY);
+    setCycleStartIdx(0);
   };
 
   return (
