@@ -94,7 +94,7 @@ function TrackingCar() {
           setMapCenter({ lat: last.lat, lng: last.lng });
         }
 
-        setIsPathLoading(false); // ← 데이터 수신되면 blur 해제
+        setIsPathLoading(false); // 데이터 수신되면 blur 해제
         return updated;
       });
     
@@ -143,7 +143,7 @@ function TrackingCar() {
 
   const handleSelectCar = (vehicleId: number) => {
     setSelectedVehicleId(vehicleId);
-    setIsPathLoading(true); // ← 선택하면 먼저 로딩 상태로
+    setIsPathLoading(true); // 선택하면 먼저 로딩 상태로
 
     const car = cars.find(c => c.vehicleId === vehicleId);
     if (car && typeof car.lat === 'number' && typeof car.lng === 'number') {
@@ -191,7 +191,9 @@ function TrackingCar() {
 
             {selectedVehicleId && isPathLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/60 text-xl font-bold text-gray-700">
-                현재 불러오고 있습니다...
+                현재 차량의 위치를 불러오고 있습니다.
+                <br></br><br></br>
+                "1분 기준(수신 없음) - 현재 운행 중인 차량이 아님"
               </div>
             )}
             <span className="absolute right-4 bottom-2 text-xs text-gray-400">
