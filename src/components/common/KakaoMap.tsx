@@ -84,9 +84,9 @@ function KakaoMap({ center, zoom, markers, polylinePath }: KakaoMapProps) {
 
       // 출발/도착 마커 로직... (이전 코드와 동일)
       const startMarkerSrc =
-        'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png'
-      const endMarkerSrc =
         'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png'
+      const endMarkerSrc =
+        'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png'
       const imageSize = new kakaoMaps.Size(20, 34)
       const imageOption = { offset: new kakaoMaps.Point(10, 34) }
       const startMarkerImage = new kakaoMaps.MarkerImage(
