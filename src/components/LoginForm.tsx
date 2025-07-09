@@ -31,36 +31,38 @@ function LoginForm() {
       })
       const result = response.data
 
+      const accessToken = result?.data?.accessToken
+      localStorage.setItem('accessToken', accessToken)
+
       // 2. 로그인 성공 시 처리
       if (result?.responseInfo?.isSuccess) {
         const accessToken = result?.data?.accessToken
         if (!accessToken) {
           setError('AccessToken이 응답에 없습니다.')
-          return;
+          return
         }
 
         // 3. localStorage에 저장
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem('accessToken')
         localStorage.setItem('accessToken', accessToken)
 
         // 4. 권한 확인
         const res = await fetch(BASE_URL + '/api/v1/auth/authority', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json'
           }
-        });
+        })
 
         const userRole = await res.json()
 
         // 5. 권한에 따라 페이지 이동
-        if (userRole.data === "EMPLOYEE") {
+        if (userRole.data === 'EMPLOYEE') {
           navigate('/emulator')
         } else {
           navigate('/dashboard')
         }
-
       } else {
         setError('이메일 또는 비밀번호를 재확인 해주세요.')
       }
