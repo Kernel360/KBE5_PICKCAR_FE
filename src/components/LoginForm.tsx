@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import SignUpModal from './SignUpModal'
 import { getErrorMessage } from './common/getErrorMessage'
+import { useAuth } from './AuthContext'
+import { jwtDecode } from 'jwt-decode'
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 axios.defaults.headers.common['Content-Type'] = 'application/json'
@@ -17,6 +19,7 @@ function LoginForm() {
   const [error, setError] = useState('')
   const [showSignUpModal, setShowSignUpModal] = useState(false)
   const navigate = useNavigate()
+  const { setRole } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,20 +44,13 @@ function LoginForm() {
 
       // localStorage에 저장
       localStorage.setItem('accessToken', accessToken)
+      //토큰 파싱
+      const payload = jwtDecode(accessToken)
+      console.log(payload.role)
+      setRole(payload.role) // 전역 상태에 role 저장
 
-      // 권한 확인 
-      const res = await fetch(BASE_URL + '/api/v1/auth/authority', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
-      })
-
-      const userRole = await res.json()
-
-      // 5. 권한에 따라 페이지 이동
-      if (userRole.data === 'EMPLOYEE') {
+      // 권한 확인
+      if (payload?.role === 'EMPLOYEE') {
         navigate('/employee/home')
       } else {
         navigate('/dashboard')

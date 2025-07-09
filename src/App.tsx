@@ -7,59 +7,93 @@ import DrivingHistoryPage from './pages/DrivingHistoryPage'
 import EmployeeManagement from './pages/EmployeeManagement'
 import VehicleManagement from './pages/VehicleManagement'
 import DashBoard from './pages/DashBoard'
+import Unauthorized from './pages/Unauthorized'
 
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+
+import { AuthProvider } from './components/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
 
 config.autoAddCss = false
 
 function App() {
   return (
-    <BrowserRouter>
-      {/* 로그인 페이지 */}
-      <Routes>
-        <Route
-          path="/"
-          element={<Login />}
-        />
+    <AuthProvider>
+      <BrowserRouter>
+        {/* 로그인 페이지 */}
+        <Routes>
+          <Route
+            path="/"
+            element={<Login />}
+          />
 
-        {/* 실시간 관제 페이지 */}
-        <Route
-          path="/tracking"
-          element={<TrackingCar />}
-        />
+          {/* 실시간 관제 페이지 */}
+          <Route
+            path="/tracking"
+            element={
+              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                <TrackingCar />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 운행일지 페이지 */}
-        <Route
-          path="/driving-history"
-          element={<DrivingHistoryPage />}
-        />
+          {/* 운행일지 페이지 */}
+          <Route
+            path="/driving-history"
+            element={
+              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                <DrivingHistoryPage />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 차량 등록/관리 페이지 */}
-        <Route
-          path="/vehicle/rental"
-          element={<VehicleManagement />}
-        />
+          {/* 차량 등록/관리 페이지 */}
+          <Route
+            path="/vehicle/rental"
+            element={
+              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                <VehicleManagement />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 대시보드 페이지 */}
-        <Route
-          path="/dashboard"
-          element={<DashBoard />}
-        />
+          {/* 대시보드 페이지 */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                <DashBoard />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 사원 관리 페이지 */}
-        <Route
-          path="/employee/management"
-          element={<EmployeeManagement />}
-        />
+          {/* 사원 관리 페이지 */}
+          <Route
+            path="/employee/management"
+            element={
+              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                <EmployeeManagement />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 시동 페이지(사원전용) */}
-        <Route
-          path="/employee/home"
-          element={<EmployeeHome />}
-        />
-      </Routes>
-    </BrowserRouter>
+          {/* 시동 페이지(사원전용) */}
+          <Route
+            path="/employee/home"
+            element={
+              <ProtectedRoute allowedRoles={['EMPLOYEE']}>
+                <EmployeeHome />
+              </ProtectedRoute>
+            }
+          />
+          <Route 
+            path="/unauthorized" 
+            element={<Unauthorized />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
