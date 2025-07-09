@@ -15,13 +15,15 @@ export default function ProtectedRoute({
 
   if (!role) {
     // 로그인 안 했으면 로그인 페이지로
-    return <Navigate to="/login" />
+    alert(role + ' / 로그인 안 함')
+    return <Navigate to="/" />
   }
 
   if (!allowedRoles.includes(role)) {
     // 권한 없으면 권한 없음 페이지로
+    alert(role + ' / 권한이 없음')
     return <Navigate to="/unauthorized" />
   }
-
+  alert(role + ' / 권한 있음')
   return children
 } 

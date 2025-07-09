@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios'
+import axios from '../axiosConfig'
 import Header from '@/components/common/Header'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL

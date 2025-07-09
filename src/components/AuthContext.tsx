@@ -1,39 +1,76 @@
-//앱 전체에서 role을 공유할 수 있도록
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useMemo
+} from 'react'
 import { jwtDecode } from 'jwt-decode'
 
-//타입 정의 인터페이스스
+//AuthContextType 정의
 interface AuthContextType {
   role: string | null
+  userName: string | null
   setRole: (role: string | null) => void
+  setUserName: (userName: string | null) => void
+  logout: () => void
 }
 
-//React Context 생성 
-//React 앱에서 전역 상태나 데이터를 편리하게 공유할 수 있도록 도와주는 기능
+//JwtPayload TYPE 정의
+interface JwtPayload {
+  role?: string
+  name?: string
+  exp?: number
+}
+
+//AuthContext 생성
 const AuthContext = createContext<AuthContextType>({
   role: null,
+  userName: null,
   setRole: () => {},
+  setUserName: () => {},
+  logout: () => {}
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<string | null>(null)
+  const [userName, setUserName] = useState<string | null>(null)
 
-// 앱 시작/새로고침 시 localStorage에서 accessToken을 읽어 role 세팅
-// 새로고침해도 로그인 역할 상태를 유지
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken')
     if (accessToken) {
-      const payload: any = jwtDecode(accessToken)
-      setRole(payload.role)
+      try {
+        const payload: JwtPayload = jwtDecode(accessToken)
+        setRole(payload.role ?? null)
+        setUserName(payload.name ?? null)
+      } catch {
+        setRole(null)
+        setUserName(null)
+        localStorage.removeItem('accessToken')
+      }
     }
   }, [])
 
-  //앱 전체 어디서든 useAuth() 훅으로 접근 가능
-  return (
-    <AuthContext.Provider value={{ role, setRole }}>
-      {children}
-    </AuthContext.Provider>
+  const logout = () => {
+    setRole(null)
+    setUserName(null)
+    localStorage.removeItem('accessToken')
+    // 로그아웃 API 호출 및 rt 쿠키 만료 필요
+  }
+
+  const value = useMemo(
+    () => ({
+      role,
+      setRole,
+      userName,
+      setUserName,
+      logout
+    }),
+    [role, userName]
   )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

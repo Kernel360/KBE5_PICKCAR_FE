@@ -3,7 +3,7 @@ import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
 import Header from '@/components/common/Header'
 import type { Car } from '@/types/tracking'
-import axios from 'axios'
+import axios from '../axiosConfig'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
@@ -16,24 +16,24 @@ const trackingApi = axios.create({
   withCredentials: true
 })
 
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()!.split(';').shift() || null
-  return null
-}
+// function getCookie(name: string): string | null {
+//   const value = `; ${document.cookie}`
+//   const parts = value.split(`; ${name}=`)
+//   if (parts.length === 2) return parts.pop()!.split(';').shift() || null
+//   return null
+// }
 
-axios.interceptors.request.use(
-  config => {
-    const token = getCookie('accessToken')
-    if (token) {
-      config.headers = config.headers || {}
-      config.headers['Authorization'] = `Bearer ${token}`
-    }
-    return config
-  },
-  error => Promise.reject(error)
-)
+// axios.interceptors.request.use(
+//   config => {
+//     const token = getCookie('accessToken')
+//     if (token) {
+//       config.headers = config.headers || {}
+//       config.headers['Authorization'] = `Bearer ${token}`
+//     }
+//     return config
+//   },
+//   error => Promise.reject(error)
+// )
 
 /**
  * 실시간 차량 관제 페이지 컴포넌트.

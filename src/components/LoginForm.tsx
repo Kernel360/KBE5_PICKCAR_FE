@@ -32,7 +32,7 @@ function LoginForm() {
       const response = await axios.post(BASE_URL + '/api/v1/auth/login', {
         email,
         password
-      })
+      }, { skipAuth: true } as any)
       const result = response.data
 
       // 로그인 성공 시 로직

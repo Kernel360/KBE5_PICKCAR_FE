@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AvailableVehicleResponse } from '@/types/employee'
-import axios from 'axios'
+import axios from '../../axiosConfig'
 
 interface ReservationModalProps {
   vehicles: AvailableVehicleResponse[]

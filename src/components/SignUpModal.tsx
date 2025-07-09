@@ -60,7 +60,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
         name: formData.name,
         phoneNumber: formData.phoneNumber,
         isAdmin: formData.isAdmin
-      })
+      }, { skipAuth: true } as any)
       // console.log('회원가입 성공:', response)
       alert('회원가입이 완료되었습니다.')
       onClose()

@@ -4,33 +4,36 @@ import Logo from './Logo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { useAuth } from '../AuthContext'
 
-interface HeaderProps {
-  userRole?: string;
-}
+// interface HeaderProps {
+//   userRole?: string
+// }
 
-function Header({ userRole }: HeaderProps) {
-  const navigate = useNavigate();
-  const displayRole = userRole === 'EMPLOYEE' ? '사원' : '관리자';
-  const linkTo = userRole === 'EMPLOYEE' ? '/employee/home' : '/dashboard';
-  
+// function Header({ userRole }: HeaderProps) {
+function Header() {
+  const navigate = useNavigate()
+  const { role, userName } = useAuth()
+  const displayName = userName || '사용자'
+  const linkTo = role === 'EMPLOYEE' ? '/employee/home' : '/dashboard'
+
   // accessToken 확인
-  const accessToken = localStorage.getItem('accessToken');
-  const isLoggedIn = !!accessToken;
+  // const accessToken = localStorage.getItem('accessToken')
+  // const isLoggedIn = !!accessToken
 
-  // useEffect로 로그인 상태 체크
-  useEffect(() => {
-    if (!isLoggedIn) {
-      console.log('로그인되지 않음 - 홈으로 이동');
-      navigate('/');
-    }
-  }, [isLoggedIn, navigate]);
+  // // useEffect로 로그인 상태 체크
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     console.log('로그인되지 않음 - 홈으로 이동')
+  //     navigate('/')
+  //   }
+  // }, [isLoggedIn, navigate])
 
   // 로그아웃 함수
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    navigate('/');
-  };
+    localStorage.removeItem('accessToken')
+    navigate('/')
+  }
 
   return (
     <header className="flex h-16 w-full items-center justify-between bg-white px-6 shadow">
@@ -46,7 +49,7 @@ function Header({ userRole }: HeaderProps) {
       </div>
 
       <div className="flex items-center">
-        {userRole !== 'EMPLOYEE' && (
+        {role !== 'EMPLOYEE' && (
           <div className="mx-10 flex flex-row">
             <div className="mx-2 mt-2 inline-grid *:[grid-area:1/1]">
               <div className="status status-success animate-ping"></div>
@@ -64,13 +67,13 @@ function Header({ userRole }: HeaderProps) {
           />
         </div>
         <div className="flex flex-col items-start">
-          <span className="text-sm font-extrabold text-gray-500">{displayRole}</span>
+          <span className="text-sm font-extrabold text-gray-500">
+            {displayName}
+          </span>
         </div>
-        
         <button
           onClick={handleLogout}
-          className="ml-4 flex items-center rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600 transition-colors"
-        >
+          className="ml-4 flex items-center rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600">
           <FontAwesomeIcon
             icon={faSignOutAlt as IconProp}
             className="mr-2"
