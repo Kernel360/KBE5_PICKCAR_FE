@@ -7,36 +7,13 @@ import type {
 } from '@/types/drivingHistory'
 import type { PaginationState } from '@/types/common/Pagination'
 import axios from '../axiosConfig'
+import { isAxiosError } from 'axios'
 import DrivingHistoryDetailModal from '@/components/history/DrivingHistoryDetailModal'
 import Header from '@/components/common/Header'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
 import DrivingHistoryBottomBar from '@/components/history/DrivingHistoryBottomBar'
 import SideMenuBar from '@/components/common/SideMenuBar'
-
-// axios 기본 설정
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
-
-// function getCookie(name: string): string | null {
-//   const value = `; ${document.cookie}`
-//   const parts = value.split(`; ${name}=`)
-//   if (parts.length === 2) return parts.pop()!.split(';').shift() || null
-//   return null
-// }
-
-// axios.interceptors.request.use(
-//   config => {
-//     const token = getCookie('accessToken')
-//     if (token) {
-//       config.headers = config.headers || {}
-//       config.headers['Authorization'] = `Bearer ${token}`
-//     }
-//     return config
-//   },
-//   error => Promise.reject(error)
-// )
 
 function DrivingHistoryPage() {
   // 오늘 날짜 계산
@@ -98,7 +75,7 @@ function DrivingHistoryPage() {
       setError(null)
     } catch (error) {
       console.error('운행 기록을 가져오는데 실패했습니다:', error)
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         if (error.response) {
           const data = error.response.data
           if (data && data.errorReason && data.errorReason.reason) {

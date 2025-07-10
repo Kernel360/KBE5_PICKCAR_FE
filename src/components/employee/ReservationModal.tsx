@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AvailableVehicleResponse } from '@/types/employee'
 import axios from '../../axiosConfig'
+import { isAxiosError } from 'axios'
 
 interface ReservationModalProps {
   vehicles: AvailableVehicleResponse[]
@@ -35,7 +36,7 @@ export default function ReservationModal({
       alert('할당에 성공하였습니다')
       onClose()
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.data) {
+      if (isAxiosError(error) && error.response?.data) {
         const errorMsg =
           error.response.data.errorReason?.reason || '차량 할당에 실패했습니다.'
         setError(errorMsg)

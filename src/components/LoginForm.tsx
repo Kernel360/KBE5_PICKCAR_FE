@@ -1,17 +1,16 @@
 import Logo from './common/Logo'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axios from '../axiosConfig'
 import SignUpModal from './SignUpModal'
 import { getErrorMessage } from './common/getErrorMessage'
 import { useAuth } from './AuthContext'
 import { jwtDecode } from 'jwt-decode'
 
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
+interface JwtPayload {
+  role?: string
+  name?: string
+}
 
 function LoginForm() {
   const [email, setEmail] = useState('')
@@ -29,10 +28,13 @@ function LoginForm() {
       return
     }
     try {
-      const response = await axios.post(BASE_URL + '/api/v1/auth/login', {
-        email,
-        password
-      }, { skipAuth: true } as any)
+      const response = await axios.post(
+        '/api/v1/auth/login', 
+        {
+          email,
+          password
+        }, 
+        { skipAuth: true } as any)
       const result = response.data
 
       // 로그인 성공 시 로직
@@ -45,9 +47,9 @@ function LoginForm() {
       // localStorage에 저장
       localStorage.setItem('accessToken', accessToken)
       //토큰 파싱
-      const payload = jwtDecode(accessToken)
+      const payload: JwtPayload = jwtDecode(accessToken)
       console.log(payload.role)
-      setRole(payload.role) // 전역 상태에 role 저장
+      setRole(payload.role || null) // 전역 상태에 role 저장
 
       // 권한 확인
       if (payload?.role === 'EMPLOYEE') {
@@ -55,7 +57,6 @@ function LoginForm() {
       } else {
         navigate('/dashboard')
       }
-
     } catch (err) {
       const msg = getErrorMessage(err)
       if (msg) {

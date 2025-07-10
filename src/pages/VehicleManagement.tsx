@@ -10,6 +10,7 @@ import {
   RegisterVehicleRequest
 } from '@/types/vehicle'
 import axios from '../axiosConfig'
+import { isAxiosError } from 'axios'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import RegisterCarInfoSection from '@/components/vehicle/register/RegisterCarInfoSection'
 import RegisterCheckModal from '@/components/vehicle/register/RegisterCheckModal'
@@ -19,36 +20,13 @@ interface ModalState {
   vehicle: VehicleListResponse | null
 }
 
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
-
-// function getCookie(name: string): string | null {
-//   const value = `; ${document.cookie}`
-//   const parts = value.split(`; ${name}=`)
-//   if (parts.length === 2) return parts.pop()!.split(';').shift() || null
-//   return null
-// }
-
-// axios.interceptors.request.use(
-//   config => {
-//     const token = getCookie('accessToken')
-//     if (token) {
-//       config.headers = config.headers || {}
-//       config.headers['Authorization'] = `Bearer ${token}`
-//     }
-//     return config
-//   },
-//   error => Promise.reject(error)
-// )
-
 const updateVehicleStatus = async (
   request: UpdateVehicleStatusRequest
 ): Promise<void> => {
   try {
     await axios.patch('/api/v1/vehicles', request)
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.data) {
+    if (isAxiosError(error) && error.response?.data) {
       throw new Error(
         error.response.data.errorReason?.reason ||
           '차량 상태 변경에 실패했습니다.'
@@ -73,7 +51,7 @@ const registerVehicle = async (
   try {
     await axios.post('/api/v1/vehicles', request)
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.data) {
+    if (isAxiosError(error) && error.response?.data) {
       throw new Error(
         error.response.data.errorReason?.reason || '차량 등록에 실패했습니다.'
       )

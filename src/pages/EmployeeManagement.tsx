@@ -1,11 +1,7 @@
 import Header from '@/components/common/Header'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import EmployeeTable from '@/components/employee/EmployeeTable'
-import axios from 'axios'
-
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
+import axios from '../axiosConfig'
 
 export default function EmployeeManagement() {
   return (

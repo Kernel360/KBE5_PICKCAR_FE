@@ -1,50 +1,52 @@
-import { useEffect, useState } from 'react';
-import axios from '../axiosConfig'
+import { useEffect, useState } from 'react'
+import axios, { employeeAxios } from '../axiosConfig'
 import Header from '@/components/common/Header'
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
 const API_URL = import.meta.env.VITE_EMULATOR_API_URL
 
 function getUserIdFromToken(): string | null {
-  const token = localStorage.getItem('accessToken');
-  if (!token) return null;
+  const token = localStorage.getItem('accessToken')
+  if (!token) return null
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.sub || null; // userId는 sub에 들어있음
+    const payload = JSON.parse(atob(token.split('.')[1]))
+    return payload.sub || null // userId는 sub에 들어있음
   } catch {
-    return null;
+    return null
   }
 }
 
 export default function EmployeeHome() {
-  const [hasCar, setHasCar] = useState(false);
-  const userId = getUserIdFromToken();
-  const [vehicleId, setVehicleId] = useState<string | null>(null);
+  const [hasCar, setHasCar] = useState(false)
+  const userId = getUserIdFromToken()
+  const [vehicleId, setVehicleId] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchAllocation() {
       try {
-        const response = await axios.get(BASE_URL + '/api/v1/vehicles/allocation/' + userId);
-        const vehicleId = response.data.data;
-        setVehicleId(vehicleId);
-        setHasCar(!!vehicleId);
+        const response = await axios.get(
+          '/api/v1/vehicles/allocation/' + userId
+        )
+        const vehicleId = response.data.data
+        setVehicleId(vehicleId)
+        setHasCar(!!vehicleId)
       } catch (err) {
-        setHasCar(false);
-        setVehicleId(null);
-        console.error(err);
+        setHasCar(false)
+        setVehicleId(null)
+        console.error(err)
       }
     }
     if (userId) fetchAllocation();
-  }, [userId]);
+  }, [userId])
 
   // 임시 차량 할당 여부
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('')
 
   // 버튼 클릭 시 python 실행 요청
   const handlePickMe = async () => {
-    const accessToken = localStorage.getItem('accessToken');
-    setMessage('실행 중...');
+    const accessToken = localStorage.getItem('accessToken')
+    setMessage('실행 중...')
     try {
+      //FIX: fetch대신 employeeAxios.post로 수정 및 API_URL제거
       const res = await fetch(API_URL + '/run-emulator', {
        method: 'POST',
        headers: {
@@ -54,23 +56,23 @@ export default function EmployeeHome() {
         accessToken,
         vehicleId,
       }),
-      });
+      })
       if (res.ok) {
-        setMessage('반납 완료!');
-        setHasCar(false);         // 차량 없음 상태로 전환(임시처리)
-        setVehicleId(null);       // <- vehicleId도 초기화 (임시처리)
+        setMessage('반납 완료!')
+        setHasCar(false)         // 차량 없음 상태로 전환(임시처리)
+        setVehicleId(null)       // <- vehicleId도 초기화 (임시처리)
       } else {
-        setMessage('실행 실패');
+        setMessage('실행 실패')
       }
     } catch (e) {
-      console.log(e);
-      setMessage('에러 발생');
+      console.log(e)
+      setMessage('에러 발생')
     }
   };
 
   return (
     <div>
-      <Header userRole="EMPLOYEE" />
+      <Header />
       <div style={{
         minHeight: '60vh',
         display: 'flex',
@@ -101,5 +103,5 @@ export default function EmployeeHome() {
         )}
       </div>
     </div>
-  );
+  )
 }
