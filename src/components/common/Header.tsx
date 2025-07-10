@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
 import Logo from './Logo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'

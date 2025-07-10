@@ -7,6 +7,7 @@ import {
   useMemo
 } from 'react'
 import { jwtDecode } from 'jwt-decode'
+import axios from '../axiosConfig'
 
 //AuthContext에서 제공할 상태와 함수들을 정의
 interface AuthContextType {
@@ -56,11 +57,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false)
   }, [])
 
-  const logout = () => {
-    setRole(null)
-    setUserName(null)
-    localStorage.removeItem('accessToken')
-    // 로그아웃 API 호출 및 rt 쿠키 만료 필요
+  const logout = async () => {
+    try {
+      await axios.post('/api/v1/auth/logout')
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setRole(null)
+      setUserName(null)
+      localStorage.removeItem('accessToken')
+    }
   }
 
   const value = useMemo(

@@ -8,10 +8,6 @@ interface AddEmployeeModalProps {
   onCancel: () => void
 }
 
-// axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-// axios.defaults.headers.common['Content-Type'] = 'application/json'
-// axios.defaults.withCredentials = true
-
 export default function AddEmployeeModal({
   onSuccess,
   onCancel
