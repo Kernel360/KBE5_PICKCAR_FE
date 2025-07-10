@@ -11,33 +11,30 @@ import gpx06 from '@/gpx/gpx06.json';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_URL = import.meta.env.VITE_EMULATOR_API_URL;
 
-const random = Math.floor(Math.random() * 6); // 0, 1, 2
+const CYCLE_SIZE = 60; // 한 번에 보낼 경로 개수
+const CYCLE_IDX_KEY = 'emulator_cycle_idx'; // 현재 전송된 위치(60*n)
+const CYCLE_GPX_NUM = 'emulator_cycle_num'; // 현재 전송된 GPX 번호(gpx0*)
+
+const gpxList = [gpx01, gpx02, gpx03, gpx04, gpx05, gpx06];
+const gpxNameList = ["gpx01", "gpx02", "gpx03", "gpx04", "gpx05", "gpx06"];
 
 let allGpx = gpx01;
 
-switch (random) {
-  case 0:
-    allGpx = gpx01;
-    break;
-  case 1:
-    allGpx = gpx02;
-    break;
-  case 2:
-    allGpx = gpx03;
-    break;
-  case 3:
-    allGpx = gpx04;
-    break;
-  case 4:
-    allGpx = gpx05;
-    break;
-  case 5:
-    allGpx = gpx06;
-    break;
-}
+const temp = localStorage.getItem(CYCLE_GPX_NUM);
 
-const CYCLE_SIZE = 60; // 한 번에 보낼 경로 개수
-const CYCLE_IDX_KEY = 'emulator_cycle_idx';
+if (temp === null) { // 처음이면 랜덤 선택 + 저장
+  const random = Math.floor(Math.random() * 6);
+  allGpx = gpxList[random];
+  localStorage.setItem(CYCLE_GPX_NUM, gpxNameList[random]);
+} else { // 기존 localStorage 값이 있을 경우 해당 gpx 데이터를 사용
+  const index = gpxNameList.indexOf(temp);
+  if (index !== -1) {
+    allGpx = gpxList[index];
+  } else { // fallback 발생 시: 기본값 gpx01 + 잘못된 localStorage 정정
+    allGpx = gpx01;
+    localStorage.setItem(CYCLE_GPX_NUM, "gpx01");
+  }
+}
 
 export default function Emulator() {
   const [engineOn, setEngineOn] = useState(false);
@@ -182,6 +179,7 @@ export default function Emulator() {
 
     setVehicleId(null);
     localStorage.removeItem(CYCLE_IDX_KEY);
+    localStorage.removeItem(CYCLE_GPX_NUM);
     setCycleStartIdx(0);
   };
 
