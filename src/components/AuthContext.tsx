@@ -8,7 +8,7 @@ import {
 } from 'react'
 import { jwtDecode } from 'jwt-decode'
 
-//AuthContextType 정의
+//AuthContext에서 제공할 상태와 함수들을 정의
 interface AuthContextType {
   role: string | null
   userName: string | null
@@ -17,7 +17,7 @@ interface AuthContextType {
   logout: () => void
 }
 
-//JwtPayload TYPE 정의
+//JWT 토큰에서 추출할 데이터 구조 정의
 interface JwtPayload {
   role?: string
   name?: string

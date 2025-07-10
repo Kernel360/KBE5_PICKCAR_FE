@@ -18,7 +18,7 @@ function LoginForm() {
   const [error, setError] = useState('')
   const [showSignUpModal, setShowSignUpModal] = useState(false)
   const navigate = useNavigate()
-  const { setRole } = useAuth()
+  const { setRole, setUserName } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -50,6 +50,7 @@ function LoginForm() {
       const payload: JwtPayload = jwtDecode(accessToken)
       console.log(payload.role)
       setRole(payload.role || null) // 전역 상태에 role 저장
+      setUserName(payload.name || null) // 전역 상태에 name 저장
 
       // 권한 확인
       if (payload?.role === 'EMPLOYEE') {

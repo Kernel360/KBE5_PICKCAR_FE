@@ -6,32 +6,16 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../AuthContext'
 
-// interface HeaderProps {
-//   userRole?: string
-// }
-
 // function Header({ userRole }: HeaderProps) {
 function Header() {
   const navigate = useNavigate()
-  const { role, userName } = useAuth()
+  const { role, userName, logout } = useAuth() // logout 함수 추가
   const displayName = userName || '사용자'
   const linkTo = role === 'EMPLOYEE' ? '/employee/home' : '/dashboard'
 
-  // accessToken 확인
-  // const accessToken = localStorage.getItem('accessToken')
-  // const isLoggedIn = !!accessToken
-
-  // // useEffect로 로그인 상태 체크
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     console.log('로그인되지 않음 - 홈으로 이동')
-  //     navigate('/')
-  //   }
-  // }, [isLoggedIn, navigate])
-
   // 로그아웃 함수
   const handleLogout = () => {
-    localStorage.removeItem('accessToken')
+    logout() // AuthContext의 logout 함수를 이용해 모든 컴포넌트에서 로그아웃 상태임을 전달
     navigate('/')
   }
 
