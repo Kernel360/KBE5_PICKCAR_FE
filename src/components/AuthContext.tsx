@@ -12,6 +12,7 @@ import { jwtDecode } from 'jwt-decode'
 interface AuthContextType {
   role: string | null
   userName: string | null
+  isLoading: boolean
   setRole: (role: string | null) => void
   setUserName: (userName: string | null) => void
   logout: () => void
@@ -28,6 +29,7 @@ interface JwtPayload {
 const AuthContext = createContext<AuthContextType>({
   role: null,
   userName: null,
+  isLoading: true,
   setRole: () => {},
   setUserName: () => {},
   logout: () => {}
@@ -36,6 +38,7 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<string | null>(null)
   const [userName, setUserName] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken')
@@ -50,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('accessToken')
       }
     }
+    setIsLoading(false)
   }, [])
 
   const logout = () => {
@@ -62,12 +66,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       role,
-      setRole,
       userName,
+      isLoading,
+      setRole,
       setUserName,
       logout
     }),
-    [role, userName]
+    [role, userName, isLoading]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
