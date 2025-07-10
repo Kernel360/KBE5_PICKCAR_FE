@@ -1,5 +1,5 @@
 import Logo from './common/Logo'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../axiosConfig'
 import SignUpModal from './SignUpModal'
@@ -18,7 +18,18 @@ function LoginForm() {
   const [error, setError] = useState('')
   const [showSignUpModal, setShowSignUpModal] = useState(false)
   const navigate = useNavigate()
-  const { setRole, setUserName } = useAuth()
+  const { setRole, setUserName, role, isLoading } = useAuth()
+
+  // 로그인 상태에서 접근 시 자동 리다이렉트
+  useEffect(() => {
+    if (!isLoading && role) {
+      if (role === 'EMPLOYEE') {
+        navigate('/employee/home', { replace: true })
+      } else {
+        navigate('/dashboard', { replace: true })
+      }
+    }
+  }, [role, isLoading, navigate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -54,9 +65,9 @@ function LoginForm() {
 
       // 권한 확인
       if (payload?.role === 'EMPLOYEE') {
-        navigate('/employee/home')
+        navigate('/employee/home', { replace: true })
       } else {
-        navigate('/dashboard')
+        navigate('/dashboard', { replace: true })
       }
     } catch (err) {
       const msg = getErrorMessage(err)
@@ -65,6 +76,9 @@ function LoginForm() {
       }
     }
   }
+
+  if (isLoading) return null
+  if (role) return null // 리다이렉트 중엔 폼 숨김
 
   return (
     <div className="flex min-h-screen items-center justify-center">

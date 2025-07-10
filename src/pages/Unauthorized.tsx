@@ -14,7 +14,7 @@ export default function Unauthorized() {
       <button
         onClick={() => {
           logout();
-          navigate('/');
+          navigate('/', { replace: true });
         }}
         style={{
           background: '#3182ce',
