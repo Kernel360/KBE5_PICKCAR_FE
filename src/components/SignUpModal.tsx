@@ -1,14 +1,10 @@
 import { useState } from 'react'
-import axios from 'axios'
+import axios from '../axiosConfig'
 import { getErrorMessage } from './common/getErrorMessage'
 
 interface SignUpModalProps {
   onClose: () => void
 }
-
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
 
 export default function SignUpModal({ onClose }: SignUpModalProps) {
   const [formData, setFormData] = useState({
@@ -41,6 +37,8 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
     e.preventDefault()
     setError('')
 
+    console.log(error)
+
     // 필수 필드 검증
     if (
       !formData.email ||
@@ -54,14 +52,17 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
 
     setIsLoading(true)
     try {
-      const response = await axios.post('/api/v1/auth/sign-up', {
-        email: formData.email,
-        password: formData.password,
-        name: formData.name,
-        phoneNumber: formData.phoneNumber,
-        isAdmin: formData.isAdmin
-      })
-      // console.log('회원가입 성공:', response)
+      await axios.post(
+        '/api/v1/auth/sign-up',
+        {
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+          phoneNumber: formData.phoneNumber,
+          isAdmin: formData.isAdmin
+        },
+        { skipAuth: true } as any
+      )
       alert('회원가입이 완료되었습니다.')
       onClose()
     } catch (error: unknown) {

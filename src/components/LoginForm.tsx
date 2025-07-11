@@ -1,15 +1,16 @@
 import Logo from './common/Logo'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axios from '../axiosConfig'
 import SignUpModal from './SignUpModal'
 import { getErrorMessage } from './common/getErrorMessage'
+import { useAuth } from './AuthContext'
+import { jwtDecode } from 'jwt-decode'
 
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
+interface JwtPayload {
+  role?: string
+  name?: string
+}
 
 function LoginForm() {
   const [email, setEmail] = useState('')
@@ -17,6 +18,18 @@ function LoginForm() {
   const [error, setError] = useState('')
   const [showSignUpModal, setShowSignUpModal] = useState(false)
   const navigate = useNavigate()
+  const { setRole, setUserName, role, isLoading } = useAuth()
+
+  // 로그인 상태에서 접근 시 자동 리다이렉트
+  useEffect(() => {
+    if (!isLoading && role) {
+      if (role === 'EMPLOYEE') {
+        navigate('/employee/home', { replace: true })
+      } else {
+        navigate('/dashboard', { replace: true })
+      }
+    }
+  }, [role, isLoading, navigate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,10 +39,13 @@ function LoginForm() {
       return
     }
     try {
-      const response = await axios.post(BASE_URL + '/api/v1/auth/login', {
-        email,
-        password
-      })
+      const response = await axios.post(
+        '/api/v1/auth/login',
+        {
+          email,
+          password
+        },
+        { skipAuth: true } as any)
       const result = response.data
 
       // 로그인 성공 시 로직
@@ -41,13 +57,18 @@ function LoginForm() {
 
       // localStorage에 저장
       localStorage.setItem('accessToken', accessToken)
+      //토큰 파싱
+      const payload: JwtPayload = jwtDecode(accessToken)
+      console.log(payload.role)
+      setRole(payload.role || null) // 전역 상태에 role 저장
+      setUserName(payload.name || null) // 전역 상태에 name 저장
 
-        // 5. 권한에 따라 페이지 이동
-        if (userRole.data === 'EMPLOYEE') {
-          navigate('/emulator')
-        } else {
-          navigate('/dashboard')
-        }
+      // 권한 확인
+      if (payload?.role === 'EMPLOYEE') {
+        navigate('/emulator', { replace: true })
+      } else {
+        navigate('/dashboard', { replace: true })
+      }
     } catch (err) {
       const msg = getErrorMessage(err)
       if (msg) {
@@ -55,6 +76,9 @@ function LoginForm() {
       }
     }
   }
+
+  if (isLoading) return null
+  if (role) return null // 리다이렉트 중엔 폼 숨김
 
   return (
     <div className="flex min-h-screen items-center justify-center">

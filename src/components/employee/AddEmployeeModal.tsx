@@ -1,34 +1,12 @@
 import { useState } from 'react'
 import { EmployeeFormData, EmployeePosition } from '@/types/employee'
-import axios from 'axios'
+import axios from '../../axiosConfig'
+import { isAxiosError } from 'axios'
 
 interface AddEmployeeModalProps {
   onSuccess: () => void
   onCancel: () => void
 }
-
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
-
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()!.split(';').shift() || null
-  return null
-}
-
-axios.interceptors.request.use(
-  config => {
-    const token = getCookie('accessToken')
-    if (token) {
-      config.headers = config.headers || {}
-      config.headers['Authorization'] = `Bearer ${token}`
-    }
-    return config
-  },
-  error => Promise.reject(error)
-)
 
 export default function AddEmployeeModal({
   onSuccess,
@@ -99,7 +77,7 @@ export default function AddEmployeeModal({
       onSuccess()
     } catch (error) {
       console.error('Error adding employee:', error)
-      if (axios.isAxiosError(error) && error.response?.data) {
+      if (isAxiosError(error) && error.response?.data) {
         setError(error.response.data.message || '사원 등록에 실패했습니다.')
       } else {
         setError('사원 등록에 실패했습니다.')

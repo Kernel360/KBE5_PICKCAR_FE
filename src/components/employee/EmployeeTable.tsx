@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Employee, AvailableVehicleResponse } from '@/types/employee'
 import LoadingScreen from '@/components/common/LoadingScreen'
-import axios from 'axios'
+import axios from '../../axiosConfig'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faCarSide } from '@fortawesome/free-solid-svg-icons'
@@ -10,29 +10,6 @@ import ReservationVehicleListModal from '@/components/employee/ReservationModal'
 interface EmployeeTableProps {
   refreshKey: number
 }
-
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
-
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()!.split(';').shift() || null
-  return null
-}
-
-axios.interceptors.request.use(
-  config => {
-    const token = getCookie('accessToken')
-    if (token) {
-      config.headers = config.headers || {}
-      config.headers['Authorization'] = `Bearer ${token}`
-    }
-    return config
-  },
-  error => Promise.reject(error)
-)
 
 export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
   const [isLoading, setIsLoading] = useState(true)
