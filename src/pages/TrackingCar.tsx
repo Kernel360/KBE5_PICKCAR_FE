@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
-import axios from 'axios'
 import KakaoMap from '@/components/common/KakaoMap'
 import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
@@ -62,10 +60,10 @@ function TrackingCar() {
     eventSource.addEventListener('vehicle-cycle', (event) => {
       const data = JSON.parse(event.data)
       console.log('[SSE 수신]', data)
-    
+
       const infos = data.cycle_infos
       if (!Array.isArray(infos)) return
-    
+
       const newPoints = infos
         .map((info) => {
           if (
@@ -76,18 +74,18 @@ function TrackingCar() {
             typeof info.longitude !== 'number' &&
             typeof info.longitude !== 'string'
           ) return null
-    
+
           const lat = parseFloat(info.latitude)
           console.log('[info.latitude 수신]', info.latitude)
           console.log('[info.latitude.parseFloat 수신]', lat)
           const lng = parseFloat(info.longitude)
-    
+
           return isNaN(lat) || isNaN(lng) ? null : { lat, lng }
         })
         .filter((p): p is { lat: number; lng: number } => p !== null)
-    
+
       if (newPoints.length === 0) return
-    
+
       setPath((prev) => {
         const updated = [...prev, ...newPoints];
         // 마지막 좌표로 지도 중심 이동
@@ -99,7 +97,7 @@ function TrackingCar() {
         setIsPathLoading(false); // 데이터 수신되면 blur 해제
         return updated;
       });
-    
+
       const last = newPoints[newPoints.length - 1]
       setCars((prevCars) =>
         prevCars.map((car) =>
@@ -109,7 +107,7 @@ function TrackingCar() {
         )
       )
     })
-    
+
 
     eventSource.onerror = (err) => {
       console.error('[SSE 오류]', err)
