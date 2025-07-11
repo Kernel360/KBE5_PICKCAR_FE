@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { getErrorMessage } from './common/getErrorMessage'
 
 interface SignUpModalProps {
   onClose: () => void
@@ -19,6 +20,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [emailError, setEmailError] = useState('')
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target
@@ -59,23 +61,15 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
         phoneNumber: formData.phoneNumber,
         isAdmin: formData.isAdmin
       })
-      console.log('회원가입 성공:', response)
+      // console.log('회원가입 성공:', response)
       alert('회원가입이 완료되었습니다.')
       onClose()
     } catch (error: unknown) {
-      console.error('회원가입 실패:', error)
-      if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as {
-          response?: { data?: { message?: string } }
-        }
-        console.error('에러 응답:', axiosError.response)
-        if (axiosError.response?.data?.message) {
-          setError(axiosError.response.data.message)
-        } else {
-          setError('회원가입에 실패했습니다. 다시 시도해주세요.')
-        }
-      } else {
-        setError('회원가입에 실패했습니다. 다시 시도해주세요.')
+      const msg = getErrorMessage(error)
+
+      // 서버에서 응답한 에러 메세지가 없다면 alert / 있다면 email input 밑밑에 메세지 출력
+      if (msg) {
+        setEmailError(msg)
       }
     } finally {
       setIsLoading(false)
@@ -111,7 +105,10 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               onChange={handleInputChange}
               placeholder="이메일을 입력하세요"
               className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
-            />
+            /> 
+            {emailError && (
+              <div className="mt-1 text-sm text-red-500">{emailError}</div>
+            )}
           </div>
 
           <div>
@@ -185,12 +182,6 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               </label>
             </div>
           </div>
-
-          {error && (
-            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-500">
-              {error}
-            </div>
-          )}
 
           {/* 하단 버튼 */}
           <div className="flex justify-end gap-2 pt-4">
