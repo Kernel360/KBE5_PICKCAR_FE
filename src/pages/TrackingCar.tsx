@@ -4,13 +4,15 @@ import KakaoMap from '@/components/common/KakaoMap'
 import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
 import Header from '@/components/common/Header'
+import { trackingAxios } from '../axiosConfig'
+import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import type { Car } from '@/types/tracking'
 
 // const trackingApi = axios.create({
-//   baseURL: import.meta.env.VITE_API_BASE_URL,
+//   baseURL: import.meta.env.VITE_TRACKING_API_URL,
 //   headers: { 'Content-Type': 'application/json' },
 //   withCredentials: true
 // })
@@ -36,7 +38,7 @@ function TrackingCar() {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('/api/v1/reservation/vehicles/assignment-completed')
+        const res = await trackingAxios.get('/api/v1/reservation/vehicles/assignment-completed')
         setCars(res.data.data || [])
       } catch (e) {
         console.error(e)

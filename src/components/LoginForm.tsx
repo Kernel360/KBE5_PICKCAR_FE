@@ -1,14 +1,16 @@
 import Logo from './common/Logo'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axios from '../axiosConfig'
 import SignUpModal from './SignUpModal'
+import { getErrorMessage } from './common/getErrorMessage'
+import { useAuth } from './AuthContext'
+import { jwtDecode } from 'jwt-decode'
 
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
+interface JwtPayload {
+  role?: string
+  name?: string
+}
 
 function LoginForm() {
   const [email, setEmail] = useState('')
@@ -16,6 +18,18 @@ function LoginForm() {
   const [error, setError] = useState('')
   const [showSignUpModal, setShowSignUpModal] = useState(false)
   const navigate = useNavigate()
+  const { setRole, setUserName, role, isLoading } = useAuth()
+
+  // 로그인 상태에서 접근 시 자동 리다이렉트
+  useEffect(() => {
+    if (!isLoading && role) {
+      if (role === 'EMPLOYEE') {
+        navigate('/employee/home', { replace: true })
+      } else {
+        navigate('/dashboard', { replace: true })
+      }
+    }
+  }, [role, isLoading, navigate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,50 +39,46 @@ function LoginForm() {
       return
     }
     try {
-      const response = await axios.post(BASE_URL + '/api/v1/auth/login', {
-        email,
-        password
-      })
+      const response = await axios.post(
+        '/api/v1/auth/login', 
+        {
+          email,
+          password
+        }, 
+        { skipAuth: true } as any)
       const result = response.data
 
-      // 2. 로그인 성공 시 처리
-      if (result?.responseInfo?.isSuccess) {
-        const accessToken = result?.data?.accessToken
-        if (!accessToken) {
-          setError('AccessToken이 응답에 없습니다.')
-          return;
-        }
+      // 로그인 성공 시 로직
+      const accessToken = result?.data?.accessToken
+      if (!accessToken) {
+        setError('AccessToken이 응답에 없습니다. 관리자에게 문의해 주세요.')
+        return
+      }
 
-        // 3. localStorage에 저장
-        localStorage.removeItem('accessToken');
-        localStorage.setItem('accessToken', accessToken)
+      // localStorage에 저장
+      localStorage.setItem('accessToken', accessToken)
+      //토큰 파싱
+      const payload: JwtPayload = jwtDecode(accessToken)
+      console.log(payload.role)
+      setRole(payload.role || null) // 전역 상태에 role 저장
+      setUserName(payload.name || null) // 전역 상태에 name 저장
 
-        // 4. 권한 확인
-        const res = await fetch(BASE_URL + '/api/v1/auth/authority', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        const userRole = await res.json()
-
-        // 5. 권한에 따라 페이지 이동
-        if (userRole.data === "EMPLOYEE") {
-          navigate('/emulator')
-        } else {
-          navigate('/dashboard')
-        }
-
+      // 권한 확인
+      if (payload?.role === 'EMPLOYEE') {
+        navigate('/emulator', { replace: true })
       } else {
-        setError('이메일 또는 비밀번호를 재확인 해주세요.')
+        navigate('/dashboard', { replace: true })
       }
     } catch (err) {
-      console.error(err)
-      setError('서버와의 연결에 실패했습니다.')
+      const msg = getErrorMessage(err)
+      if (msg) {
+        setError(msg)
+      }
     }
   }
+
+  if (isLoading) return null
+  if (role) return null // 리다이렉트 중엔 폼 숨김
 
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -99,7 +109,11 @@ function LoginForm() {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-          {error && <div className="mb-2 text-sm text-red-500">{error}</div>}
+          {error && (
+            <div className="mt-1 mb-2 text-[11px] font-normal text-red-500">
+              {error}
+            </div>
+          )}
           <button
             type="submit"
             className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white">

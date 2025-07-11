@@ -308,7 +308,7 @@ export default function Emulator() {
 
   return (
     <div>
-      <Header userRole="EMPLOYEE" />
+      <Header />
       <div style={{ minHeight: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {!vehicleId ? (
           <h2 style={{ fontSize: '1.8rem', textAlign: 'center' }}>
