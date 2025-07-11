@@ -9,11 +9,11 @@ import ErrorScreen from '@/components/common/ErrorScreen'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import type { Car } from '@/types/tracking'
 
-const trackingApi = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-  withCredentials: true
-})
+// const trackingApi = axios.create({
+//   baseURL: import.meta.env.VITE_API_BASE_URL,
+//   headers: { 'Content-Type': 'application/json' },
+//   withCredentials: true
+// })
 
 function TrackingCar() {
   const INIT_CENTER = { lat: 37.5665, lng: 126.978 }
