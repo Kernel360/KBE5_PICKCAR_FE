@@ -44,7 +44,6 @@ instances.forEach(addAuthInterceptor)
 function handleLogoutAndRedirect(msg?: string){
   localStorage.removeItem('accessToken')
   window.location.href = '/'
-  if (msg) alert(msg)
 }
 
 const errorHandlers: Record<string, (msg?: string) => void | Promise<void>> = {
