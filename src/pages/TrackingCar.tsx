@@ -2,7 +2,7 @@ import KakaoMap from '@/components/common/KakaoMap'
 import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
 import Header from '@/components/common/Header'
-import { trackingAxios } from '../axiosConfig'
+import axios from '../axiosConfig'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
@@ -36,7 +36,9 @@ function TrackingCar() {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await trackingAxios.get('/api/v1/reservation/vehicles/assignment-completed')
+        const res = await axios.get(
+          '/api/v1/reservation/vehicles/assignment-completed'
+        )
         setCars(res.data.data || [])
       } catch (e) {
         console.error(e)
