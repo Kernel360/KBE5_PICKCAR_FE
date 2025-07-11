@@ -24,7 +24,7 @@ function LoginForm() {
   useEffect(() => {
     if (!isLoading && role) {
       if (role === 'EMPLOYEE') {
-        navigate('/employee/home', { replace: true })
+        navigate('/emulator', { replace: true })
       } else {
         navigate('/dashboard', { replace: true })
       }

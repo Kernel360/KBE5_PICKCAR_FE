@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
+import axios from '../axiosConfig'
 import Header from '@/components/common/Header';
 import gpx01 from '@/gpx/gpx01.json';
 import gpx02 from '@/gpx/gpx02.json';
