@@ -40,11 +40,11 @@ function LoginForm() {
     }
     try {
       const response = await axios.post(
-        '/api/v1/auth/login', 
+        '/api/v1/auth/login',
         {
           email,
           password
-        }, 
+        },
         { skipAuth: true } as any)
       const result = response.data
 

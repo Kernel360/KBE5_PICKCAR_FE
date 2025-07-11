@@ -14,7 +14,7 @@ export default function EmployeeManagement() {
 
         <main className="relative mx-2 flex h-[calc(100vh-64px)] min-h-0 flex-1 flex-col p-6">
           <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-800">사원 관리</h1>
+            <h1 className="text-2xl font-bold text-gray-800">사원 차량 할당</h1>
           </div>
 
           <div

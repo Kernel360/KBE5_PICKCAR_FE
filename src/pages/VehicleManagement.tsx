@@ -20,6 +20,10 @@ interface ModalState {
   vehicle: VehicleListResponse | null
 }
 
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
+axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.defaults.withCredentials = true
+
 const updateVehicleStatus = async (
   request: UpdateVehicleStatusRequest
 ): Promise<void> => {
