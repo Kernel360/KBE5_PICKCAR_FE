@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Header from '@/components/common/Header';
 import gpx01 from '@/gpx/gpx01.json';
@@ -46,6 +46,9 @@ export default function Emulator() {
     return saved ? parseInt(saved, 10) : 0;
   });
 
+  const elapsedSecondsRef = useRef(0);
+  const intervalIdRef = useRef<number | null>(null);
+
   const accessToken = localStorage.getItem('accessToken');
   const userId = (() => {
     try {
@@ -70,6 +73,19 @@ export default function Emulator() {
         setVehicleId(null);
       });
   }, [userId]);
+
+  // engineOn 시 1초 단위 카운트 시작
+  useEffect(() => {
+    if (engineOn) {
+      elapsedSecondsRef.current = 0;
+      intervalIdRef.current = window.setInterval(() => {
+        elapsedSecondsRef.current += 1;
+      }, 1000);
+    } else if (intervalIdRef.current !== null) {
+      clearInterval(intervalIdRef.current);
+      intervalIdRef.current = null;
+    }
+  }, [engineOn]);
 
   // 엔진 ON 시 cycle_infos에 gpx 데이터 사용
   useEffect(() => {
@@ -154,7 +170,6 @@ export default function Emulator() {
 
       localStorage.setItem('engineOnTime', engineOnTime);
 
-      // === 🌍 위도/경도 계산 로직 ===
       let lat = 0;
       let lng = 0;
 
@@ -194,10 +209,9 @@ export default function Emulator() {
 
   const handleEngineOff = () => {
     if (!vehicleId) return;
-
+  
     const now = new Date();
     const pad = (num: number) => num.toString().padStart(2, '0');
-
     const engineOffTime = 
       now.getFullYear().toString() +
       pad(now.getMonth() + 1) +
@@ -205,36 +219,42 @@ export default function Emulator() {
       pad(now.getHours()) +
       pad(now.getMinutes()) +
       pad(now.getSeconds());
-
-      const engineOnTime = localStorage.getItem('engineOnTime');
-
-      // === 🌍 위도/경도 계산 로직 ===
-      let lat = 0;
-      let lng = 0;
-
-      const gpxKey = localStorage.getItem(CYCLE_GPX_NUM);
-      const gpxIndex = gpxNameList.indexOf(gpxKey ?? '');
-    
-      if (gpxKey === null || gpxIndex === -1) {
-        // localStorage에 GPX 번호 없음 → 랜덤으로 선택된 allGpx[0] 사용
-        if (allGpx.length > 0) {
-          lat = allGpx[0].latitude;
-          lng = allGpx[0].longitude;
-        }
-      } else {
-        // gpxKey가 있음 → 해당 파일의 cycleStartIdx 위치의 데이터 사용
-        const selectedGpx = gpxList[gpxIndex];
-        const idx = cycleStartIdx < selectedGpx.length ? cycleStartIdx : 0;
-        const point = selectedGpx[idx];
-        if (point) {
-          lat = point.latitude;
-          lng = point.longitude;
-        }
-      }
-
-      localStorage.setItem('lat', String(lat));
-      localStorage.setItem('lng', String(lng));
-
+  
+    const engineOnTime = localStorage.getItem('engineOnTime');
+  
+    // 실제 전송할 개수 계산
+    const actualCycleSize = Math.min(elapsedSecondsRef.current, CYCLE_SIZE);
+    const gpxKey = localStorage.getItem(CYCLE_GPX_NUM);
+    const gpxIndex = gpxNameList.indexOf(gpxKey ?? '');
+    const selectedGpx = gpxIndex !== -1 ? gpxList[gpxIndex] : allGpx;
+    const idx = cycleStartIdx;
+  
+    const actualCycleInfos = selectedGpx.slice(idx, idx + actualCycleSize);
+    const nextIdx = (idx + actualCycleSize) % selectedGpx.length;
+  
+    // 위도/경도
+    const lat = actualCycleInfos[0]?.latitude ?? 0;
+    const lng = actualCycleInfos[0]?.longitude ?? 0;
+  
+    localStorage.setItem('lat', String(lat));
+    localStorage.setItem('lng', String(lng));
+  
+    // 실제 전송
+    postApi('/api/v1/cycle', {
+      vehicle_id: vehicleId,
+      cycle_cnt: actualCycleSize,
+      occurred_at: engineOffTime,
+      distance: 100,
+      cycle_infos: actualCycleInfos,
+    });
+  
+    // cycle 인덱스 갱신
+    setCycleStartIdx(() => {
+      localStorage.setItem(CYCLE_IDX_KEY, nextIdx.toString());
+      return nextIdx;
+    });
+  
+    // 상태 및 시간 저장
     postApi('/api/v1/event/engine/off', {
       vehicle_id: vehicleId,
       mdn: '01234567890',
@@ -245,11 +265,11 @@ export default function Emulator() {
       latitude: lat,
       longitude: lng,
     });
-
+  
     localStorage.setItem('engineOffTime', engineOffTime);
-
     setEngineOn(false);
   };
+  
 
   const handleReturn = () => {
     if (!vehicleId) return;
