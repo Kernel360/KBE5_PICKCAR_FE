@@ -87,12 +87,23 @@ export default function Emulator() {
                 ...allGpx.slice(0, CYCLE_SIZE - cycle_infos.length),
               ];
 
+        const now = new Date();
+        const pad = (num: number) => num.toString().padStart(2, '0');
+
+        const cycleTime = 
+          now.getFullYear().toString() +
+          pad(now.getMonth() + 1) +
+          pad(now.getDate()) +
+          pad(now.getHours()) +
+          pad(now.getMinutes()) +
+                pad(now.getSeconds());
+          
         axios.post(
           API_URL + '/api/v1/cycle',
           {
             vehicle_id: vehicleId,
             cycle_cnt: CYCLE_SIZE,
-            occurred_at: '20250630123001',
+            occurred_at: cycleTime,
             distance: 100,
             cycle_infos: actualCycleInfos,
           },
@@ -129,31 +140,114 @@ export default function Emulator() {
 
   const handleEngineOn = () => {
     if (!vehicleId) return;
+
+    const now = new Date();
+    const pad = (num: number) => num.toString().padStart(2, '0');
+
+    const engineOnTime = 
+      now.getFullYear().toString() +
+      pad(now.getMonth() + 1) +
+      pad(now.getDate()) +
+      pad(now.getHours()) +
+      pad(now.getMinutes()) +
+      pad(now.getSeconds());
+
+      localStorage.setItem('engineOnTime', engineOnTime);
+
+      // === 🌍 위도/경도 계산 로직 ===
+      let lat = 0;
+      let lng = 0;
+
+      const gpxKey = localStorage.getItem(CYCLE_GPX_NUM);
+      const gpxIndex = gpxNameList.indexOf(gpxKey ?? '');
+    
+      if (gpxKey === null || gpxIndex === -1) {
+        // localStorage에 GPX 번호 없음 → 랜덤으로 선택된 allGpx[0] 사용
+        if (allGpx.length > 0) {
+          lat = allGpx[0].latitude;
+          lng = allGpx[0].longitude;
+        }
+      } else {
+        // gpxKey가 있음 → 해당 파일의 cycleStartIdx 위치의 데이터 사용
+        const selectedGpx = gpxList[gpxIndex];
+        const idx = cycleStartIdx < selectedGpx.length ? cycleStartIdx : 0;
+        const point = selectedGpx[idx];
+        if (point) {
+          lat = point.latitude;
+          lng = point.longitude;
+        }
+      }
+
     postApi('/api/v1/event/engine/on', {
       vehicle_id: vehicleId,
       mdn: '01234567890',
       event_status: 'ON',
-      engine_on_time: '20250709103601',
+      engine_on_time: engineOnTime,
       engine_off_time: '',
       gps_status: 'NORMAL',
-      latitude: 37.4418038,
-      longitude: 12.7244003,
+      latitude: lat,
+      longitude: lng,
     });
+
     setEngineOn(true);
   };
 
   const handleEngineOff = () => {
     if (!vehicleId) return;
+
+    const now = new Date();
+    const pad = (num: number) => num.toString().padStart(2, '0');
+
+    const engineOffTime = 
+      now.getFullYear().toString() +
+      pad(now.getMonth() + 1) +
+      pad(now.getDate()) +
+      pad(now.getHours()) +
+      pad(now.getMinutes()) +
+      pad(now.getSeconds());
+
+      const engineOnTime = localStorage.getItem('engineOnTime');
+
+      // === 🌍 위도/경도 계산 로직 ===
+      let lat = 0;
+      let lng = 0;
+
+      const gpxKey = localStorage.getItem(CYCLE_GPX_NUM);
+      const gpxIndex = gpxNameList.indexOf(gpxKey ?? '');
+    
+      if (gpxKey === null || gpxIndex === -1) {
+        // localStorage에 GPX 번호 없음 → 랜덤으로 선택된 allGpx[0] 사용
+        if (allGpx.length > 0) {
+          lat = allGpx[0].latitude;
+          lng = allGpx[0].longitude;
+        }
+      } else {
+        // gpxKey가 있음 → 해당 파일의 cycleStartIdx 위치의 데이터 사용
+        const selectedGpx = gpxList[gpxIndex];
+        const idx = cycleStartIdx < selectedGpx.length ? cycleStartIdx : 0;
+        const point = selectedGpx[idx];
+        if (point) {
+          lat = point.latitude;
+          lng = point.longitude;
+        }
+      }
+
+      localStorage.setItem('lat', String(lat));
+      localStorage.setItem('lng', String(lng));
+
     postApi('/api/v1/event/engine/off', {
       vehicle_id: vehicleId,
       mdn: '01234567890',
       event_status: 'OFF',
-      engine_on_time: '20250709103601',
-      engine_off_time: '20250709103700',
+      engine_on_time: engineOnTime,
+      engine_off_time: engineOffTime,
       gps_status: 'NORMAL',
-      latitude: 37.4418097,
-      longitude: 12.7244062,
+      latitude: lat,
+      longitude: lng,
     });
+
+    localStorage.setItem('engineOffTime', engineOffTime);
+
     setEngineOn(false);
   };
 
@@ -166,18 +260,27 @@ export default function Emulator() {
     const confirmed = window.confirm(`${vehicleId}번 차량을 반납하시겠습니까?`);
     if (!confirmed) return;
 
+    const engineOnTime = localStorage.getItem('engineOnTime');
+    const engineOffTime = localStorage.getItem('engineOffTime');
+    const lat = parseFloat(localStorage.getItem('lat') || '0');
+    const lng = parseFloat(localStorage.getItem('lng') || '0');
+
     postApi('/api/v1/event/returned', {
       vehicle_id: vehicleId,
       mdn: '01234567890',
       event_status: 'RETURNED',
-      engine_on_time: '20250709103601',
-      engine_off_time: '20250709103700',
+      engine_on_time: engineOnTime,
+      engine_off_time: engineOffTime,
       gps_status: 'NORMAL',
-      latitude: 37.4418097,
-      longitude: 12.7244062,
+      latitude: lat,
+      longitude: lng,
     });
 
     setVehicleId(null);
+    localStorage.removeItem('lat');
+    localStorage.removeItem('lng');
+    localStorage.removeItem('engineOnTime');
+    localStorage.removeItem('engineOffTime');
     localStorage.removeItem(CYCLE_IDX_KEY);
     localStorage.removeItem(CYCLE_GPX_NUM);
     setCycleStartIdx(0);
