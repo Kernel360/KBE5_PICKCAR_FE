@@ -6,6 +6,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from dotenv import load_dotenv
+import platform
 import os
 import requests
 import sys
@@ -16,28 +17,28 @@ load_dotenv(dotenv_file)
 
 api_base_url = os.getenv("API_BASE_URL", "http://localhost:8080")
 
-# 경고창을 띄우기 위한 tkinter import
-import tkinter as tk
-from tkinter import messagebox
+if platform.system() == 'Linux':
+    font_regular = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+    font_bold = '/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf'
+else:
+    font_regular = '/Users/park/Library/Fonts/NanumGothic-Regular.ttf'
+    font_bold = '/Users/park/Library/Fonts/NanumGothic-Bold.ttf'
 
-LabelBase.register(name='AppleSDGothicNeo',
-                   fn_regular='/System/Library/Fonts/AppleSDGothicNeo.ttc')
+LabelBase.register(
+    name='NanumGothic',
+    fn_regular=font_regular,
+    fn_bold=font_bold
+)
 
 if len(sys.argv) > 1:
     access_token = sys.argv[1]
 else:
-    # 경고창 띄우기
-    root = tk.Tk()
-    root.withdraw()  # 메인 윈도우 숨기기
-    messagebox.showerror("오류", "인증된 토큰이 없습니다.")
+    print("인증된 토큰이 없습니다. 프로그램 종료.")
     sys.exit(0)  # 프로그램 종료
 if len(sys.argv) > 2:
     vehicle_id = sys.argv[2]
 else:
-    # 경고창 띄우기
-    root = tk.Tk()
-    root.withdraw()  # 메인 윈도우 숨기기
-    messagebox.showerror("오류", "할당된 차량이 없습니다.")
+    print("할당된 차량이 없습니다. 프로그램 종료.")
     sys.exit(0)  # 프로그램 종료
 
 from kivy.app import App
@@ -63,7 +64,7 @@ class ReturnConfirmPopup(Popup):
             text=vehicle_id+'번 해당 차량을\n반납하시겠습니까?', 
             size_hint_y=None, 
             height=90,
-            font_name='AppleSDGothicNeo'
+            font_name='NanumGothic'
         )
         layout.add_widget(message)
         
@@ -74,7 +75,7 @@ class ReturnConfirmPopup(Popup):
         yes_btn = Button(
             text='예', 
             size_hint_x=0.5,
-            font_name='AppleSDGothicNeo'
+            font_name='NanumGothic'
         )
         yes_btn.bind(on_press=self.confirm_return)
         button_layout.add_widget(yes_btn)
@@ -83,7 +84,7 @@ class ReturnConfirmPopup(Popup):
         no_btn = Button(
             text='아니오', 
             size_hint_x=0.5,
-            font_name='AppleSDGothicNeo'
+            font_name='NanumGothic'
         )
         no_btn.bind(on_press=self.dismiss)
         button_layout.add_widget(no_btn)
@@ -107,9 +108,9 @@ class RemoteControlApp(App):
     
         layout = BoxLayout(orientation='vertical', spacing=10, padding=50)
 
-        self.btn_on = Button(text='ON', font_size=24, font_name='AppleSDGothicNeo', disabled=False)
-        self.btn_off = Button(text='OFF', font_size=24, font_name='AppleSDGothicNeo', disabled=True)
-        self.btn_return = Button(text='반납', font_size=24, font_name='AppleSDGothicNeo', disabled=False)
+        self.btn_on = Button(text='ON', font_size=24, font_name='NanumGothic', disabled=False)
+        self.btn_off = Button(text='OFF', font_size=24, font_name='NanumGothic', disabled=True)
+        self.btn_return = Button(text='반납', font_size=24, font_name='NanumGothic', disabled=False)
 
         self.btn_on.bind(on_press=self.on_engine_on)
         self.btn_off.bind(on_press=self.on_engine_off)
