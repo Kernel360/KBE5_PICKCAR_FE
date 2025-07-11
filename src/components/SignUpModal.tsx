@@ -37,6 +37,8 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
     e.preventDefault()
     setError('')
 
+    console.log(error)
+
     // 필수 필드 검증
     if (
       !formData.email ||

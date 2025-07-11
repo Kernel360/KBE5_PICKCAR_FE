@@ -65,7 +65,7 @@ function LoginForm() {
 
       // 권한 확인
       if (payload?.role === 'EMPLOYEE') {
-        navigate('/employee/home', { replace: true })
+        navigate('/emulator', { replace: true })
       } else {
         navigate('/dashboard', { replace: true })
       }

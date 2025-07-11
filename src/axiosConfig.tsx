@@ -41,7 +41,7 @@ const instances = [defaultAxios, trackingAxios, employeeAxios]
 instances.forEach(addAuthInterceptor)
 
 // ====== 에러코드별 분기 처리 response 인터셉터 추가 ======
-function handleLogoutAndRedirect(msg?: string){
+function handleLogoutAndRedirect(){
   localStorage.removeItem('accessToken')
   window.location.href = '/'
 }

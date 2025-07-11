@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios, { employeeAxios } from '../axiosConfig'
+import axios from '../axiosConfig'
 import Header from '@/components/common/Header'
 
 const API_URL = import.meta.env.VITE_EMULATOR_API_URL

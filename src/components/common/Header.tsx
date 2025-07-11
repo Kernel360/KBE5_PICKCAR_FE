@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../AuthContext'
-import React from 'react'
 import axios from '../../axiosConfig'
 
 // function Header({ userRole }: HeaderProps) {

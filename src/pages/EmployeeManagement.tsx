@@ -1,7 +1,6 @@
 import Header from '@/components/common/Header'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import EmployeeTable from '@/components/employee/EmployeeTable'
-import axios from '../axiosConfig'
 
 export default function EmployeeManagement() {
   return (

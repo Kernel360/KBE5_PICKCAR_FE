@@ -80,15 +80,15 @@ function App() {
 
           {/* 시동 페이지(사원전용) */}
           <Route
-            path="/employee/home"
+            path="/emulator"
             element={
               <ProtectedRoute allowedRoles={['EMPLOYEE']}>
-                <EmployeeHome />
+                <Emulator />
               </ProtectedRoute>
             }
           />
-          <Route 
-            path="/unauthorized" 
+          <Route
+            path="/unauthorized"
             element={<Unauthorized />}
           />
         </Routes>
