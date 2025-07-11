@@ -3,37 +3,18 @@ import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
 import Header from '@/components/common/Header'
 import type { Car } from '@/types/tracking'
-import axios from 'axios'
+import { trackingAxios } from '../axiosConfig'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import ErrorScreen from '@/components/common/ErrorScreen'
 import SideMenuBar from '@/components/common/SideMenuBar'
 
 // 2. 애뮬레이터 (sse) (8081)용 인스턴스 - FIXME: 8081이 아니면 환경변수 바꿀 것
-const trackingApi = axios.create({
-  baseURL: import.meta.env.VITE_TRACKING_API_URL,
-  headers: { 'Content-Type': 'application/json' },
-  withCredentials: true
-})
-
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()!.split(';').shift() || null
-  return null
-}
-
-axios.interceptors.request.use(
-  config => {
-    const token = getCookie('accessToken')
-    if (token) {
-      config.headers = config.headers || {}
-      config.headers['Authorization'] = `Bearer ${token}`
-    }
-    return config
-  },
-  error => Promise.reject(error)
-)
+// const trackingApi = axios.create({
+//   baseURL: import.meta.env.VITE_TRACKING_API_URL,
+//   headers: { 'Content-Type': 'application/json' },
+//   withCredentials: true
+// })
 
 /**
  * 실시간 차량 관제 페이지 컴포넌트.
@@ -64,7 +45,7 @@ function TrackingCar() {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const response = await axios.get('/api/v1/vehicles')
+        const response = await trackingAxios.get('/api/v1/vehicles')
         console.log(response.data.data)
 
         setCars(response.data.data || [])
@@ -93,7 +74,7 @@ function TrackingCar() {
 
     ws.onopen = () => {
       console.log('WebSocket 서버에 연결되었습니다.')
-      trackingApi
+      trackingAxios
         .get('/api/v1/trackingcars')
         .then(response =>
           console.log('스트리밍 시작 요청 결과:', response.data.message)
