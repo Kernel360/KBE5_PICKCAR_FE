@@ -18,7 +18,7 @@ const DrivingHistoryBottomBar = ({
     totalElements === 0 ? 0 : Math.min((page + 1) * PAGE_SIZE, totalElements)
 
   return (
-    <div className="mt-auto flex items-center justify-between pt-5 text-sm text-gray-500">
+    <div className="mt-auto flex items-center justify-between pt-5 text-sm text-gray-500 dark:text-gray-400">
       <div>
         총 {totalElements}개 중 {start}-{end} 표시
       </div>

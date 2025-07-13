@@ -20,9 +20,9 @@ interface ModalState {
   vehicle: VehicleListResponse | null
 }
 
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
+// axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
+// axios.defaults.headers.common['Content-Type'] = 'application/json'
+// axios.defaults.withCredentials = true
 
 const updateVehicleStatus = async (
   request: UpdateVehicleStatusRequest
@@ -143,8 +143,8 @@ export default function Rental() {
   }
 
   return (
-    <div className="flex flex-col bg-[#f5f8fa]">
-      <header className="flex bg-white">
+    <div className="flex flex-col bg-[#f5f8fa] dark:bg-gray-900">
+      <header className="flex bg-white dark:bg-gray-800">
         <Header />
       </header>
 
@@ -170,8 +170,8 @@ export default function Rental() {
           {/* 차량 등록 모달 */}
           {showRegisterModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-              <div className="relative w-full max-w-2xl rounded-2xl bg-white px-8 py-8 shadow-xl">
-                <h2 className="mb-6 text-xl font-bold text-gray-900">
+              <div className="relative w-full max-w-2xl rounded-2xl bg-white px-8 py-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700">
+                <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
                   차량 등록
                 </h2>
                 <RegisterCarInfoSection
@@ -274,7 +274,7 @@ export default function Rental() {
           {/* 등록 성공 안내 */}
           {registerSuccess && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-              <div className="rounded-xl bg-white px-8 py-6 text-center text-lg font-semibold text-blue-600 shadow-xl">
+              <div className="rounded-xl bg-white px-8 py-6 text-center text-lg font-semibold text-blue-600 shadow-xl dark:bg-gray-800 dark:text-blue-400 dark:shadow-gray-700">
                 등록이 완료되었습니다!
               </div>
             </div>

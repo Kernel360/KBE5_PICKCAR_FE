@@ -34,9 +34,9 @@ const DrivingHistoryDetailModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="relative w-[900px] max-w-full rounded-2xl bg-white p-10 shadow-xl">
+      <div className="relative w-[900px] max-w-full rounded-2xl bg-white p-10 shadow-xl dark:bg-gray-800 dark:shadow-gray-700">
         <button
-          className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-gray-600"
+          className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
           onClick={onClose}>
           ×
         </button>
@@ -47,74 +47,74 @@ const DrivingHistoryDetailModal = ({
             className="h-20 w-20 rounded-full object-contain"
           />
           <div>
-            <div className="text-lg font-bold">
+            <div className="text-lg font-bold dark:text-white">
               {detail.licensePlate} 상세 정보
             </div>
-            <div className="text-gray-500">{detail.model}</div>
+            <div className="text-gray-500 dark:text-gray-400">{detail.model}</div>
           </div>
         </div>
         <div className="mb-6 grid grid-cols-2 gap-6">
-          <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm">
-            <div className="mb-2 font-semibold text-gray-700">차량 정보</div>
+          <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm dark:bg-gray-700">
+            <div className="mb-2 font-semibold text-gray-700 dark:text-gray-300">차량 정보</div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">차량번호</span>
-              <span className="font-semibold text-gray-800">
+              <span className="text-gray-500 dark:text-gray-400">차량번호</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.licensePlate}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">제조사/모델</span>
-              <span className="font-semibold text-gray-800">
+              <span className="text-gray-500 dark:text-gray-400">제조사/모델</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.model}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">연식</span>
-              <span className="font-semibold text-gray-800">
+              <span className="text-gray-500 dark:text-gray-400">연식</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.carAge}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">상태</span>
+              <span className="text-gray-500 dark:text-gray-400">상태</span>
               <span
                 className={`rounded px-2 py-0.5 text-xs font-semibold ${status.color}`}>
                 {status.label}
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm">
-            <div className="mb-2 font-semibold text-gray-700">
+          <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm dark:bg-gray-700">
+            <div className="mb-2 font-semibold text-gray-700 dark:text-gray-300">
               현재 운행 정보
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">운행 시작</span>
-              <span className="font-semibold text-gray-800">
+              <span className="text-gray-500 dark:text-gray-400">운행 시작</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {new Date(detail.drivingStartedAt).toLocaleString('ko-KR')}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">운행 시간</span>
-              <span className="font-semibold text-gray-800">
+              <span className="text-gray-500 dark:text-gray-400">운행 시간</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.totalDrivingTime}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">이동 거리</span>
-              <span className="font-semibold text-gray-800">
+              <span className="text-gray-500 dark:text-gray-400">이동 거리</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.totalDistance.toFixed(1)} km
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">운전자</span>
-              <span className="font-semibold text-gray-800">
+              <span className="text-gray-500 dark:text-gray-400">운전자</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.driverName}
               </span>
             </div>
           </div>
         </div>
         <div>
-          <div className="mb-2 font-semibold text-gray-700">이동 경로</div>
-          <div className="flex h-70 items-center justify-center rounded-lg bg-[#eaf3fb] text-gray-400">
+          <div className="mb-2 font-semibold text-gray-700 dark:text-gray-300">이동 경로</div>
+          <div className="flex h-70 items-center justify-center rounded-lg bg-[#eaf3fb] text-gray-400 dark:bg-gray-600 dark:text-gray-500">
             <KakaoMap
               center={
                 polylinePath && polylinePath.length > 0

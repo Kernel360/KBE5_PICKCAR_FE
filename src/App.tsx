@@ -19,81 +19,83 @@ config.autoAddCss = false
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        {/* 로그인 페이지 */}
-        <Routes>
-          <Route
-            path="/"
-            element={<Login />}
-          />
+    <div className="min-h-screen bg-white text-black transition-colors duration-200 dark:bg-gray-900 dark:text-white">
+      <AuthProvider>
+        <BrowserRouter>
+          {/* 로그인 페이지 */}
+          <Routes>
+            <Route
+              path="/"
+              element={<Login />}
+            />
 
-          {/* 실시간 관제 페이지 */}
-          <Route
-            path="/tracking"
-            element={
-              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
-                <TrackingCar />
-              </ProtectedRoute>
-            }
-          />
+            {/* 실시간 관제 페이지 */}
+            <Route
+              path="/tracking"
+              element={
+                <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                  <TrackingCar />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* 운행일지 페이지 */}
-          <Route
-            path="/driving-history"
-            element={
-              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
-                <DrivingHistoryPage />
-              </ProtectedRoute>
-            }
-          />
+            {/* 운행일지 페이지 */}
+            <Route
+              path="/driving-history"
+              element={
+                <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                  <DrivingHistoryPage />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* 차량 등록/관리 페이지 */}
-          <Route
-            path="/vehicle/rental"
-            element={
-              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
-                <VehicleManagement />
-              </ProtectedRoute>
-            }
-          />
+            {/* 차량 등록/관리 페이지 */}
+            <Route
+              path="/vehicle/rental"
+              element={
+                <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                  <VehicleManagement />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* 대시보드 페이지 */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
-                <DashBoard />
-              </ProtectedRoute>
-            }
-          />
+            {/* 대시보드 페이지 */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                  <DashBoard />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* 사원 관리 페이지 */}
-          <Route
-            path="/employee/management"
-            element={
-              <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
-                <EmployeeManagement />
-              </ProtectedRoute>
-            }
-          />
+            {/* 사원 관리 페이지 */}
+            <Route
+              path="/employee/management"
+              element={
+                <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                  <EmployeeManagement />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* 시동 페이지(사원전용) */}
-          <Route
-            path="/emulator"
-            element={
-              <ProtectedRoute allowedRoles={['EMPLOYEE']}>
-                <Emulator />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/unauthorized"
-            element={<Unauthorized />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            {/* 시동 페이지(사원전용) */}
+            <Route
+              path="/emulator"
+              element={
+                <ProtectedRoute allowedRoles={['EMPLOYEE']}>
+                  <Emulator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/unauthorized"
+              element={<Unauthorized />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </div>
   )
 }
 

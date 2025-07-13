@@ -79,12 +79,12 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700">
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-extrabold text-gray-900">회원가입</h2>
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">회원가입</h2>
           <button
-            className="text-2xl text-gray-400 hover:text-gray-600"
+            className="text-2xl text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
             onClick={onClose}
             aria-label="닫기">
             &times;
@@ -96,7 +96,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
           onSubmit={handleSubmit}
           className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               이메일 *
             </label>
             <input
@@ -105,15 +105,15 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="이메일을 입력하세요"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:bg-gray-600"
             /> 
             {emailError && (
-              <div className="mt-1 text-sm text-red-500">{emailError}</div>
+              <div className="mt-1 text-sm text-red-500 dark:text-red-400">{emailError}</div>
             )}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               비밀번호 *
             </label>
             <input
@@ -122,12 +122,12 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               value={formData.password}
               onChange={handleInputChange}
               placeholder="비밀번호를 입력하세요 (6자 이상)"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:bg-gray-600"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               이름 *
             </label>
             <input
@@ -136,12 +136,12 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="이름을 입력하세요"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:bg-gray-600"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               전화번호 *
             </label>
             <input
@@ -150,16 +150,16 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               value={formData.phoneNumber}
               onChange={handleInputChange}
               placeholder="전화번호를 입력하세요"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:bg-gray-600"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               권한 선택
             </label>
             <div className="flex gap-4">
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 dark:text-gray-300">
                 <input
                   type="radio"
                   name="isAdmin"
@@ -170,7 +170,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
                 />
                 <span>관리자</span>
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 dark:text-gray-300">
                 <input
                   type="radio"
                   name="isAdmin"
@@ -188,14 +188,14 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
           <div className="flex justify-end gap-2 pt-4">
             <button
               type="button"
-              className="btn btn-default btn-soft btn-md rounded-2xl"
+              className="btn btn-default btn-soft btn-md rounded-2xl dark:bg-gray-600 dark:text-gray-200"
               onClick={onClose}
               disabled={isLoading}>
               취소
             </button>
             <button
               type="submit"
-              className="btn btn-md rounded-2xl bg-blue-500 text-white"
+              className="btn btn-md rounded-2xl bg-blue-500 text-white dark:bg-blue-600"
               disabled={isLoading}>
               {isLoading ? '처리중...' : '가입하기'}
             </button>

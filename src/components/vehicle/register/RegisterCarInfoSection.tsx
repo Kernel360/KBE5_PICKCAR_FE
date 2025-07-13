@@ -66,14 +66,14 @@ export default function RegisterCarInfoSection({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="carNumber"
-            className="text-sm font-medium text-gray-900">
-            차량번호 <span className="text-blue-600">*</span>
+            className="text-sm font-medium text-gray-900 dark:text-gray-300">
+            차량번호 <span className="text-blue-600 dark:text-blue-400">*</span>
           </label>
           <input
             type="text"
             id="carNumber"
             name="carNumber"
-            className="input"
+            className="input dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
             placeholder="차량번호 입력"
             value={carNumber}
             onChange={e => setCarNumber(e.target.value)}
@@ -82,13 +82,13 @@ export default function RegisterCarInfoSection({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="model"
-            className="text-sm font-medium text-gray-900">
-            모델명 <span className="text-blue-600">*</span>
+            className="text-sm font-medium text-gray-900 dark:text-gray-300">
+            모델명 <span className="text-blue-600 dark:text-blue-400">*</span>
           </label>
           <input
             id="model"
             name="model"
-            className="input"
+            className="input dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
             placeholder="모델명 입력 (예: 현대 아반떼, 기아 스포티지)"
             value={model}
             onChange={e => setModel(e.target.value)}
@@ -97,13 +97,13 @@ export default function RegisterCarInfoSection({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="carType"
-            className="text-sm font-medium text-gray-900">
-            차종 <span className="text-blue-600">*</span>
+            className="text-sm font-medium text-gray-900 dark:text-gray-300">
+            차종 <span className="text-blue-600 dark:text-blue-400">*</span>
           </label>
           <select
             id="carType"
             name="carType"
-            className="select"
+            className="select dark:bg-gray-700 dark:text-white dark:border-gray-600"
             value={carType}
             onChange={e => setCarType(e.target.value)}>
             <option
@@ -124,7 +124,7 @@ export default function RegisterCarInfoSection({
             <input
               id="customCarType"
               name="customCarType"
-              className="input"
+              className="input dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
               placeholder="차종 직접 입력"
               value={customCarType}
               onChange={e => setCustomCarType(e.target.value)}
@@ -134,13 +134,13 @@ export default function RegisterCarInfoSection({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="manufacturer"
-            className="text-sm font-medium text-gray-900">
-            제조사 <span className="text-blue-600">*</span>
+            className="text-sm font-medium text-gray-900 dark:text-gray-300">
+            제조사 <span className="text-blue-600 dark:text-blue-400">*</span>
           </label>
           <select
             id="manufacturer"
             name="manufacturer"
-            className="select"
+            className="select dark:bg-gray-700 dark:text-white dark:border-gray-600"
             value={manufacturer}
             onChange={e => setManufacturer(e.target.value)}>
             <option
@@ -161,7 +161,7 @@ export default function RegisterCarInfoSection({
             <input
               id="customManufacturer"
               name="customManufacturer"
-              className="input"
+              className="input dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
               placeholder="제조사 직접 입력"
               value={customManufacturer}
               onChange={e => setCustomManufacturer(e.target.value)}
@@ -171,13 +171,13 @@ export default function RegisterCarInfoSection({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="year"
-            className="text-sm font-medium text-gray-900">
-            연식 <span className="text-blue-600">*</span>
+            className="text-sm font-medium text-gray-900 dark:text-gray-300">
+            연식 <span className="text-blue-600 dark:text-blue-400">*</span>
           </label>
           <input
             id="year"
             name="year"
-            className="input"
+            className="input dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
             placeholder="연식 입력 (예: 2023)"
             value={year}
             onChange={e => setYear(e.target.value)}
@@ -186,13 +186,13 @@ export default function RegisterCarInfoSection({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="color"
-            className="text-sm font-medium text-gray-900">
+            className="text-sm font-medium text-gray-900 dark:text-gray-300">
             색상
           </label>
           <input
             id="color"
             name="color"
-            className="input"
+            className="input dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
             placeholder="색상 입력"
             value={color}
             onChange={e => setColor(e.target.value)}
@@ -201,13 +201,13 @@ export default function RegisterCarInfoSection({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="fuelType"
-            className="text-sm font-medium text-gray-900">
+            className="text-sm font-medium text-gray-900 dark:text-gray-300">
             연료 타입
           </label>
           <select
             id="fuelType"
             name="fuelType"
-            className="select"
+            className="select dark:bg-gray-700 dark:text-white dark:border-gray-600"
             value={fuelType}
             onChange={e => setFuelType(e.target.value)}>
             <option
@@ -228,13 +228,13 @@ export default function RegisterCarInfoSection({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="hasGps"
-            className="text-sm font-medium text-gray-900">
+            className="text-sm font-medium text-gray-900 dark:text-gray-300">
             GPS 여부
           </label>
           <select
             id="hasGps"
             name="hasGps"
-            className="select"
+            className="select dark:bg-gray-700 dark:text-white dark:border-gray-600"
             value={hasGps}
             onChange={e => setHasGps(e.target.value)}>
             <option

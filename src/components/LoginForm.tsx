@@ -82,47 +82,47 @@ function LoginForm() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="flex w-90 flex-col items-center rounded-2xl bg-white p-10 shadow-lg">
+      <div className="flex w-90 flex-col items-center rounded-2xl bg-white p-10 shadow-lg dark:bg-gray-800 dark:shadow-gray-700">
         <div className="mb-8 flex items-center">
           <Logo />
           <div>
-            <div className="text-2xl font-bold text-[#222]">PickCar</div>
-            <div className="text-sm text-[#888]">렌터카 차량 관제 서비스</div>
+            <div className="text-2xl font-bold text-[#222] dark:text-white">PickCar</div>
+            <div className="text-sm text-[#888] dark:text-gray-400">렌터카 차량 관제 서비스</div>
           </div>
         </div>
         <form
           className="flex w-full flex-col"
           onSubmit={handleSubmit}>
-          <label className="mt-3 mb-1 text-sm text-[#222]">이메일</label>
+          <label className="mt-3 mb-1 text-sm text-[#222] dark:text-gray-300">이메일</label>
           <input
             type="email"
             placeholder="이메일 주소를 입력하세요"
-            className="mb-2 rounded-lg border border-gray-200 bg-[#f8fafc] p-3 text-base"
+            className="mb-2 rounded-lg border border-gray-200 bg-[#f8fafc] p-3 text-base dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             value={email}
             onChange={e => setEmail(e.target.value)}
           />
-          <label className="mt-3 mb-1 text-sm text-[#222]">비밀번호</label>
+          <label className="mt-3 mb-1 text-sm text-[#222] dark:text-gray-300">비밀번호</label>
           <input
             type="password"
             placeholder="비밀번호"
-            className="mb-2 rounded-lg border border-gray-200 bg-[#f8fafc] p-3 text-base"
+            className="mb-2 rounded-lg border border-gray-200 bg-[#f8fafc] p-3 text-base dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
           {error && (
-            <div className="mt-1 mb-2 text-[11px] font-normal text-red-500">
+            <div className="mt-1 mb-2 text-[11px] font-normal text-red-500 dark:text-red-400">
               {error}
             </div>
           )}
           <button
             type="submit"
-            className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white">
+            className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white dark:bg-blue-600">
             로그인
           </button>
         </form>
 
         <button
-          className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white"
+          className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white dark:bg-blue-600"
           onClick={() => setShowSignUpModal(true)}>
           회원가입
         </button>

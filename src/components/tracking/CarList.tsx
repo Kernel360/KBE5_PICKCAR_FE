@@ -22,7 +22,7 @@ function CarList({
       {' '}
       {/* todo : 스크롤 추가 */}
       {cars.length === 0 ? (
-        <p className="text-center text-gray-500">표시할 차량이 없습니다.</p>
+        <p className="text-center text-gray-500 dark:text-gray-400">표시할 차량이 없습니다.</p>
       ) : (
         cars.map(car => (
           <CarListItem

@@ -58,7 +58,7 @@ const lineData = {
 
 const DashBoard: React.FC = () => {
   return (
-    <div className="bg-[#f5f8fa]">
+    <div className="bg-[#f5f8fa] dark:bg-gray-900">
       <header>
         <Header />
       </header>
@@ -70,7 +70,7 @@ const DashBoard: React.FC = () => {
           <div className="flex"></div>
           <div className="mt-5 mr-3 flex h-full min-h-0 w-full flex-col justify-between">
             <div className="flex w-full flex-none flex-row items-center justify-between">
-              <div className="stats flex flex-1 flex-row bg-white py-4 shadow">
+              <div className="stats flex flex-1 flex-row bg-white py-4 shadow dark:bg-gray-800 dark:shadow-gray-700">
                 <div className="stat">
                   <div className="stat-figure text-primary">
                     <FontAwesomeIcon
@@ -122,16 +122,16 @@ const DashBoard: React.FC = () => {
             </div>
 
             <div className="my-5 flex min-h-0 flex-1 flex-row gap-14">
-              <div className="bg-base-100 flex h-full flex-1 items-center justify-center rounded-2xl">
+              <div className="bg-base-100 flex h-full flex-1 items-center justify-center rounded-2xl dark:bg-gray-800">
                 <Doughnut data={doughnutData} />
               </div>
-              <div className="bg-base-100 flex h-full flex-1 items-center justify-center rounded-2xl">
+              <div className="bg-base-100 flex h-full flex-1 items-center justify-center rounded-2xl dark:bg-gray-800">
                 <Line data={lineData} />
               </div>
             </div>
 
             <div className="mb-5 flex flex-none flex-row justify-between">
-              <ul className="list bg-base-100 rounded-box flex pr-40 shadow-md">
+              <ul className="list bg-base-100 rounded-box flex pr-40 shadow-md dark:bg-gray-800 dark:shadow-gray-700">
                 <li className="p-4 pb-2 text-sm tracking-wide opacity-60">
                   어제 가장 많이 이동한 사원
                 </li>
@@ -182,7 +182,7 @@ const DashBoard: React.FC = () => {
                 </li>
               </ul>
 
-              <ul className="list bg-base-100 rounded-box mx-10 flex flex-1 pr-40 shadow-md">
+              <ul className="list bg-base-100 rounded-box mx-10 flex flex-1 pr-40 shadow-md dark:bg-gray-800 dark:shadow-gray-700">
                 <li className="p-4 pb-2 text-sm tracking-wide opacity-60">
                   공지사항
                 </li>

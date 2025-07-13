@@ -14,7 +14,7 @@ export default function CarFilters({
         placeholder="차량번호 또는 모델명 검색"
         value={searchTerm}
         onChange={e => onSearchTermChange(e.target.value)}
-        className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm"
+        className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
       />
     </div>
   )

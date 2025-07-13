@@ -21,11 +21,11 @@ export default function RentalTopBar({
   return (
     <div className="my-5 flex flex-row items-center justify-between">
       <div className="justify-start">
-        <h1 className="text-xl font-bold">차량 등록/관리</h1>
+        <h1 className="text-xl font-bold dark:text-white">차량 등록/관리</h1>
       </div>
       <div className="flex items-center gap-4">
         <button
-          className="btn btn-sm flex gap-3 outline"
+          className="btn btn-sm flex gap-3 outline dark:bg-gray-700 dark:text-white"
           type="button"
           onClick={onClickAddCar}>
           <FontAwesomeIcon
@@ -46,7 +46,7 @@ export default function RentalTopBar({
           </label>
           <input
             id="vehicle-search"
-            className="input ml-4 rounded border border-gray-300 bg-white px-3 py-2 text-sm"
+            className="input ml-4 rounded border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             placeholder="차량번호 검색"
             value={search}
             onChange={e => setSearch(e.target.value)}

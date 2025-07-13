@@ -46,63 +46,63 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
   if (error) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="text-lg text-red-500">{error}</div>
+        <div className="text-lg text-red-500 dark:text-red-400">{error}</div>
       </div>
     )
   }
 
   return (
-    <div className="h-full min-h-0 flex-1 overflow-x-auto rounded-lg border border-gray-200 bg-white">
+    <div className="h-full min-h-0 flex-1 overflow-x-auto rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-800">
       <div
         className="h-full overflow-y-auto"
         style={{ overflowX: 'auto', overflowY: 'auto' }}>
         <table className="table-zebra text-m table">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 No
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 이름
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 상태
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 권한
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 이메일
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 작업
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 border-b border-gray-200">
+          <tbody className="divide-y divide-gray-100 border-b border-gray-200 dark:divide-gray-600 dark:border-gray-600">
             {employees.map((employee, idx) => (
               <tr
                 key={employee.userId}
-                className="h-12 hover:bg-gray-50">
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                className="h-12 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {idx + 1}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.name}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.status}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.role}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.email}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   <FontAwesomeIcon
                     icon={faCarSide as IconProp}
-                    className="btn p-3"
+                    className="btn p-3 dark:text-white"
                     onClick={() => {
                       setSelectedEmployeeId(employee.userId)
                       setIsVehicleModalOpen(true)
