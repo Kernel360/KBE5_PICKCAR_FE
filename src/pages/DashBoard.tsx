@@ -4,7 +4,10 @@ import '../main.css'
 import Header from '@/components/common/Header'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import VehicleReservationStat from '@/components/dailyreport/VehicleReservationStat'
-import { DailyReportPreInfoResponse } from '@/types/dailyReport'
+import {
+  DailyReportPreInfoResponse,
+  VehicleReservationStat as VehicleReservationStatType
+} from '@/types/dailyReport'
 import ReportGraph from '@/components/dailyreport/ReportGraph'
 import TotalDistanceRanking from '@/components/dailyreport/TotalDistanceRanking'
 
@@ -12,12 +15,15 @@ const DashBoard: React.FC = () => {
   const [dailyReportData, setDailyReportData] =
     useState<DailyReportPreInfoResponse | null>(null)
   const [loading, setLoading] = useState(true)
+  const [currentStat, setCurrentStat] =
+    useState<VehicleReservationStatType | null>(null)
 
   useEffect(() => {
     const fetchDailyReportData = async () => {
       try {
         const response = await axios.get('/api/v1/report/pre-info')
         setDailyReportData(response.data)
+        setCurrentStat(response.data.currentStat)
       } catch (error) {
         console.error('Failed to fetch daily report data:', error)
       } finally {
@@ -44,10 +50,11 @@ const DashBoard: React.FC = () => {
         <main className="relative mx-2 flex h-[calc(100vh-64px)] min-h-0 flex-1 p-6">
           <div className="flex"></div>
           <div className="mt-5 mr-3 flex h-full min-h-0 w-full flex-col justify-between">
-            {dailyReportData && (
+            {dailyReportData && currentStat && (
               <VehicleReservationStat
-                currentData={dailyReportData.currentStat}
+                currentData={currentStat}
                 yesterdayData={dailyReportData.yesterdayStat}
+                onRefreshCurrentStat={setCurrentStat}
               />
             )}
 
@@ -56,6 +63,7 @@ const DashBoard: React.FC = () => {
                 destinationStats={
                   dailyReportData.yesterdayDynamicInfo.destinationStats
                 }
+                movedDistances={dailyReportData.movedDistances}
               />
             )}
 

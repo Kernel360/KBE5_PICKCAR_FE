@@ -55,7 +55,7 @@ function CarListItem({
             icon={faLocationDot as IconProp}
             size="lg"
             color="#5e8db0"
-            className="rounded px-3 py-3"
+            className="cursor-pointer rounded-xl px-3 py-3 hover:bg-gray-300"
           />
         </button>
         <button>
@@ -63,7 +63,7 @@ function CarListItem({
             icon={faCircleInfo as IconProp}
             size="lg"
             color="#4c7b6d"
-            className="rounded px-3 py-3"
+            className="cursor-pointer rounded-xl px-3 py-3 hover:bg-gray-300"
           />
         </button>
       </div>

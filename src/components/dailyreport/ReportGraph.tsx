@@ -10,7 +10,10 @@ import {
   PointElement,
   LineElement
 } from 'chart.js'
-import { DestinationCountStat } from '@/types/dailyReport'
+import {
+  DestinationCountStat,
+  MovedDistanceHistoryProjection
+} from '@/types/dailyReport'
 
 Chart.register(
   ArcElement,
@@ -24,9 +27,13 @@ Chart.register(
 
 interface ReportGraphProps {
   destinationStats?: DestinationCountStat[]
+  movedDistances?: MovedDistanceHistoryProjection[]
 }
 
-const ReportGraph: React.FC<ReportGraphProps> = ({ destinationStats = [] }) => {
+const ReportGraph: React.FC<ReportGraphProps> = ({
+  destinationStats = [],
+  movedDistances = []
+}) => {
   const doughnutData = {
     labels: destinationStats.map(stat => stat.destination),
     datasets: [
@@ -51,11 +58,11 @@ const ReportGraph: React.FC<ReportGraphProps> = ({ destinationStats = [] }) => {
   }
 
   const lineData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    labels: movedDistances.map(item => item.reportDate),
     datasets: [
       {
-        label: 'My First Dataset',
-        data: [65, 59, 80, 81, 56, 55, 40],
+        label: '총 이동 거리',
+        data: movedDistances.map(item => item.totalMovedDistance),
         fill: false,
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1
@@ -66,7 +73,9 @@ const ReportGraph: React.FC<ReportGraphProps> = ({ destinationStats = [] }) => {
   return (
     <div className="my-5 flex min-h-0 min-w-0 flex-1 flex-col gap-4 lg:flex-row lg:gap-14">
       <div className="bg-base-100 flex h-full min-w-0 flex-1 flex-col overflow-hidden rounded-2xl p-4">
-        <div className="stat-title text-sm font-bold">목적지별 방문 현황</div>
+        <div className="mb-2 flex text-center font-semibold text-gray-700">
+          목적지별 방문 현황
+        </div>
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <div className="h-full max-h-full w-full max-w-full">
             <Doughnut
@@ -90,7 +99,9 @@ const ReportGraph: React.FC<ReportGraphProps> = ({ destinationStats = [] }) => {
         </div>
       </div>
       <div className="bg-base-100 flex h-full min-w-0 flex-1 flex-col overflow-hidden rounded-2xl p-4">
-        <div className="stat-title text-sm font-bold">월별 통계</div>
+        <div className="mb-2 text-center font-semibold text-gray-700">
+          일별 총 이동 거리 (km)
+        </div>
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <div className="h-full max-h-full w-full max-w-full">
             <Line
@@ -100,7 +111,7 @@ const ReportGraph: React.FC<ReportGraphProps> = ({ destinationStats = [] }) => {
                 maintainAspectRatio: false,
                 plugins: {
                   legend: {
-                    display: true,
+                    display: false,
                     position: 'top',
                     labels: {
                       padding: 15,

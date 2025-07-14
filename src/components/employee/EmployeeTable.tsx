@@ -109,8 +109,8 @@ export default function EmployeeTable({
                       <FontAwesomeIcon
                         icon={faInfoCircle as IconProp}
                         size="xl"
-                        color="#1524aa"
-                        className="bg-base-500 rounded-3xl p-2 hover:shadow-2xl"
+                        color="#4c7b6d"
+                        className="cursor-pointer rounded-xl p-2 hover:bg-gray-300"
                         onClick={() => setDetailModalId(employee.reservationId)}
                       />
                       {detailModalId === employee.reservationId && (
@@ -123,9 +123,9 @@ export default function EmployeeTable({
                   ) : (
                     <FontAwesomeIcon
                       icon={faCarSide as IconProp}
-                      color="#458111"
+                      color="#5e8db0"
                       size="xl"
-                      className="rounded-3xl p-2"
+                      className="cursor-pointer rounded-xl p-2 hover:bg-gray-300"
                       onClick={() => {
                         setSelectedEmployeeId(employee.employeeId)
                         setIsVehicleModalOpen(true)

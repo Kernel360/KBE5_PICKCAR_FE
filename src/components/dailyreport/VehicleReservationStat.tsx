@@ -1,22 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faPerson,
   faCarSide,
   faWrench,
-  faRotateLeft
+  faRotateLeft,
+  faWarehouse
 } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 import { VehicleReservationStat as VehicleReservationStatType } from '@/types/dailyReport'
+import axios from '@/axiosConfig'
 
 interface VehicleReservationStatProps {
   currentData: VehicleReservationStatType
   yesterdayData: VehicleReservationStatType
+  onRefreshCurrentStat?: (newStat: VehicleReservationStatType) => void
 }
 
 const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
   currentData,
-  yesterdayData
+  yesterdayData,
+  onRefreshCurrentStat
 }) => {
   // 증감률 계산 함수
   const calculatePercentageChange = (
@@ -34,9 +38,25 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
     const percentageChange = calculatePercentageChange(current, previous)
     return `전일(${previous}대) 대비 ${percentageChange}`
   }
+
+  const [loading, setLoading] = useState(false)
+
+  const handleRefresh = async () => {
+    if (!onRefreshCurrentStat) return
+    setLoading(true)
+    try {
+      const res = await axios.get('/api/v1/report/stat')
+      onRefreshCurrentStat(res.data)
+    } catch {
+      // 에러 핸들링 필요시 추가
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="flex w-full flex-none flex-row items-center justify-between">
-      <div className="stats flex flex-1 flex-row overflow-x-auto bg-white py-4 shadow">
+      <div className="stats flex flex-1 flex-row overflow-x-auto bg-white px-5 py-4 shadow">
         <div className="stat">
           <div className="stat-figure text-primary">
             <FontAwesomeIcon
@@ -100,17 +120,32 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
         <div className="stat">
           <div className="stat-figure">
             <FontAwesomeIcon
-              icon={faRotateLeft}
+              icon={faWarehouse}
               size="xl"
               color="#374151"
             />
           </div>
-          <div className="stat-title text-sm font-bold">반납 예정</div>
+          <div className="stat-title text-sm font-bold">
+            반납 예정(3일 이내)
+          </div>
           <div className="stat-value">{currentData.expectedReturnCount}대</div>
           <div className="stat-desc text-secondary">
             {currentData.delayedCount}대 반납 지연중
           </div>
         </div>
+        <button
+          className="ml-4 flex items-center justify-center"
+          onClick={handleRefresh}
+          disabled={loading}
+          title="새로고침"
+          type="button">
+          <FontAwesomeIcon
+            icon={faRotateLeft}
+            size="xl"
+            color="#374151"
+            className="btn rounded-xl py-3"
+          />
+        </button>
       </div>
     </div>
   )

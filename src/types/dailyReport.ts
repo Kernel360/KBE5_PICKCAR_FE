@@ -17,6 +17,11 @@ export interface DestinationCountStat {
   visitCount: number
 }
 
+export interface MovedDistanceHistoryProjection {
+  reportDate: string
+  totalMovedDistance: number
+}
+
 export interface DynamicInfo {
   totalMovedDistance: number
   top3DriversContext: DriverAndDistanceContext[]
@@ -27,4 +32,6 @@ export interface DailyReportPreInfoResponse {
   currentStat: VehicleReservationStat
   yesterdayStat: VehicleReservationStat
   yesterdayDynamicInfo: DynamicInfo
+  movedDistances: MovedDistanceHistoryProjection[]
+  yesterday: string
 }
