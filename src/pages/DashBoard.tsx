@@ -4,11 +4,9 @@ import '../main.css'
 import Header from '@/components/common/Header'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import VehicleReservationStat from '@/components/dailyreport/VehicleReservationStat'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPerson } from '@fortawesome/free-solid-svg-icons'
-import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { DailyReportPreInfoResponse } from '@/types/dailyReport'
 import ReportGraph from '@/components/dailyreport/ReportGraph'
+import TotalDistanceRanking from '@/components/dailyreport/TotalDistanceRanking'
 
 const DashBoard: React.FC = () => {
   const [dailyReportData, setDailyReportData] =
@@ -62,59 +60,16 @@ const DashBoard: React.FC = () => {
             )}
 
             <div className="mb-5 flex flex-none flex-row justify-between">
-              <ul className="list bg-base-100 rounded-box flex pr-40 shadow-md">
-                <li className="p-4 pb-2 text-sm tracking-wide opacity-60">
-                  어제 가장 많이 이동한 사원
-                </li>
-
-                <li className="list-row">
-                  <div className="text-xl tabular-nums opacity-30">01</div>
-                  <FontAwesomeIcon
-                    icon={faPerson as IconProp}
-                    className="rounded-box mt-1.5 ml-2 size-10"
-                    size="xl"
-                  />
-                  <div className="list-col-grow">
-                    <div>박총무</div>
-                    <div className="text-xs font-semibold uppercase opacity-60">
-                      재무지원팀
-                    </div>
-                  </div>
-                </li>
-
-                <li className="list-row">
-                  <div className="text-xl tabular-nums opacity-30">02</div>
-                  <FontAwesomeIcon
-                    icon={faPerson as IconProp}
-                    className="rounded-box mt-1.5 ml-2 size-10"
-                    size="xl"
-                  />
-                  <div className="list-col-grow">
-                    <div>박총무</div>
-                    <div className="text-xs font-semibold uppercase opacity-60">
-                      재무지원팀
-                    </div>
-                  </div>
-                </li>
-
-                <li className="list-row">
-                  <div className="text-xl tabular-nums opacity-30">03</div>
-                  <FontAwesomeIcon
-                    icon={faPerson as IconProp}
-                    className="rounded-box mt-1.5 ml-2 size-10"
-                    size="xl"
-                  />
-                  <div className="list-col-grow">
-                    <div>박총무</div>
-                    <div className="text-xs font-semibold uppercase opacity-60">
-                      재무지원팀
-                    </div>
-                  </div>
-                </li>
-              </ul>
+              {dailyReportData && (
+                <TotalDistanceRanking
+                  drivers={
+                    dailyReportData.yesterdayDynamicInfo.top3DriversContext
+                  }
+                />
+              )}
 
               <ul className="list bg-base-100 rounded-box mx-10 flex flex-1 pr-40 shadow-md">
-                <li className="p-4 pb-2 text-sm tracking-wide opacity-60">
+                <li className="p-4 pb-2 text-sm font-bold tracking-wide opacity-60">
                   공지사항
                 </li>
 

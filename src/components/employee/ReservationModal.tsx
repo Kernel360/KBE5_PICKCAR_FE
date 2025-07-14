@@ -63,7 +63,7 @@ export default function ReservationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="w-240 max-w-lg rounded-2xl bg-white p-8 shadow-xl">
+      <div className="w-[900px] max-w-2xl rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-extrabold text-gray-900">차량 할당</h2>
           <button
@@ -92,7 +92,8 @@ export default function ReservationModal({
               <tr>
                 <th className="px-4 py-2">차량번호</th>
                 <th className="px-4 py-2">모델</th>
-                <th className="px-4 py-2">상태</th>
+                <th className="px-4 py-2">연식</th>
+                <th className="px-4 py-2">색상</th>
                 <th className="px-4 py-2">선택</th>
               </tr>
             </thead>
@@ -101,7 +102,8 @@ export default function ReservationModal({
                 <tr key={vehicle.vehicleId}>
                   <td className="px-4 py-2">{vehicle.licensePlate}</td>
                   <td className="px-4 py-2">{vehicle.model}</td>
-                  <td className="px-4 py-2">{vehicle.status}</td>
+                  <td className="px-4 py-2">{vehicle.carAge}</td>
+                  <td className="px-4 py-2">{vehicle.color}</td>
                   <td className="px-4 py-2">
                     <input
                       type="radio"

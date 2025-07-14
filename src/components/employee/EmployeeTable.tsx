@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Employee, AvailableVehicleResponse } from '@/types/employee'
+import {
+  EmployeeReservationProjection,
+  AvailableVehicleResponse
+} from '@/types/employee'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import axios from '../../axiosConfig'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faCarSide } from '@fortawesome/free-solid-svg-icons'
+import { faCarSide, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import ReservationVehicleListModal from '@/components/employee/ReservationModal'
 
 interface EmployeeTableProps {
@@ -14,7 +17,9 @@ interface EmployeeTableProps {
 export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [employees, setEmployees] = useState<Employee[]>([])
+  const [employees, setEmployees] = useState<EmployeeReservationProjection[]>(
+    []
+  )
   const [vehicleList, setVehicleList] = useState<AvailableVehicleResponse[]>([])
   const [isVehicleModalOpen, setIsVehicleModalOpen] = useState(false)
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(
@@ -25,8 +30,11 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
     setIsLoading(true)
     try {
       const res = await axios.get('/api/v1/reservation/pre-info')
-      setEmployees(res.data.data.employeeResponses)
-      setVehicleList(res.data.data.vehicleResponses)
+      setEmployees(
+        Array.isArray(res.data.data?.employeePreInfos)
+          ? res.data.data.employeePreInfos
+          : []
+      )
       setError(null)
     } catch {
       setError('사전 정보를 불러오는데 실패했습니다.')
@@ -35,8 +43,18 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
     }
   }
 
+  const fetchAvailableVehicles = async () => {
+    try {
+      const res = await axios.get('/api/v1/vehicles/available')
+      setVehicleList(res.data.data)
+    } catch {
+      setVehicleList([])
+    }
+  }
+
   useEffect(() => {
     fetchPreInfo()
+    fetchAvailableVehicles()
   }, [refreshKey])
 
   if (isLoading) {
@@ -66,13 +84,16 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
                 이름
               </th>
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
-                상태
-              </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
-                권한
+                직위
               </th>
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
                 이메일
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                예약 여부
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                차량 번호
               </th>
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
                 작업
@@ -80,47 +101,64 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-b border-gray-200">
-            {employees.map((employee, idx) => (
+            {employees.map(employee => (
               <tr
-                key={employee.userId}
+                key={employee.employeeId}
                 className="h-12 hover:bg-gray-50">
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                  {idx + 1}
+                  {employee.employeeId}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600">
                   {employee.name}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                  {employee.status}
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                  {employee.role}
+                  {employee.role === 'EMPLOYEE' ? '사원' : '관리자'}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600">
                   {employee.email}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                  <FontAwesomeIcon
-                    icon={faCarSide as IconProp}
-                    className="btn p-3"
-                    onClick={() => {
-                      setSelectedEmployeeId(employee.userId)
-                      setIsVehicleModalOpen(true)
-                    }}
-                  />
+                  {employee.hasReservation ? (
+                    <span className="font-bold text-green-600">예약됨</span>
+                  ) : (
+                    <span className="text-gray-400">미예약</span>
+                  )}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                  {employee.hasReservation ? employee.licensePlate || '-' : '-'}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                  {employee.hasReservation ? (
+                    <FontAwesomeIcon
+                      icon={faInfoCircle as IconProp}
+                      size="xl"
+                      className="btn rounded-3xl p-2"
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faCarSide as IconProp}
+                      size="xl"
+                      className="btn rounded-3xl p-2"
+                      onClick={() => {
+                        setSelectedEmployeeId(employee.employeeId)
+                        setIsVehicleModalOpen(true)
+                      }}
+                    />
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {isVehicleModalOpen && selectedEmployeeId && (
+      {isVehicleModalOpen && selectedEmployeeId !== null && (
         <ReservationVehicleListModal
           vehicles={vehicleList}
           employeeId={selectedEmployeeId}
           onClose={() => setIsVehicleModalOpen(false)}
           onAssigned={() => {
             fetchPreInfo()
+            fetchAvailableVehicles()
             setIsVehicleModalOpen(false)
           }}
         />

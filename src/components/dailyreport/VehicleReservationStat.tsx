@@ -1,6 +1,12 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPerson } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPerson,
+  faCarSide,
+  faWrench,
+  faRotateLeft
+} from '@fortawesome/free-solid-svg-icons'
+import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 import { VehicleReservationStat as VehicleReservationStatType } from '@/types/dailyReport'
 
 interface VehicleReservationStatProps {
@@ -34,9 +40,9 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
         <div className="stat">
           <div className="stat-figure text-primary">
             <FontAwesomeIcon
-              icon={faPerson}
+              icon={faCarSide}
               size="xl"
-              color="#448dc5"
+              color="#374151"
             />
           </div>
           <div className="stat-title text-sm font-bold">총 등록 차량</div>
@@ -54,9 +60,9 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
         <div className="stat">
           <div className="stat-figure text-blue-500">
             <FontAwesomeIcon
-              icon={faPerson}
+              icon={faCalendarCheck}
               size="xl"
-              color="#53b295"
+              color="#374151"
             />
           </div>
           <div className="stat-title text-sm font-bold">예약된 차량</div>
@@ -74,9 +80,9 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
         <div className="stat">
           <div className="stat-figure text-warning">
             <FontAwesomeIcon
-              icon={faPerson}
+              icon={faWrench}
               size="xl"
-              color="#e6c341"
+              color="#374151"
             />
           </div>
           <div className="stat-title text-sm font-bold">점검중인 차량</div>
@@ -92,10 +98,16 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
         </div>
 
         <div className="stat">
-          <div className="stat-figure text-secondary"></div>
+          <div className="stat-figure">
+            <FontAwesomeIcon
+              icon={faRotateLeft}
+              size="xl"
+              color="#374151"
+            />
+          </div>
           <div className="stat-title text-sm font-bold">반납 예정</div>
           <div className="stat-value">{currentData.expectedReturnCount}대</div>
-          <div className="stat-desc">
+          <div className="stat-desc text-secondary">
             {currentData.delayedCount}대 반납 지연중
           </div>
         </div>
