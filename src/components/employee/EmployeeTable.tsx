@@ -1,63 +1,39 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   EmployeeReservationProjection,
   AvailableVehicleResponse
 } from '@/types/employee'
 import LoadingScreen from '@/components/common/LoadingScreen'
-import axios from '../../axiosConfig'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faCarSide, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import ReservationVehicleListModal from '@/components/employee/ReservationModal'
+import ReservationDetailModal from '@/components/employee/ReservationDetailModal'
 
 interface EmployeeTableProps {
+  employees: EmployeeReservationProjection[]
+  vehicleList: AvailableVehicleResponse[]
   refreshKey: number
+  onRefresh: () => void
+  loading: boolean
+  error: string | null
 }
 
-export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [employees, setEmployees] = useState<EmployeeReservationProjection[]>(
-    []
-  )
-  const [vehicleList, setVehicleList] = useState<AvailableVehicleResponse[]>([])
+export default function EmployeeTable({
+  employees,
+  vehicleList,
+  refreshKey,
+  onRefresh,
+  loading,
+  error
+}: EmployeeTableProps) {
   const [isVehicleModalOpen, setIsVehicleModalOpen] = useState(false)
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(
     null
   )
+  const [detailModalId, setDetailModalId] = useState<number | null>(null)
 
-  const fetchPreInfo = async () => {
-    setIsLoading(true)
-    try {
-      const res = await axios.get('/api/v1/reservation/pre-info')
-      setEmployees(
-        Array.isArray(res.data.data?.employeePreInfos)
-          ? res.data.data.employeePreInfos
-          : []
-      )
-      setError(null)
-    } catch {
-      setError('사전 정보를 불러오는데 실패했습니다.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const fetchAvailableVehicles = async () => {
-    try {
-      const res = await axios.get('/api/v1/vehicles/available')
-      setVehicleList(res.data.data)
-    } catch {
-      setVehicleList([])
-    }
-  }
-
-  useEffect(() => {
-    fetchPreInfo()
-    fetchAvailableVehicles()
-  }, [refreshKey])
-
-  if (isLoading) {
+  if (loading) {
     return <LoadingScreen />
   }
 
@@ -129,16 +105,25 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600">
                   {employee.hasReservation ? (
-                    <FontAwesomeIcon
-                      icon={faInfoCircle as IconProp}
-                      size="xl"
-                      className="btn rounded-3xl p-2"
-                    />
+                    <>
+                      <FontAwesomeIcon
+                        icon={faInfoCircle as IconProp}
+                        size="xl"
+                        className="btn btn-info rounded-3xl p-2"
+                        onClick={() => setDetailModalId(employee.reservationId)}
+                      />
+                      {detailModalId === employee.reservationId && (
+                        <ReservationDetailModal
+                          reservationId={employee.reservationId}
+                          onClose={() => setDetailModalId(null)}
+                        />
+                      )}
+                    </>
                   ) : (
                     <FontAwesomeIcon
                       icon={faCarSide as IconProp}
                       size="xl"
-                      className="btn rounded-3xl p-2"
+                      className="btn btn-success rounded-3xl p-2"
                       onClick={() => {
                         setSelectedEmployeeId(employee.employeeId)
                         setIsVehicleModalOpen(true)
@@ -157,8 +142,7 @@ export default function EmployeeTable({ refreshKey }: EmployeeTableProps) {
           employeeId={selectedEmployeeId}
           onClose={() => setIsVehicleModalOpen(false)}
           onAssigned={() => {
-            fetchPreInfo()
-            fetchAvailableVehicles()
+            onRefresh()
             setIsVehicleModalOpen(false)
           }}
         />
