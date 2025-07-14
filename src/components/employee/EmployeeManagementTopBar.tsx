@@ -22,7 +22,7 @@ export default function EmployeeManagementTopBar({
         {(['all', 'reserved', 'not_reserved'] as const).map(type => (
           <button
             key={type}
-            className={`btn ${filter === type ? 'btn-primary' : 'btn-outline'}`}
+            className={`btn ${filter === type ? 'bg-blue-500' : 'btn-outline'}`}
             onClick={() => onFilterChange(type)}>
             {FILTER_LABELS[type]}
           </button>
