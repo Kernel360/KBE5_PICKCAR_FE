@@ -1,62 +1,39 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
+import axios from '@/axiosConfig'
 import '../main.css'
 import Header from '@/components/common/Header'
 import SideMenuBar from '@/components/common/SideMenuBar'
+import VehicleReservationStat from '@/components/dailyreport/VehicleReservationStat'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPerson } from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { Doughnut, Line } from 'react-chartjs-2'
-import {
-  Chart,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement
-} from 'chart.js'
-
-Chart.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement
-)
-
-const doughnutData = {
-  labels: ['Red', 'Blue', 'Yellow'],
-  datasets: [
-    {
-      label: 'My First Dataset',
-      data: [300, 50, 100],
-      backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)'
-      ],
-      hoverOffset: 4
-    }
-  ]
-}
-
-const lineData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-  datasets: [
-    {
-      label: 'My First Dataset',
-      data: [65, 59, 80, 81, 56, 55, 40],
-      fill: false,
-      borderColor: 'rgb(75, 192, 192)',
-      tension: 0.1
-    }
-  ]
-}
+import { DailyReportPreInfoResponse } from '@/types/dailyReport'
+import ReportGraph from '@/components/dailyreport/ReportGraph'
 
 const DashBoard: React.FC = () => {
+  const [dailyReportData, setDailyReportData] =
+    useState<DailyReportPreInfoResponse | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchDailyReportData = async () => {
+      try {
+        const response = await axios.get('/api/v1/report/pre-info')
+        setDailyReportData(response.data)
+      } catch (error) {
+        console.error('Failed to fetch daily report data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDailyReportData()
+  }, [])
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className="bg-[#f5f8fa]">
       <header>
@@ -69,66 +46,20 @@ const DashBoard: React.FC = () => {
         <main className="relative mx-2 flex h-[calc(100vh-64px)] min-h-0 flex-1 p-6">
           <div className="flex"></div>
           <div className="mt-5 mr-3 flex h-full min-h-0 w-full flex-col justify-between">
-            <div className="flex w-full flex-none flex-row items-center justify-between">
-              <div className="stats flex flex-1 flex-row bg-white py-4 shadow">
-                <div className="stat">
-                  <div className="stat-figure text-primary">
-                    <FontAwesomeIcon
-                      icon={faPerson}
-                      size="xl"
-                      color="#448dc5"
-                    />
-                  </div>
-                  <div className="stat-title">총 등록 차량</div>
-                  <div className="stat-value text-blue-500">120대</div>
-                  <div className="stat-desc">전일 대비 00% 증가(감소)</div>
-                </div>
+            {dailyReportData && (
+              <VehicleReservationStat
+                currentData={dailyReportData.currentStat}
+                yesterdayData={dailyReportData.yesterdayStat}
+              />
+            )}
 
-                <div className="stat">
-                  <div className="stat-figure text-blue-500">
-                    <FontAwesomeIcon
-                      icon={faPerson}
-                      size="xl"
-                      color="#53b295"
-                    />
-                  </div>
-                  <div className="stat-title">예약된 차량</div>
-                  <div className="stat-value text-success">76대</div>
-                  <div className="stat-desc">전일 대비 00% 증가(감소)</div>
-                </div>
-
-                <div className="stat">
-                  <div className="stat-figure text-warning">
-                    <FontAwesomeIcon
-                      icon={faPerson}
-                      size="xl"
-                      color="#e6c341"
-                    />
-                  </div>
-                  <div className="stat-title">점검중인 차량</div>
-                  <div className="stat-value text-warning">8대</div>
-                  <div className="stat-desc">전일 대비 00% 증가(감소)</div>
-                </div>
-
-                <div className="stat">
-                  <div className="stat-figure text-secondary"></div>
-                  <div className="stat-value">추가 예정</div>
-                  <div className="stat-title">추가 예정</div>
-                  <div className="stat-desc text-secondary">
-                    31 tasks remaining
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="my-5 flex min-h-0 flex-1 flex-row gap-14">
-              <div className="bg-base-100 flex h-full flex-1 items-center justify-center rounded-2xl">
-                <Doughnut data={doughnutData} />
-              </div>
-              <div className="bg-base-100 flex h-full flex-1 items-center justify-center rounded-2xl">
-                <Line data={lineData} />
-              </div>
-            </div>
+            {dailyReportData && (
+              <ReportGraph
+                destinationStats={
+                  dailyReportData.yesterdayDynamicInfo.destinationStats
+                }
+              />
+            )}
 
             <div className="mb-5 flex flex-none flex-row justify-between">
               <ul className="list bg-base-100 rounded-box flex pr-40 shadow-md">

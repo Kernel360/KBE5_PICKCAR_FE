@@ -41,7 +41,7 @@ const instances = [defaultAxios, trackingAxios, employeeAxios]
 instances.forEach(addAuthInterceptor)
 
 // ====== 에러코드별 분기 처리 response 인터셉터 추가 ======
-function handleLogoutAndRedirect(){
+function handleLogoutAndRedirect() {
   localStorage.removeItem('accessToken')
   window.location.href = '/'
 }
@@ -89,10 +89,7 @@ const handleAuthError = (error: any) => {
 
 // 모든 인스턴스에 response 인터셉터 추가
 instances.forEach(instance => {
-  instance.interceptors.response.use(
-    response => response,
-    handleAuthError
-  )
+  instance.interceptors.response.use(response => response, handleAuthError)
 })
 
 export default defaultAxios
