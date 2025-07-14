@@ -1,3 +1,5 @@
+import React from 'react'
+
 const CAR_TYPES = [
   '소형',
   '준중형',
@@ -12,8 +14,6 @@ const CAR_TYPES = [
 const MANUFACTURERS = ['현대', '기아', '쌍용', 'custom'] as const
 
 const FUEL_TYPES = ['LPG', '휘발유', '경유', '전기', '기타'] as const
-
-const GPS_OPTIONS = ['예', '아니오'] as const
 
 interface RegisterCarInfoSectionProps {
   carNumber: string
@@ -60,6 +60,12 @@ export default function RegisterCarInfoSection({
   hasGps,
   setHasGps
 }: RegisterCarInfoSectionProps) {
+  // 연료 타입, 색상, GPS 여부의 기본값을 보장
+  React.useEffect(() => {
+    if (!fuelType) setFuelType(FUEL_TYPES[0])
+    if (!color) setColor('검정색')
+    if (hasGps !== '예') setHasGps('예')
+  }, [])
   return (
     <div className="mb-8">
       <div className="grid grid-cols-2 gap-x-6 gap-y-5">
@@ -77,6 +83,7 @@ export default function RegisterCarInfoSection({
             placeholder="차량번호 입력"
             value={carNumber}
             onChange={e => setCarNumber(e.target.value)}
+            maxLength={15}
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -92,6 +99,7 @@ export default function RegisterCarInfoSection({
             placeholder="모델명 입력 (예: 현대 아반떼, 기아 스포티지)"
             value={model}
             onChange={e => setModel(e.target.value)}
+            maxLength={15}
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -106,12 +114,6 @@ export default function RegisterCarInfoSection({
             className="select"
             value={carType}
             onChange={e => setCarType(e.target.value)}>
-            <option
-              value=""
-              disabled={carType !== ''}
-              hidden={carType !== ''}>
-              차종 선택
-            </option>
             {CAR_TYPES.map(type => (
               <option
                 key={type}
@@ -143,12 +145,6 @@ export default function RegisterCarInfoSection({
             className="select"
             value={manufacturer}
             onChange={e => setManufacturer(e.target.value)}>
-            <option
-              value=""
-              disabled={manufacturer !== ''}
-              hidden={manufacturer !== ''}>
-              제조사 선택
-            </option>
             {MANUFACTURERS.map(maker => (
               <option
                 key={maker}
@@ -174,14 +170,23 @@ export default function RegisterCarInfoSection({
             className="text-sm font-medium text-gray-900">
             연식 <span className="text-blue-600">*</span>
           </label>
-          <input
+          <select
             id="year"
             name="year"
-            className="input"
-            placeholder="연식 입력 (예: 2023)"
+            className="select"
             value={year}
-            onChange={e => setYear(e.target.value)}
-          />
+            onChange={e => setYear(e.target.value)}>
+            {Array.from({ length: 30 }, (_, i) => {
+              const y = 2025 - i
+              return (
+                <option
+                  key={y}
+                  value={y}>
+                  {y}
+                </option>
+              )
+            })}
+          </select>
         </div>
         <div className="flex flex-col gap-1">
           <label
@@ -189,14 +194,24 @@ export default function RegisterCarInfoSection({
             className="text-sm font-medium text-gray-900">
             색상
           </label>
-          <input
+          <select
             id="color"
             name="color"
-            className="input"
-            placeholder="색상 입력"
+            className="select"
             value={color}
-            onChange={e => setColor(e.target.value)}
-          />
+            onChange={e => setColor(e.target.value)}>
+            <option value="">색상 선택</option>
+            <option value="빨강색">빨강색</option>
+            <option value="주황색">주황색</option>
+            <option value="노란색">노란색</option>
+            <option value="초록색">초록색</option>
+            <option value="파랑색">파란색</option>
+            <option value="남색">남색</option>
+            <option value="보라색">보라색</option>
+            <option value="검정색">검정색</option>
+            <option value="흰색">흰색</option>
+            <option value="은색">은색</option>
+          </select>
         </div>
         <div className="flex flex-col gap-1">
           <label
@@ -210,12 +225,6 @@ export default function RegisterCarInfoSection({
             className="select"
             value={fuelType}
             onChange={e => setFuelType(e.target.value)}>
-            <option
-              value=""
-              disabled={fuelType !== ''}
-              hidden={fuelType !== ''}>
-              연료 타입 선택
-            </option>
             {FUEL_TYPES.map(type => (
               <option
                 key={type}
@@ -229,27 +238,16 @@ export default function RegisterCarInfoSection({
           <label
             htmlFor="hasGps"
             className="text-sm font-medium text-gray-900">
-            GPS 여부
+            GPS 여부 (선택 불가)
           </label>
           <select
             id="hasGps"
             name="hasGps"
             className="select"
             value={hasGps}
-            onChange={e => setHasGps(e.target.value)}>
-            <option
-              value=""
-              disabled={hasGps !== ''}
-              hidden={hasGps !== ''}>
-              GPS 여부 선택
-            </option>
-            {GPS_OPTIONS.map(option => (
-              <option
-                key={option}
-                value={option}>
-                {option}
-              </option>
-            ))}
+            onChange={e => setHasGps(e.target.value)}
+            disabled>
+            <option value="예">예</option>
           </select>
         </div>
       </div>
