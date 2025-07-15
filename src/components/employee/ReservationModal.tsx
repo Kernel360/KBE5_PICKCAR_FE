@@ -63,25 +63,25 @@ export default function ReservationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="w-240 max-w-lg rounded-2xl bg-white p-8 shadow-xl">
+      <div className="w-240 max-w-lg rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-extrabold text-gray-900">차량 할당</h2>
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">차량 할당</h2>
           <button
-            className="text-2xl text-gray-400 hover:text-gray-600"
+            className="text-2xl text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100"
             onClick={onClose}
             aria-label="닫기">
             &times;
           </button>
         </div>
         <div className="mb-5 flex items-center justify-center">
-          <h2 className="mr-3 font-bold text-gray-500">
+          <h2 className="mr-3 font-bold text-gray-500 dark:text-gray-300">
             할당 마감일을 선택해주세요 (최대 60일)
           </h2>
           <input
             type="date"
             max={maximumDate}
             min={today}
-            className="input w-40 rounded border px-3 py-3 text-sm"
+            className="input w-40 rounded border px-3 py-3 text-sm dark:bg-gray-700 dark:text-white dark:border-gray-600"
             value={dueDate}
             onChange={e => setDueDate(e.target.value)}
           />
@@ -90,18 +90,18 @@ export default function ReservationModal({
           <table className="table-zebra table w-full table-auto">
             <thead>
               <tr>
-                <th className="px-4 py-2">차량번호</th>
-                <th className="px-4 py-2">모델</th>
-                <th className="px-4 py-2">상태</th>
-                <th className="px-4 py-2">선택</th>
+                <th className="px-4 py-2 dark:text-white">차량번호</th>
+                <th className="px-4 py-2 dark:text-white">모델</th>
+                <th className="px-4 py-2 dark:text-white">상태</th>
+                <th className="px-4 py-2 dark:text-white">선택</th>
               </tr>
             </thead>
             <tbody>
               {vehicles.map(vehicle => (
                 <tr key={vehicle.vehicleId}>
-                  <td className="px-4 py-2">{vehicle.licensePlate}</td>
-                  <td className="px-4 py-2">{vehicle.model}</td>
-                  <td className="px-4 py-2">{vehicle.status}</td>
+                  <td className="px-4 py-2 dark:text-gray-300">{vehicle.licensePlate}</td>
+                  <td className="px-4 py-2 dark:text-gray-300">{vehicle.model}</td>
+                  <td className="px-4 py-2 dark:text-gray-300">{vehicle.status}</td>
                   <td className="px-4 py-2">
                     <input
                       type="radio"
@@ -116,10 +116,10 @@ export default function ReservationModal({
             </tbody>
           </table>
         </div>
-        {error && <div className="mt-2 text-sm text-red-500">{error}</div>}
+        {error && <div className="mt-2 text-sm text-red-500 dark:text-red-400">{error}</div>}
         <div className="mt-10 flex justify-center">
           <button
-            className="btn bg-blue-500 text-white"
+            className="btn bg-blue-500 text-white dark:bg-blue-600"
             onClick={handleAssign}
             disabled={isLoading}>
             {isLoading ? '할당 중...' : '할당'}

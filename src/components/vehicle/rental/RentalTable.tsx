@@ -57,57 +57,57 @@ export default function RentalTable({
   if (isLoading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="text-lg text-gray-500">로딩 중...</div>
+        <div className="text-lg text-gray-500 dark:text-gray-400">로딩 중...</div>
       </div>
     )
   }
 
   return (
-    <div className="h-full min-h-0 flex-1 overflow-x-auto rounded-lg border border-gray-200 bg-white">
+    <div className="h-full min-h-0 flex-1 overflow-x-auto rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-800">
       <div
         className="h-full overflow-y-auto"
         style={{ overflowX: 'auto', overflowY: 'auto' }}>
         <table className="table-zebra text-m table">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 No
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 차량번호
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 차종
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 상태
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 회사
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 대여일
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 작업
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-600">
             {filteredVehicles.map((vehicle, idx) => (
               <tr
                 key={vehicle.vehicleId}
-                className="h-12 hover:bg-gray-50">
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                className="h-12 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {idx + 1}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {vehicle.licensePlate}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {vehicle.model}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   <span
                     className={`inline-flex w-20 justify-center rounded-full px-2.5 py-1 text-xs font-medium ${
                       statusStyles[vehicle.vehicleStatus]
@@ -118,17 +118,17 @@ export default function RentalTable({
                     {statusLabels[vehicle.vehicleStatus]}
                   </span>
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {vehicle.rentedCompany || '-'}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {vehicle.rentedAt
                     ? new Date(vehicle.rentedAt).toLocaleDateString()
                     : '-'}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   <FontAwesomeIcon
-                    className="rounded p-1 hover:bg-gray-200"
+                    className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-600"
                     icon={faWrench as IconProp}
                     size="lg"
                     color="black"
