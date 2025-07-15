@@ -22,8 +22,8 @@ function CarListItem({
 }: CarListItemProps): React.ReactElement {
   const baseClasses =
     'flex cursor-pointer items-center justify-between rounded p-3'
-  const selectedClasses = 'bg-blue-50'
-  const hoverClasses = 'hover:bg-blue-50'
+  const selectedClasses = 'bg-blue-50 dark:bg-blue-900'
+  const hoverClasses = 'hover:bg-blue-50 dark:hover:bg-blue-900'
 
   return (
     <div
@@ -36,8 +36,8 @@ function CarListItem({
         onSelectCar(car.vehicleId)
       }}>
       <div>
-        <div className="font-semibold">{car.licensePlate}</div>
-        <div className="text-xs text-gray-400">
+        <div className="font-semibold dark:text-white">{car.licensePlate}</div>
+        <div className="text-xs text-gray-400 dark:text-gray-500">
           {car.model} · {car.location}
         </div>
       </div>

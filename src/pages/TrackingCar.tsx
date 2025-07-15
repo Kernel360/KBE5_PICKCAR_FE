@@ -173,10 +173,10 @@ function TrackingCar() {
   return (
     <>
       <Header />
-      <div className="flex min-h-screen gap-6 bg-[#f5f8fa]">
+      <div className="flex min-h-screen gap-6 bg-[#f5f8fa] dark:bg-gray-900">
         <SideMenuBar />
-        <div className="my-10 flex flex-1 flex-col rounded-2xl bg-[#eaf1fb] p-6 shadow">
-          <h1 className="mb-5 text-xl font-bold">실시간 관제</h1>
+        <div className="my-10 flex flex-1 flex-col rounded-2xl bg-[#eaf1fb] p-6 shadow dark:bg-gray-800 dark:shadow-gray-700">
+          <h1 className="mb-5 text-xl font-bold dark:text-white">실시간 관제</h1>
           <div className="relative flex-1 md:min-h-0">
             <div
               className="h-full w-full transition-all duration-300"
@@ -193,26 +193,26 @@ function TrackingCar() {
             </div>
             {/* 오버레이 메시지 */}
             {!selectedVehicleId && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/60 text-xl font-bold text-gray-700">
+              <div className="absolute inset-0 flex items-center justify-center bg-white/60 text-xl font-bold text-gray-700 dark:bg-gray-800/60 dark:text-gray-200">
                 할당된 차량을 선택하세요
               </div>
             )}
 
             {selectedVehicleId && isPathLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/60 text-xl font-bold text-gray-700">
+              <div className="absolute inset-0 flex items-center justify-center bg-white/60 text-xl font-bold text-gray-700 dark:bg-gray-800/60 dark:text-gray-200">
                 현재 차량의 위치를 불러오고 있습니다.
                 <br></br>
                 <br></br>
                 "1분 기준(수신 없음) - 현재 운행 중인 차량이 아님"
               </div>
             )}
-            <span className="absolute right-4 bottom-2 text-xs text-gray-400">
+            <span className="absolute right-4 bottom-2 text-xs text-gray-400 dark:text-gray-500">
               [실시간 관제 지도]
             </span>
           </div>
         </div>
-        <div className="my-10 flex w-96 flex-col rounded-2xl bg-white p-6 shadow">
-          <div className="mb-4 text-lg font-bold">
+        <div className="my-10 flex w-96 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800 dark:shadow-gray-700">
+          <div className="mb-4 text-lg font-bold dark:text-white">
             할당된 차량 리스트 ({filteredCars.length})
             {/* 추후 '운행 중인 차량'으로 변경 예정 */}
           </div>

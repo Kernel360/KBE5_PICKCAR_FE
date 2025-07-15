@@ -14,11 +14,11 @@ const minDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
 const DrivingHistoryTopBar = ({ filter, setFilter, onSearch }: TopBarProps) => (
   <div className="my-5 flex flex-row items-center justify-between">
     <div className="justify-start">
-      <h1 className="text-xl font-bold">운행일지</h1>
+      <h1 className="text-xl font-bold dark:text-white">운행일지</h1>
     </div>
 
     <div className="flex flex-1 items-center justify-end gap-3">
-      <h3 className="text-sm text-gray-950">
+      <h3 className="text-sm text-gray-950 dark:text-gray-300">
         조회 가능 기간은 최대 30일 입니다
       </h3>
       <input
@@ -29,7 +29,7 @@ const DrivingHistoryTopBar = ({ filter, setFilter, onSearch }: TopBarProps) => (
         onChange={e =>
           setFilter({ ...filter, from: e.target.value + 'T00:00:00' })
         }
-        className="input w-40 rounded border px-3 py-3 text-sm"
+        className="input w-40 rounded border px-3 py-3 text-sm dark:bg-gray-700 dark:text-white dark:border-gray-600"
       />
       <input
         type="date"
@@ -39,7 +39,7 @@ const DrivingHistoryTopBar = ({ filter, setFilter, onSearch }: TopBarProps) => (
         onChange={e =>
           setFilter({ ...filter, to: e.target.value + 'T23:59:59' })
         }
-        className="input w-40 rounded border px-3 py-3 text-sm"
+        className="input w-40 rounded border px-3 py-3 text-sm dark:bg-gray-700 dark:text-white dark:border-gray-600"
       />
       <input
         type="text"
@@ -47,16 +47,16 @@ const DrivingHistoryTopBar = ({ filter, setFilter, onSearch }: TopBarProps) => (
         maxLength={15}
         value={filter.driverName}
         onChange={e => setFilter({ ...filter, driverName: e.target.value })}
-        className="input w-40 rounded border px-3 py-3 text-sm"
+        className="input w-40 rounded border px-3 py-3 text-sm dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
       />
       <input
         type="text"
         placeholder="예약 기반 조회"
-        className="input w-40"
+        className="input w-40 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
         disabled
       />
       <button
-        className="btn btn-outline btn-default rounded border px-4 py-2 text-sm font-semibold"
+        className="btn btn-outline btn-default rounded border px-4 py-2 text-sm font-semibold dark:bg-gray-700 dark:text-white dark:border-gray-600"
         type="button"
         onClick={onSearch}>
         검색

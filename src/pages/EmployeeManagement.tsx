@@ -52,8 +52,8 @@ export default function EmployeeManagement() {
   })
 
   return (
-    <div className="flex flex-col bg-[#f5f8fa]">
-      <header className="flex bg-white">
+    <div className="flex flex-col bg-[#f5f8fa] dark:bg-gray-900">
+      <header className="flex bg-white dark:bg-gray-800">
         <Header />
       </header>
       <div className="flex flex-1">
@@ -63,7 +63,7 @@ export default function EmployeeManagement() {
             filter={filter}
             onFilterChange={setFilter}
           />
-          <div className="min-h-[400px] flex-1 flex-col rounded-2xl bg-white p-0 shadow">
+          <div className="min-h-[400px] flex-1 flex-col rounded-2xl bg-white p-0 shadow dark:bg-gray-800 dark:shadow-gray-700">
             <EmployeeTable
               employees={filteredEmployees}
               vehicleList={vehicleList}

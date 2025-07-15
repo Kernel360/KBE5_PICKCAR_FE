@@ -73,7 +73,7 @@ const ReportGraph: React.FC<ReportGraphProps> = ({
   return (
     <div className="my-5 flex min-h-0 min-w-0 flex-1 flex-col gap-4 lg:flex-row lg:gap-14">
       <div className="bg-base-100 flex h-full min-w-0 flex-1 flex-col overflow-hidden rounded-2xl p-4">
-        <div className="mb-2 flex text-center font-semibold text-gray-700">
+        <div className="mb-2 flex text-center font-semibold text-gray-700 dark:bg-gray-800">
           목적지별 방문 현황
         </div>
         <div className="flex min-h-0 flex-1 items-center justify-center">
@@ -103,7 +103,7 @@ const ReportGraph: React.FC<ReportGraphProps> = ({
           일별 총 이동 거리 (km)
         </div>
         <div className="flex min-h-0 flex-1 items-center justify-center">
-          <div className="h-full max-h-full w-full max-w-full">
+          <div className="h-full max-h-full w-full max-w-full dark:bg-gray-800">
             <Line
               data={lineData}
               options={{

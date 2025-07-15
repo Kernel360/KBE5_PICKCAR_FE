@@ -56,7 +56,7 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
 
   return (
     <div className="flex w-full flex-none flex-row items-center justify-between">
-      <div className="stats flex flex-1 flex-row overflow-x-auto bg-white px-5 py-4 shadow">
+      <div className="stats flex flex-1 flex-row overflow-x-auto bg-white px-5 py-4 shadow dark:bg-gray-800 dark:shadow-gray-700">
         <div className="stat">
           <div className="stat-figure text-primary">
             <FontAwesomeIcon

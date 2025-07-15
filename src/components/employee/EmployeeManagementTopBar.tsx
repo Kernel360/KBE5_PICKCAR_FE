@@ -17,7 +17,9 @@ export default function EmployeeManagementTopBar({
 }: EmployeeManagementTopBarProps) {
   return (
     <div className="mb-6 flex items-center justify-between">
-      <h1 className="text-2xl font-bold text-gray-800">사원 차량 할당</h1>
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+        사원 차량 할당
+      </h1>
       <div className="flex gap-2">
         {(['all', 'reserved', 'not_reserved'] as const).map(type => (
           <button

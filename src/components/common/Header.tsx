@@ -19,13 +19,13 @@ function Header() {
   }
 
   return (
-    <header className="flex h-16 w-full items-center justify-between bg-white px-6 shadow">
+    <header className="flex h-16 w-full items-center justify-between bg-white px-6 shadow dark:bg-gray-800 dark:shadow-gray-700">
       <div className="flex items-center">
         <Link
           to={linkTo}
           className="flex items-center hover:opacity-80">
           <Logo />
-          <span className="ml-2 text-lg font-medium text-gray-700">
+          <span className="ml-2 text-lg font-medium text-gray-700 dark:text-gray-200">
             PickCar
           </span>
         </Link>
@@ -38,25 +38,25 @@ function Header() {
               <div className="status status-success animate-ping"></div>
               <div className="status status-success"></div>
             </div>{' '}
-            <p className="text-gray-500">관제 시스템 정상</p>
+            <p className="text-gray-500 dark:text-gray-400">관제 시스템 정상</p>
           </div>
         )}
 
-        <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 text-xl font-bold text-white">
+        <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 text-xl font-bold text-white dark:bg-gray-600">
           <FontAwesomeIcon
             icon={faUser as IconProp}
             size="lg"
-            className="rounded px-3 py-3 outline"
+            className="rounded px-3 py-3 focus:outline-none"
           />
         </div>
         <div className="flex flex-col items-start">
-          <span className="text-sm font-extrabold text-gray-500">
+          <span className="text-sm font-extrabold text-gray-500 dark:text-gray-400">
             {displayName}
           </span>
         </div>
         <button
           onClick={handleLogout}
-          className="ml-4 flex items-center rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600">
+          className="ml-4 flex items-center rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
           <FontAwesomeIcon
             icon={faSignOutAlt as IconProp}
             className="mr-2"

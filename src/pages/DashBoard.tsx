@@ -39,7 +39,7 @@ const DashBoard: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#f5f8fa]">
+    <div className="bg-[#f5f8fa] dark:bg-gray-900">
       <header>
         <Header />
       </header>
@@ -76,7 +76,7 @@ const DashBoard: React.FC = () => {
                 />
               )}
 
-              <ul className="list bg-base-100 rounded-box mx-10 flex flex-1 pr-40 shadow-md">
+              <ul className="list bg-base-100 rounded-box mx-10 flex flex-1 pr-40 shadow-md dark:shadow-gray-700">
                 <li className="p-4 pb-2 text-sm font-bold tracking-wide opacity-60">
                   공지사항
                 </li>
