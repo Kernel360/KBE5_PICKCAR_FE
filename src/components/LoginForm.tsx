@@ -1,4 +1,3 @@
-import Logo from './common/Logo'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../axiosConfig'
@@ -59,7 +58,6 @@ function LoginForm() {
       localStorage.setItem('accessToken', accessToken)
       //토큰 파싱
       const payload: JwtPayload = jwtDecode(accessToken)
-      console.log(payload.role)
       setRole(payload.role || null) // 전역 상태에 role 저장
       setUserName(payload.name || null) // 전역 상태에 name 저장
 
@@ -81,53 +79,46 @@ function LoginForm() {
   if (role) return null // 리다이렉트 중엔 폼 숨김
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="flex w-90 flex-col items-center rounded-2xl bg-white p-10 shadow-lg dark:bg-gray-800 dark:shadow-gray-700">
-        <div className="mb-8 flex items-center">
-          <Logo />
-          <div>
-            <div className="text-2xl font-bold text-[#222] dark:text-white">PickCar</div>
-            <div className="text-sm text-[#888] dark:text-gray-400">렌터카 차량 관제 서비스</div>
+    <div className="flex w-full flex-col items-center">
+      <form
+        className="flex w-full max-w-xs flex-col p-4"
+        onSubmit={handleSubmit}>
+        <label className="mt-3 mb-1 text-sm text-white">이메일</label>
+        <input
+          type="email"
+          placeholder="이메일 주소를 입력하세요."
+          className="mb-2 bg-transparent border-b border-gray-400 focus:border-green-400 text-sm text-white placeholder-gray-300 px-0 py-3 outline-none transition"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <label className="mt-3 mb-1 text-sm text-white">비밀번호</label>
+        <input
+          type="password"
+          placeholder="비밀번호를 입력하세요."
+          className="mb-12 bg-transparent border-b border-gray-400 focus:border-green-400 text-sm text-white placeholder-gray-300 px-0 py-3 outline-none transition"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        {error && (
+          <div className="mt-1 mb-2 text-[11px] font-normal text-red-500">
+            {error}
           </div>
-        </div>
-        <form
-          className="flex w-full flex-col"
-          onSubmit={handleSubmit}>
-          <label className="mt-3 mb-1 text-sm text-[#222] dark:text-gray-300">이메일</label>
-          <input
-            type="email"
-            placeholder="이메일 주소를 입력하세요"
-            className="mb-2 rounded-lg border border-gray-200 bg-[#f8fafc] p-3 text-base dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-          <label className="mt-3 mb-1 text-sm text-[#222] dark:text-gray-300">비밀번호</label>
-          <input
-            type="password"
-            placeholder="비밀번호"
-            className="mb-2 rounded-lg border border-gray-200 bg-[#f8fafc] p-3 text-base dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-          {error && (
-            <div className="mt-1 mb-2 text-[11px] font-normal text-red-500 dark:text-red-400">
-              {error}
-            </div>
-          )}
-          <button
-            type="submit"
-            className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white dark:bg-blue-600">
-            로그인
-          </button>
-        </form>
-
+        )}
         <button
-          className="btn mt-4 w-full rounded-lg bg-blue-500 py-5 text-lg font-semibold text-white dark:bg-blue-600"
-          onClick={() => setShowSignUpModal(true)}>
-          회원가입
+          type="submit"
+          className="btn w-full rounded-full bg-blue-500 py-5 text-lg font-semibold text-white">
+          로그인
         </button>
-      </div>
-
+        <div className="mt-4 text-center text-sm text-gray-500">
+          계정이 없으신가요?{' '}
+          <button
+            type="button"
+            className="font-semibold text-blue-500 hover:underline"
+            onClick={() => setShowSignUpModal(true)}>
+            회원가입
+          </button>
+        </div>
+      </form>
       {showSignUpModal && (
         <SignUpModal onClose={() => setShowSignUpModal(false)} />
       )}
