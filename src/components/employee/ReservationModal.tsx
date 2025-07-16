@@ -22,6 +22,7 @@ export default function ReservationModal({
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dueDate, setDueDate] = useState<string>('')
+  const [search, setSearch] = useState('')
 
   const handleAssign = async () => {
     if (!selectedVehicleId) {
@@ -63,7 +64,7 @@ export default function ReservationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="w-[900px] max-w-2xl rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700">
+      <div className="flex h-[700px] max-h-[90vh] w-[900px] max-w-2xl flex-col rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">
             차량 할당
@@ -75,20 +76,29 @@ export default function ReservationModal({
             &times;
           </button>
         </div>
-        <div className="mb-5 flex items-center justify-center">
-          <h2 className="mr-3 font-bold text-gray-500 dark:text-gray-300">
-            할당 마감일을 선택해주세요 (최대 60일)
-          </h2>
+        <div className="mb-5 flex items-center justify-between">
           <input
-            type="date"
-            max={maximumDate}
-            min={today}
-            className="input w-40 rounded border px-3 py-3 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-            value={dueDate}
-            onChange={e => setDueDate(e.target.value)}
+            type="text"
+            className="input w-40 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            placeholder="차량 번호 검색"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
           />
+          <div className="flex flex-row">
+            <h2 className="mt-2 mr-3 font-bold text-gray-500 dark:text-gray-300">
+              할당 마감일 선택 (최대 60일)
+            </h2>
+            <input
+              type="date"
+              max={maximumDate}
+              min={today}
+              className="input w-40 rounded border px-3 py-3 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              value={dueDate}
+              onChange={e => setDueDate(e.target.value)}
+            />
+          </div>
         </div>
-        <div className="max-h-96 overflow-y-auto rounded-2xl">
+        <div className="max-h-full min-h-0 flex-1 overflow-y-auto rounded-2xl">
           <table className="table-zebra table w-full table-auto">
             <thead>
               <tr>
@@ -100,31 +110,33 @@ export default function ReservationModal({
               </tr>
             </thead>
             <tbody>
-              {vehicles.map(vehicle => (
-                <tr key={vehicle.vehicleId}>
-                  <td className="px-4 py-2 dark:text-gray-300">
-                    {vehicle.licensePlate}
-                  </td>
-                  <td className="px-4 py-2 dark:text-gray-300">
-                    {vehicle.model}
-                  </td>
-                  <td className="px-4 py-2 dark:text-gray-300">
-                    {vehicle.carAge}
-                  </td>
-                  <td className="px-4 py-2 dark:text-gray-300">
-                    {vehicle.color}
-                  </td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="radio"
-                      name="selectVehicle"
-                      className="radio"
-                      checked={selectedVehicleId === vehicle.vehicleId}
-                      onChange={() => setSelectedVehicleId(vehicle.vehicleId)}
-                    />
-                  </td>
-                </tr>
-              ))}
+              {vehicles
+                .filter(vehicle => vehicle.licensePlate.includes(search))
+                .map(vehicle => (
+                  <tr key={vehicle.vehicleId}>
+                    <td className="px-4 py-2 dark:text-gray-300">
+                      {vehicle.licensePlate}
+                    </td>
+                    <td className="px-4 py-2 dark:text-gray-300">
+                      {vehicle.model}
+                    </td>
+                    <td className="px-4 py-2 dark:text-gray-300">
+                      {vehicle.carAge}
+                    </td>
+                    <td className="px-4 py-2 dark:text-gray-300">
+                      {vehicle.color}
+                    </td>
+                    <td className="px-4 py-2">
+                      <input
+                        type="radio"
+                        name="selectVehicle"
+                        className="radio"
+                        checked={selectedVehicleId === vehicle.vehicleId}
+                        onChange={() => setSelectedVehicleId(vehicle.vehicleId)}
+                      />
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
