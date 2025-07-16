@@ -78,43 +78,59 @@ const DashBoard: React.FC = () => {
               )}
 
               <ul className="list bg-base-100 rounded-box mx-10 flex flex-1 pr-40 shadow-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700">
-                <li className="p-4 pb-2 text-sm font-bold tracking-wide opacity-60 dark:text-gray-400">
+                <li className="p-4 pb-2 text-sm font-bold tracking-wide text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
                   공지사항
                 </li>
 
                 <li className="list-row">
                   <div>
-                    <p>06.30</p>
+                    <p className="text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
+                      06.30
+                    </p>
                   </div>
                   <div>
-                    <div>사원 관리 시스템 점검 관련 건</div>
-                  </div>
-                </li>
-
-                <li className="list-row">
-                  <div>
-                    <p>06.30</p>
-                  </div>
-                  <div>
-                    <div>운행일지 시스템 점검 관련 건</div>
+                    <div className="text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
+                      사원 관리 시스템 점검 관련 건
+                    </div>
                   </div>
                 </li>
 
                 <li className="list-row">
                   <div>
-                    <p>06.30</p>
+                    <p className="text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
+                      06.30
+                    </p>
                   </div>
                   <div>
-                    <div>관제 시스템 점검 관련 건</div>
+                    <div className="text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
+                      운행일지 시스템 점검 관련 건
+                    </div>
                   </div>
                 </li>
 
                 <li className="list-row">
                   <div>
-                    <p>06.30</p>
+                    <p className="text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
+                      06.30
+                    </p>
                   </div>
                   <div>
-                    <div>차량 시스템 점검 관련 건</div>
+                    <div className="text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
+                      관제 시스템 점검 관련 건
+                    </div>
+                  </div>
+                </li>
+
+                <li className="list-row">
+                  <div>
+                    <p className="text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
+                      06.30
+                    </p>
+                  </div>
+                  <div>
+                    <div className="text-gray-700 opacity-60 dark:bg-gray-800 dark:text-gray-200">
+                      차량 시스템 점검 관련 건
+                    </div>
                   </div>
                 </li>
               </ul>

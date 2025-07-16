@@ -82,10 +82,16 @@ export default function RentalTable({
                 차종
               </th>
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
+                색상
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 등록일
               </th>
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 상태
+              </th>
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
+                대여 여부
               </th>
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 작업
@@ -107,8 +113,11 @@ export default function RentalTable({
                   {vehicle.model}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
-                  {vehicle.rentedAt
-                    ? new Date(vehicle.rentedAt).toLocaleDateString()
+                  {vehicle.color}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
+                  {vehicle.createdAt
+                    ? new Date(vehicle.createdAt).toLocaleDateString()
                     : '-'}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
@@ -122,13 +131,15 @@ export default function RentalTable({
                     {statusLabels[vehicle.vehicleStatus]}
                   </span>
                 </td>
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
+                  {vehicle.isRented ? '대여중' : '-'}
+                </td>
 
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   <FontAwesomeIcon
-                    className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    className="cursor-pointer rounded p-3 hover:bg-gray-200 dark:hover:bg-gray-600"
                     icon={faWrench as IconProp}
                     size="lg"
-                    color="black"
                     onClick={() => onChangeStatus(vehicle)}
                   />
                 </td>

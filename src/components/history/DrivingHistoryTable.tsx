@@ -76,12 +76,12 @@ function DrivingHistoryTable({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100 dark:divide-gray-600">
-          {logs.map(log => (
+          {logs.map((log, idx) => (
             <tr
               key={log.historyId}
               className="hover:bg-gray-50 dark:hover:bg-gray-700">
               <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
-                {log.historyId}
+                {idx + 1}
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                 {log.licensePlate}
