@@ -18,6 +18,7 @@ export default function EmployeeManagement() {
   const [filter, setFilter] = useState<'all' | 'reserved' | 'not_reserved'>(
     'all'
   )
+  const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -45,10 +46,12 @@ export default function EmployeeManagement() {
 
   // 필터링
   const filteredEmployees = employees.filter(emp => {
-    if (filter === 'all') return true
-    if (filter === 'reserved') return emp.hasReservation
-    if (filter === 'not_reserved') return !emp.hasReservation
-    return true
+    const matchesFilter =
+      filter === 'all' ||
+      (filter === 'reserved' && emp.hasReservation) ||
+      (filter === 'not_reserved' && !emp.hasReservation)
+    const matchesSearch = emp.name.includes(search)
+    return matchesFilter && matchesSearch
   })
 
   return (
@@ -62,6 +65,8 @@ export default function EmployeeManagement() {
           <EmployeeManagementTopBar
             filter={filter}
             onFilterChange={setFilter}
+            search={search}
+            onSearchChange={setSearch}
           />
           <div className="min-h-[400px] flex-1 flex-col rounded-2xl bg-white p-0 shadow dark:bg-gray-800 dark:shadow-gray-700">
             <EmployeeTable

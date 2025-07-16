@@ -75,12 +75,12 @@ export default function EmployeeTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-b border-gray-200 dark:divide-gray-600 dark:border-gray-600">
-            {employees.map(employee => (
+            {employees.map((employee, idx) => (
               <tr
                 key={employee.employeeId}
                 className="h-12 hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
-                  {employee.employeeId}
+                  {idx + 1}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.name}

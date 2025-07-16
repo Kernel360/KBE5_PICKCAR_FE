@@ -3,6 +3,8 @@ import React from 'react'
 interface EmployeeManagementTopBarProps {
   filter: 'all' | 'reserved' | 'not_reserved'
   onFilterChange: (filter: 'all' | 'reserved' | 'not_reserved') => void
+  search: string
+  onSearchChange: (search: string) => void
 }
 
 const FILTER_LABELS = {
@@ -13,7 +15,9 @@ const FILTER_LABELS = {
 
 export default function EmployeeManagementTopBar({
   filter,
-  onFilterChange
+  onFilterChange,
+  search,
+  onSearchChange
 }: EmployeeManagementTopBarProps) {
   return (
     <div className="mb-6 flex items-center justify-between">
@@ -21,6 +25,13 @@ export default function EmployeeManagementTopBar({
         사원 차량 할당
       </h1>
       <div className="flex gap-2">
+        <input
+          type="text"
+          className="input"
+          placeholder="이름을 입력해주세요"
+          value={search}
+          onChange={e => onSearchChange(e.target.value)}
+        />
         {(['all', 'reserved', 'not_reserved'] as const).map(type => (
           <button
             key={type}
