@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../../axiosConfig'
-import carSampleImg from '@/components/common/car_sample.jpg'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import DrivingHistoryDetailModal from '@/components/history/DrivingHistoryDetailModal'
+import type { DrivingHistoryDetail } from '@/types/drivingHistory'
 
 interface VehicleInfo {
   licensePlate: string
@@ -16,6 +19,10 @@ interface ReservationDetailResponse {
   vehicleInfo: VehicleInfo
   dueDate: string
   rentedAt: string
+  relatedHistoryContexts?: {
+    driveHistoryId: number
+    drivingDate: string
+  }[]
 }
 
 interface Props {
@@ -35,6 +42,34 @@ export default function ReservationDetailModal({
   const [data, setData] = useState<ReservationDetailResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [openHistoryDetail, setOpenHistoryDetail] = useState(false)
+  const [historyDetail, setHistoryDetail] =
+    useState<DrivingHistoryDetail | null>(null)
+  const [polylinePath, setPolylinePath] = useState<
+    { lat: number; lng: number }[]
+  >([])
+
+  const handleViewHistoryDetail = async (historyId: number) => {
+    try {
+      const res = await axios.get(`/api/v1/history/${historyId}/detail`)
+      setHistoryDetail(res.data.data)
+      if (res.data.data.path) {
+        setPolylinePath(
+          res.data.data.path.map(
+            (p: { latitude: number; longitude: number }) => ({
+              lat: p.latitude,
+              lng: p.longitude
+            })
+          )
+        )
+      } else {
+        setPolylinePath([])
+      }
+      setOpenHistoryDetail(true)
+    } catch {
+      alert('운행일지 상세 정보를 불러오지 못했습니다.')
+    }
+  }
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -70,26 +105,14 @@ export default function ReservationDetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="relative w-[700px] max-w-full rounded-2xl bg-white p-10 shadow-xl dark:bg-gray-800">
+      <div className="relative h-[700px] w-[700px] max-w-full rounded-2xl bg-white p-10 shadow-xl dark:bg-gray-800">
         <button
           className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-gray-600"
           onClick={onClose}>
           ×
         </button>
-        <div className="mb-6 flex items-center gap-3">
-          <img
-            src={carSampleImg}
-            alt="차량 샘플"
-            className="h-20 w-20 rounded-full object-contain"
-          />
-          <div>
-            <div className="text-lg font-bold dark:text-gray-400">
-              {data.vehicleInfo.licensePlate}
-            </div>
-            <div className="text-gray-500">{data.vehicleInfo.model}</div>
-          </div>
-        </div>
-        <div className="mb-6 grid grid-cols-2 gap-6">
+        <h1 className="text-xl font-bold">상세 정보</h1>
+        <div className="mt-10 mb-6 grid grid-cols-2 gap-6">
           <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm dark:bg-gray-700">
             <div className="mb-2 font-semibold text-gray-700 dark:text-gray-400">
               차량 정보
@@ -148,8 +171,53 @@ export default function ReservationDetailModal({
               </span>
             </div>
           </div>
+          <div className="flex items-center justify-center"></div>
         </div>
+        {data.relatedHistoryContexts &&
+          data.relatedHistoryContexts.length > 0 && (
+            <div className="mt-8">
+              <div className="mb-2 font-semibold text-gray-700 dark:text-gray-400">
+                연관 운행 기록
+              </div>
+              <div className="max-h-60 overflow-y-auto">
+                <table className="table-zebra table w-full table-auto">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-2 dark:text-white">운행일자</th>
+                      <th className="px-4 py-2 dark:text-white">상세보기</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.relatedHistoryContexts.map((ctx, idx) => (
+                      <tr key={idx}>
+                        <td className="px-4 py-2 dark:text-gray-300">
+                          {ctx.drivingDate}
+                        </td>
+                        <td className="px-4 py-2 dark:text-gray-300">
+                          <FontAwesomeIcon
+                            icon={faInfoCircle}
+                            size="xl"
+                            color="#4c7b6d"
+                            className="cursor-pointer rounded-xl p-2 hover:bg-gray-300"
+                            onClick={() =>
+                              handleViewHistoryDetail(ctx.driveHistoryId)
+                            }
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
       </div>
+      <DrivingHistoryDetailModal
+        open={openHistoryDetail}
+        onClose={() => setOpenHistoryDetail(false)}
+        detail={historyDetail}
+        polylinePath={polylinePath}
+      />
     </div>
   )
 }

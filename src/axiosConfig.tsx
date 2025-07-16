@@ -19,6 +19,8 @@ export const employeeAxios = createAxiosInstance(
   import.meta.env.VITE_EMULATOR_API_URL
 )
 
+export const sseAxios = createAxiosInstance(import.meta.env.VITE_SSE_API_URL)
+
 // 인터셉터(토큰 자동 추가) - 모든 인스턴스에 적용
 const addAuthInterceptor = (instance: AxiosInstance) => {
   instance.interceptors.request.use(
