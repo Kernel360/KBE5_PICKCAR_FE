@@ -50,7 +50,7 @@ function DrivingHistoryTable({
         <thead className="bg-gray-50 dark:bg-gray-700">
           <tr>
             <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
-              ID
+              No
             </th>
             <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
               차량번호
@@ -105,7 +105,6 @@ function DrivingHistoryTable({
                 <FontAwesomeIcon
                   icon={faCompass as IconProp}
                   size="xl"
-                  color="#111111"
                   onClick={() => onViewDetails(log.historyId)}
                   className="rounded-2xl p-1 hover:bg-gray-200 dark:hover:bg-gray-600"
                 />

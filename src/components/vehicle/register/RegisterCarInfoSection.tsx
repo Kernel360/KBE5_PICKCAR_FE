@@ -15,6 +15,8 @@ const MANUFACTURERS = ['현대', '기아', '쌍용', 'custom'] as const
 
 const FUEL_TYPES = ['LPG', '휘발유', '경유', '전기', '기타'] as const
 
+const GPS_OPTIONS = ['예', '아니오'] as const
+
 interface RegisterCarInfoSectionProps {
   carNumber: string
   setCarNumber: (v: string) => void
@@ -60,8 +62,10 @@ export default function RegisterCarInfoSection({
   hasGps,
   setHasGps
 }: RegisterCarInfoSectionProps) {
-  // 연료 타입, 색상, GPS 여부의 기본값을 보장
   React.useEffect(() => {
+    if (!carType) setCarType(CAR_TYPES[0])
+    if (!manufacturer) setManufacturer(MANUFACTURERS[0])
+    if (!year) setYear('2025')
     if (!fuelType) setFuelType(FUEL_TYPES[0])
     if (!color) setColor('검정색')
     if (hasGps !== '예') setHasGps('예')
@@ -83,7 +87,6 @@ export default function RegisterCarInfoSection({
             placeholder="차량번호 입력"
             value={carNumber}
             onChange={e => setCarNumber(e.target.value)}
-            maxLength={15}
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -99,7 +102,6 @@ export default function RegisterCarInfoSection({
             placeholder="모델명 입력 (예: 현대 아반떼, 기아 스포티지)"
             value={model}
             onChange={e => setModel(e.target.value)}
-            maxLength={15}
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -173,7 +175,7 @@ export default function RegisterCarInfoSection({
           <select
             id="year"
             name="year"
-            className="select dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+            className="select dark:border-gray-600 dark:bg-gray-700 dark:text-white"
             value={year}
             onChange={e => setYear(e.target.value)}>
             {Array.from({ length: 30 }, (_, i) => {
@@ -194,23 +196,14 @@ export default function RegisterCarInfoSection({
             className="text-sm font-medium text-gray-900 dark:text-gray-300">
             색상
           </label>
-          <select
+          <input
             id="color"
             name="color"
-            className="select dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+            className="input dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+            placeholder="색상 입력"
             value={color}
-            onChange={e => setColor(e.target.value)}>
-            <option value="빨강색">빨강색</option>
-            <option value="주황색">주황색</option>
-            <option value="노란색">노란색</option>
-            <option value="초록색">초록색</option>
-            <option value="파랑색">파란색</option>
-            <option value="남색">남색</option>
-            <option value="보라색">보라색</option>
-            <option value="검정색">검정색</option>
-            <option value="흰색">흰색</option>
-            <option value="은색">은색</option>
-          </select>
+            onChange={e => setColor(e.target.value)}
+          />
         </div>
         <div className="flex flex-col gap-1">
           <label
@@ -224,6 +217,12 @@ export default function RegisterCarInfoSection({
             className="select dark:border-gray-600 dark:bg-gray-700 dark:text-white"
             value={fuelType}
             onChange={e => setFuelType(e.target.value)}>
+            <option
+              value=""
+              disabled={fuelType !== ''}
+              hidden={fuelType !== ''}>
+              연료 타입 선택
+            </option>
             {FUEL_TYPES.map(type => (
               <option
                 key={type}
@@ -237,7 +236,7 @@ export default function RegisterCarInfoSection({
           <label
             htmlFor="hasGps"
             className="text-sm font-medium text-gray-900 dark:text-gray-300">
-            GPS 여부 (선택 불가)
+            GPS 여부
           </label>
           <select
             id="hasGps"

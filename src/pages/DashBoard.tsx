@@ -64,6 +64,7 @@ const DashBoard: React.FC = () => {
                   dailyReportData.yesterdayDynamicInfo.destinationStats
                 }
                 movedDistances={dailyReportData.movedDistances}
+                yesterday={dailyReportData.yesterday}
               />
             )}
 
@@ -76,8 +77,8 @@ const DashBoard: React.FC = () => {
                 />
               )}
 
-              <ul className="list bg-base-100 rounded-box mx-10 flex flex-1 pr-40 shadow-md dark:shadow-gray-700">
-                <li className="p-4 pb-2 text-sm font-bold tracking-wide opacity-60">
+              <ul className="list bg-base-100 rounded-box mx-10 flex flex-1 pr-40 shadow-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700">
+                <li className="p-4 pb-2 text-sm font-bold tracking-wide opacity-60 dark:text-gray-400">
                   공지사항
                 </li>
 

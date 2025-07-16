@@ -12,9 +12,9 @@ const TotalDistanceRanking: React.FC<TotalDistanceRankingProps> = ({
   drivers
 }) => {
   return (
-    <ul className="list bg-base-100 rounded-box flex pr-40 shadow-md">
-      <li className="p-4 pb-2 text-sm font-bold tracking-wide opacity-60">
-        어제 가장 많이 이동한 사원
+    <ul className="list bg-base-100 rounded-box flex pr-40 shadow-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700">
+      <li className="p-4 pb-2 text-sm font-bold tracking-wide opacity-60 dark:text-gray-400">
+        전일 가장 많이 이동한 사원
       </li>
       {drivers.map((driver, idx) => (
         <li

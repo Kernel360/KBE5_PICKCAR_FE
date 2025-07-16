@@ -70,7 +70,7 @@ export default function ReservationDetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="relative w-[700px] max-w-full rounded-2xl bg-white p-10 shadow-xl">
+      <div className="relative w-[700px] max-w-full rounded-2xl bg-white p-10 shadow-xl dark:bg-gray-800">
         <button
           className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-gray-600"
           onClick={onClose}>
@@ -83,63 +83,67 @@ export default function ReservationDetailModal({
             className="h-20 w-20 rounded-full object-contain"
           />
           <div>
-            <div className="text-lg font-bold">
-              {data.vehicleInfo.licensePlate} 상세 정보
+            <div className="text-lg font-bold dark:text-gray-400">
+              {data.vehicleInfo.licensePlate}
             </div>
             <div className="text-gray-500">{data.vehicleInfo.model}</div>
           </div>
         </div>
         <div className="mb-6 grid grid-cols-2 gap-6">
-          <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm">
-            <div className="mb-2 font-semibold text-gray-700">차량 정보</div>
+          <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm dark:bg-gray-700">
+            <div className="mb-2 font-semibold text-gray-700 dark:text-gray-400">
+              차량 정보
+            </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">차량번호</span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-white">
                 {data.vehicleInfo.licensePlate}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">모델</span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-white">
                 {data.vehicleInfo.model}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">연식</span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-white">
                 {data.vehicleInfo.carAge}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">색상</span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-white">
                 {data.vehicleInfo.color}
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm">
-            <div className="mb-2 font-semibold text-gray-700">예약 정보</div>
+          <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm dark:bg-gray-700">
+            <div className="mb-2 font-semibold text-gray-700 dark:text-gray-400">
+              예약 정보
+            </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">사원명</span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-white">
                 {data.employeeName}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">연락처</span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-white">
                 {data.phoneNumber}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">대여일</span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-white">
                 {formatDate(data.rentedAt)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">반납 예정일</span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-white">
                 {formatDate(data.dueDate)}
               </span>
             </div>

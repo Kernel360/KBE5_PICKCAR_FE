@@ -62,7 +62,7 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
             <FontAwesomeIcon
               icon={faCarSide}
               size="xl"
-              color="#374151"
+              color="#2b7fff"
             />
           </div>
           <div className="stat-title text-sm font-bold">총 등록 차량</div>
@@ -82,7 +82,7 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
             <FontAwesomeIcon
               icon={faCalendarCheck}
               size="xl"
-              color="#374151"
+              color="#00d390"
             />
           </div>
           <div className="stat-title text-sm font-bold">예약된 차량</div>
@@ -102,7 +102,7 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
             <FontAwesomeIcon
               icon={faWrench}
               size="xl"
-              color="#374151"
+              color="#fcb700"
             />
           </div>
           <div className="stat-title text-sm font-bold">점검중인 차량</div>
@@ -122,14 +122,13 @@ const VehicleReservationStat: React.FC<VehicleReservationStatProps> = ({
             <FontAwesomeIcon
               icon={faWarehouse}
               size="xl"
-              color="#374151"
             />
           </div>
           <div className="stat-title text-sm font-bold">
             반납 예정(3일 이내)
           </div>
           <div className="stat-value">{currentData.expectedReturnCount}대</div>
-          <div className="stat-desc text-secondary">
+          <div className="stat-desc text-secondary font-bold">
             {currentData.delayedCount}대 반납 지연중
           </div>
         </div>

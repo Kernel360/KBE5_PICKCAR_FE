@@ -1,4 +1,5 @@
 export interface EmployeeReservationProjection {
+  reservationId: number
   employeeId: number
   name: string
   email: string

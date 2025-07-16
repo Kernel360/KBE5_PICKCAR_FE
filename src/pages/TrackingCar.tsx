@@ -176,7 +176,6 @@ function TrackingCar() {
       <div className="flex min-h-screen gap-6 bg-[#f5f8fa] dark:bg-gray-900">
         <SideMenuBar />
         <div className="my-10 flex flex-1 flex-col rounded-2xl bg-[#eaf1fb] p-6 shadow dark:bg-gray-800 dark:shadow-gray-700">
-          <h1 className="mb-5 text-xl font-bold dark:text-white">실시간 관제</h1>
           <div className="relative flex-1 md:min-h-0">
             <div
               className="h-full w-full transition-all duration-300"
@@ -213,7 +212,7 @@ function TrackingCar() {
         </div>
         <div className="my-10 flex w-96 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800 dark:shadow-gray-700">
           <div className="mb-4 text-lg font-bold dark:text-white">
-            할당된 차량 리스트 ({filteredCars.length})
+            관제 차량 목록 ({filteredCars.length})
             {/* 추후 '운행 중인 차량'으로 변경 예정 */}
           </div>
           <CarFilters

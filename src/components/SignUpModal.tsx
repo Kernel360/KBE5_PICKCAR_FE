@@ -12,7 +12,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
     password: '',
     name: '',
     phoneNumber: '',
-    isAdmin: false
+    isAdmin: true // 기본값을 true(관리자)로 설정
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -82,7 +82,9 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700">
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">회원가입</h2>
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">
+            회원가입
+          </h2>
           <button
             className="text-2xl text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
             onClick={onClose}
@@ -106,9 +108,11 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               onChange={handleInputChange}
               placeholder="이메일을 입력하세요"
               className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:bg-gray-600"
-            /> 
+            />
             {emailError && (
-              <div className="mt-1 text-sm text-red-500 dark:text-red-400">{emailError}</div>
+              <div className="mt-1 text-sm text-red-500 dark:text-red-400">
+                {emailError}
+              </div>
             )}
           </div>
 
@@ -166,7 +170,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
                   value="true"
                   checked={formData.isAdmin === true}
                   onChange={handleInputChange}
-                  className="radio radio-primary"
+                  className="radio radio-primary outline-none"
                 />
                 <span>관리자</span>
               </label>
@@ -177,7 +181,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
                   value="false"
                   checked={formData.isAdmin === false}
                   onChange={handleInputChange}
-                  className="radio radio-primary"
+                  className="radio radio-primary outline-none"
                 />
                 <span>사원</span>
               </label>

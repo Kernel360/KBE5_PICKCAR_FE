@@ -5,7 +5,6 @@ import {
 } from '@/types/employee'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faCarSide, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import ReservationVehicleListModal from '@/components/employee/ReservationModal'
 import ReservationDetailModal from '@/components/employee/ReservationDetailModal'
@@ -22,7 +21,6 @@ interface EmployeeTableProps {
 export default function EmployeeTable({
   employees,
   vehicleList,
-  refreshKey,
   onRefresh,
   loading,
   error
@@ -59,86 +57,55 @@ export default function EmployeeTable({
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 이름
               </th>
-<<<<<<< HEAD
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 직위
-=======
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
-                상태
-              </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
-                권한
->>>>>>> 8903c4d18065d192055839feab66b7bc4193bc2e
               </th>
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 이메일
               </th>
-<<<<<<< HEAD
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 예약 여부
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
                 차량 번호
               </th>
-              <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
-=======
               <th className="px-4 py-3 text-left font-semibold whitespace-nowrap dark:text-white">
->>>>>>> 8903c4d18065d192055839feab66b7bc4193bc2e
                 작업
               </th>
             </tr>
           </thead>
-<<<<<<< HEAD
-          <tbody className="divide-y divide-gray-100 border-b border-gray-200">
+          <tbody className="divide-y divide-gray-100 border-b border-gray-200 dark:divide-gray-600 dark:border-gray-600">
             {employees.map(employee => (
               <tr
                 key={employee.employeeId}
-                className="h-12 hover:bg-gray-50">
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                  {employee.employeeId}
-=======
-          <tbody className="divide-y divide-gray-100 border-b border-gray-200 dark:divide-gray-600 dark:border-gray-600">
-            {employees.map((employee, idx) => (
-              <tr
-                key={employee.userId}
                 className="h-12 hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
-                  {idx + 1}
->>>>>>> 8903c4d18065d192055839feab66b7bc4193bc2e
+                  {employee.employeeId}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.name}
                 </td>
-<<<<<<< HEAD
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.role === 'EMPLOYEE' ? '사원' : '관리자'}
-=======
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
-                  {employee.status}
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
-                  {employee.role}
->>>>>>> 8903c4d18065d192055839feab66b7bc4193bc2e
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.email}
                 </td>
-<<<<<<< HEAD
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.hasReservation ? (
                     <span className="font-bold text-green-600">예약됨</span>
                   ) : (
                     <span className="text-gray-400">미예약</span>
                   )}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.hasReservation ? employee.licensePlate || '-' : '-'}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
                   {employee.hasReservation ? (
                     <>
                       <FontAwesomeIcon
-                        icon={faInfoCircle as IconProp}
+                        icon={faInfoCircle}
                         size="xl"
                         color="#4c7b6d"
                         className="cursor-pointer rounded-xl p-2 hover:bg-gray-300"
@@ -153,7 +120,7 @@ export default function EmployeeTable({
                     </>
                   ) : (
                     <FontAwesomeIcon
-                      icon={faCarSide as IconProp}
+                      icon={faCarSide}
                       color="#5e8db0"
                       size="xl"
                       className="cursor-pointer rounded-xl p-2 hover:bg-gray-300"
@@ -163,17 +130,6 @@ export default function EmployeeTable({
                       }}
                     />
                   )}
-=======
-                <td className="px-4 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">
-                  <FontAwesomeIcon
-                    icon={faCarSide as IconProp}
-                    className="btn p-3 dark:text-white"
-                    onClick={() => {
-                      setSelectedEmployeeId(employee.userId)
-                      setIsVehicleModalOpen(true)
-                    }}
-                  />
->>>>>>> 8903c4d18065d192055839feab66b7bc4193bc2e
                 </td>
               </tr>
             ))}

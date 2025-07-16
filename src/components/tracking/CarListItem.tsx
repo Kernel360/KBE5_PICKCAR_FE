@@ -58,14 +58,6 @@ function CarListItem({
             className="cursor-pointer rounded-xl px-3 py-3 hover:bg-gray-300"
           />
         </button>
-        <button>
-          <FontAwesomeIcon
-            icon={faCircleInfo as IconProp}
-            size="lg"
-            color="#4c7b6d"
-            className="cursor-pointer rounded-xl px-3 py-3 hover:bg-gray-300"
-          />
-        </button>
       </div>
     </div>
   )
