@@ -180,7 +180,7 @@ export default function ReservationDetailModal({
                 연관 운행 기록
               </div>
               <div className="max-h-60 overflow-y-auto">
-                <table className="table-zebra table w-full table-auto">
+                <table className="table-zebra dark:bg-base-300 table w-full table-auto">
                   <thead>
                     <tr>
                       <th className="px-4 py-2 dark:text-white">운행일자</th>

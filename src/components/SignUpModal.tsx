@@ -17,14 +17,64 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [emailError, setEmailError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+
+  // 전화번호 포맷팅 함수
+  const formatPhoneNumber = (value: string) => {
+    // 숫자만 추출
+    const numbers = value.replace(/[^\d]/g, '')
+
+    // 11자리 이하로 제한
+    if (numbers.length > 11) return value
+
+    // 전화번호 형식에 맞게 포맷팅
+    if (numbers.length <= 3) {
+      return numbers
+    } else if (numbers.length <= 7) {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3)}`
+    } else {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`
+    }
+  }
+
+  // 전화번호 유효성 검사
+  const validatePhoneNumber = (phone: string) => {
+    const numbers = phone.replace(/[^\d]/g, '')
+    if (numbers.length !== 11) {
+      return '전화번호는 11자리여야 합니다.'
+    }
+    if (
+      !numbers.startsWith('010') &&
+      !numbers.startsWith('011') &&
+      !numbers.startsWith('016') &&
+      !numbers.startsWith('017') &&
+      !numbers.startsWith('018') &&
+      !numbers.startsWith('019')
+    ) {
+      return '올바른 휴대폰 번호를 입력해주세요.'
+    }
+    return ''
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target
+
     if (type === 'radio' && name === 'isAdmin') {
       setFormData(prev => ({
         ...prev,
         isAdmin: value === 'true'
       }))
+    } else if (name === 'phoneNumber') {
+      // 전화번호 입력 처리
+      const formattedValue = formatPhoneNumber(value)
+      setFormData(prev => ({
+        ...prev,
+        phoneNumber: formattedValue
+      }))
+
+      // 실시간 유효성 검사
+      const validationError = validatePhoneNumber(formattedValue)
+      setPhoneError(validationError)
     } else {
       setFormData(prev => ({
         ...prev,
@@ -50,6 +100,13 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
       return
     }
 
+    // 전화번호 최종 유효성 검사
+    const phoneValidationError = validatePhoneNumber(formData.phoneNumber)
+    if (phoneValidationError) {
+      setPhoneError(phoneValidationError)
+      return
+    }
+
     setIsLoading(true)
     try {
       await axios.post(
@@ -61,7 +118,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
           phoneNumber: formData.phoneNumber,
           isAdmin: formData.isAdmin
         },
-        { skipAuth: true } as any
+        { skipAuth: true } as { skipAuth: boolean }
       )
       alert('회원가입이 완료되었습니다.')
       onClose()
@@ -153,9 +210,15 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleInputChange}
-              placeholder="전화번호를 입력하세요"
+              placeholder="010-0000-0000"
+              maxLength={13}
               className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base transition focus:border-blue-500 focus:bg-white focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:bg-gray-600"
             />
+            {phoneError && (
+              <div className="mt-1 text-sm text-red-500 dark:text-red-400">
+                {phoneError}
+              </div>
+            )}
           </div>
 
           <div>
