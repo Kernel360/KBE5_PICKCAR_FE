@@ -210,7 +210,7 @@ function TrackingCar() {
             </span>
           </div>
         </div>
-        <div className="my-10 flex w-96 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800 dark:shadow-gray-700">
+        <div className="my-10 flex min-h-0 w-96 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800 dark:shadow-gray-700">
           <div className="mb-4 text-lg font-bold dark:text-white">
             관제 차량 목록 ({filteredCars.length})
             {/* 추후 '운행 중인 차량'으로 변경 예정 */}
@@ -219,11 +219,13 @@ function TrackingCar() {
             searchTerm={searchTerm}
             onSearchTermChange={setSearchTerm}
           />
-          <CarList
-            cars={filteredCars}
-            selectedVehicleId={selectedVehicleId}
-            onSelectCar={handleSelectCar}
-          />
+          <div className="h-0 min-h-0 flex-1">
+            <CarList
+              cars={filteredCars}
+              selectedVehicleId={selectedVehicleId}
+              onSelectCar={handleSelectCar}
+            />
+          </div>
         </div>
       </div>
     </>

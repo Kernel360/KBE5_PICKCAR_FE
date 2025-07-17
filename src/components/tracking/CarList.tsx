@@ -18,21 +18,23 @@ function CarList({
   onSelectCar
 }: CarListProps): React.ReactElement {
   return (
-    <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-      {' '}
-      {/* todo : 스크롤 추가 */}
-      {cars.length === 0 ? (
-        <p className="text-center text-gray-500 dark:text-gray-400">표시할 차량이 없습니다.</p>
-      ) : (
-        cars.map(car => (
-          <CarListItem
-            key={car.vehicleId} // 차량 번호가 고유하다고 가정
-            car={car}
-            isSelected={selectedVehicleId === car.vehicleId}
-            onSelectCar={onSelectCar}
-          />
-        ))
-      )}
+    <div className="flex h-screen flex-col">
+      <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
+        {cars.length === 0 ? (
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            표시할 차량이 없습니다.
+          </p>
+        ) : (
+          cars.map(car => (
+            <CarListItem
+              key={car.vehicleId}
+              car={car}
+              isSelected={selectedVehicleId === car.vehicleId}
+              onSelectCar={onSelectCar}
+            />
+          ))
+        )}
+      </div>
     </div>
   )
 }
