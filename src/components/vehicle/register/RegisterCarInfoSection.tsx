@@ -14,9 +14,6 @@ const CAR_TYPES = [
 const MANUFACTURERS = ['현대', '기아', '쌍용', 'custom'] as const
 
 const FUEL_TYPES = ['LPG', '휘발유', '경유', '전기', '기타'] as const
-
-const GPS_OPTIONS = ['예', '아니오'] as const
-
 interface RegisterCarInfoSectionProps {
   carNumber: string
   setCarNumber: (v: string) => void

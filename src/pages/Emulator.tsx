@@ -43,7 +43,7 @@ export default function Emulator() {
   const [engineOn, setEngineOn] = useState(false)
   const [message, setMessage] = useState('')
   const [vehicleId, setVehicleId] = useState<string | null>(null)
-  const [dueDate, setDueDate] = useState<date | null>(null)
+  const [dueDate, setDueDate] = useState<Date | null>(null)
   const [reservationStatus, setReservationStatus] = useState<string | null>(
     null
   )
@@ -350,7 +350,9 @@ export default function Emulator() {
               {vehicleId}번 차량 에뮬레이터
             </h1>
             <div>
-              <h3 className="font-bold">반납 기한 : {dueDate}</h3>
+              <h3 className="font-bold">
+                반납 기한 : {dueDate ? dueDate.toLocaleString() : ''}
+              </h3>
               <h3 className="font-bold">
                 할당 상태 :{' '}
                 {reservationStatus === 'RESERVED'

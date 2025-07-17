@@ -2,7 +2,7 @@ import React from 'react' // JSX 사용 및 React 타입 참조를 위해 import
 import type { Car } from '@/types/tracking'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faLocationDot, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 
 /**
  * 개별 차량 정보
