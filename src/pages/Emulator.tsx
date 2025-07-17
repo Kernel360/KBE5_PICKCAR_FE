@@ -147,7 +147,7 @@ export default function Emulator() {
           localStorage.setItem(CYCLE_IDX_KEY, next.toString())
           return next
         })
-      }, 10000) // 1분 주기(여야 하지만 답답하니까 우선은 10초)
+      }, 5000) // 1분 주기(여야 하지만 답답하니까 우선은 10초)
     }
     return () => clearInterval(interval)
   }, [engineOn, vehicleId, cycleStartIdx])
