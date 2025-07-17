@@ -2,7 +2,7 @@ import React from 'react' // JSX 사용 및 React 타입 참조를 위해 import
 import type { Car } from '@/types/tracking'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faLocationDot, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 
 /**
  * 개별 차량 정보
@@ -55,15 +55,7 @@ function CarListItem({
             icon={faLocationDot as IconProp}
             size="lg"
             color="#5e8db0"
-            className="rounded px-3 py-3"
-          />
-        </button>
-        <button>
-          <FontAwesomeIcon
-            icon={faCircleInfo as IconProp}
-            size="lg"
-            color="#4c7b6d"
-            className="rounded px-3 py-3"
+            className="cursor-pointer rounded-xl px-3 py-3 hover:bg-gray-300"
           />
         </button>
       </div>

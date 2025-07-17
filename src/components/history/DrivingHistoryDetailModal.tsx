@@ -47,15 +47,19 @@ const DrivingHistoryDetailModal = ({
             className="h-20 w-20 rounded-full object-contain"
           />
           <div>
-            <div className="text-lg font-bold dark:text-white">
-              {detail.licensePlate} 상세 정보
+            <div className="text-lg font-bold dark:text-gray-400">
+              {detail.licensePlate}
             </div>
-            <div className="text-gray-500 dark:text-gray-400">{detail.model}</div>
+            <div className="text-gray-500 dark:text-gray-400">
+              {detail.model}
+            </div>
           </div>
         </div>
         <div className="mb-6 grid grid-cols-2 gap-6">
           <div className="flex flex-col gap-2 rounded-xl bg-[#f7fafc] p-6 shadow-sm dark:bg-gray-700">
-            <div className="mb-2 font-semibold text-gray-700 dark:text-gray-300">차량 정보</div>
+            <div className="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+              차량 정보
+            </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500 dark:text-gray-400">차량번호</span>
               <span className="font-semibold text-gray-800 dark:text-gray-200">
@@ -63,7 +67,9 @@ const DrivingHistoryDetailModal = ({
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">제조사/모델</span>
+              <span className="text-gray-500 dark:text-gray-400">
+                제조사/모델
+              </span>
               <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.model}
               </span>
@@ -87,19 +93,25 @@ const DrivingHistoryDetailModal = ({
               현재 운행 정보
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">운행 시작</span>
+              <span className="text-gray-500 dark:text-gray-400">
+                운행 시작
+              </span>
               <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {new Date(detail.drivingStartedAt).toLocaleString('ko-KR')}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">운행 시간</span>
+              <span className="text-gray-500 dark:text-gray-400">
+                운행 시간
+              </span>
               <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.totalDrivingTime}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">이동 거리</span>
+              <span className="text-gray-500 dark:text-gray-400">
+                이동 거리
+              </span>
               <span className="font-semibold text-gray-800 dark:text-gray-200">
                 {detail.totalDistance.toFixed(1)} km
               </span>
@@ -113,7 +125,9 @@ const DrivingHistoryDetailModal = ({
           </div>
         </div>
         <div>
-          <div className="mb-2 font-semibold text-gray-700 dark:text-gray-300">이동 경로</div>
+          <div className="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+            이동 경로
+          </div>
           <div className="flex h-70 items-center justify-center rounded-lg bg-[#eaf3fb] text-gray-400 dark:bg-gray-600 dark:text-gray-500">
             <KakaoMap
               center={
