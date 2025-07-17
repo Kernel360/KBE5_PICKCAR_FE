@@ -10,8 +10,8 @@ export interface VehicleListResponse {
   model: string
   color: string
   vehicleStatus: VehicleStatus
-  rentedCompany: string | null
-  rentedAt: string | null
+  isRented: boolean
+  createdAt: string | null
 }
 
 export interface UpdateVehicleStatusRequest {

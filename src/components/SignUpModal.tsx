@@ -13,7 +13,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
     password: '',
     name: '',
     phoneNumber: '',
-    isAdmin: false
+    isAdmin: true // 기본값을 true(관리자)로 설정
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -62,7 +62,6 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
       setError('모든 필수 항목을 입력해 주세요.')
       return
     }
-
     setIsLoading(true)
     try {
       await axios.post(
@@ -75,7 +74,7 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
           phoneNumber: formData.phoneNumber.replace(/-/g, ''),
           isAdmin: formData.isAdmin,
         },
-        { skipAuth: true } as any
+        { skipAuth: true } as { skipAuth: boolean }
       )
       alert('회원가입이 완료되었습니다.')
       onClose()
@@ -94,7 +93,9 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700">
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">회원가입</h2>
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">
+            회원가입
+          </h2>
           <button
             className="text-2xl text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
             onClick={onClose}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from '../axiosConfig'
-import Header from '@/components/common/Header'
+// import Header from '@/components/common/Header'
 
 const API_URL = import.meta.env.VITE_EMULATOR_API_URL
 
@@ -72,7 +72,7 @@ export default function EmployeeHome() {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <div style={{
         minHeight: '60vh',
         display: 'flex',

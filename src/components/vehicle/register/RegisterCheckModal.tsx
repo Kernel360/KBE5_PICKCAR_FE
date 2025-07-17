@@ -1,12 +1,15 @@
 const MODAL_STYLES = {
   overlay:
     'bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black',
-  container: 'w-full max-w-md rounded-xl bg-white p-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700',
+  container:
+    'w-full max-w-md rounded-xl bg-white p-8 shadow-xl dark:bg-gray-800 dark:shadow-gray-700',
   title: 'mb-4 text-lg font-bold text-gray-900 dark:text-white',
   list: 'mb-6 space-y-2 text-sm text-gray-700 dark:text-gray-300',
   buttonContainer: 'flex justify-end gap-2',
-  cancelButton: 'rounded px-6 py-2 btn btn-default btn-soft rounded-2xl dark:bg-gray-600 dark:text-gray-200',
-  confirmButton: 'rounded px-6 py-2 btn bg-blue-500 text-white rounded-2xl dark:bg-blue-600'
+  cancelButton:
+    'rounded px-6 py-2 btn btn-default btn-soft rounded-2xl dark:bg-gray-600 dark:text-gray-200',
+  confirmButton:
+    'rounded px-6 py-2 btn bg-blue-500 text-white rounded-2xl dark:bg-blue-600'
 } as const
 
 interface RegisterCheckModalProps {

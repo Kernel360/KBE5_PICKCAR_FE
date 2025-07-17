@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Header from '@/components/common/Header'
+// import Header from '@/components/common/Header'
 import RentalTable from '@/components/vehicle/rental/RentalTable'
 import RentalTopBar from '@/components/vehicle/rental/RentalTopBar'
 import ChangeStatusModal from '@/components/vehicle/rental/ChangeStatusModal'
@@ -144,9 +144,9 @@ export default function Rental() {
 
   return (
     <div className="flex flex-col bg-[#f5f8fa] dark:bg-gray-900">
-      <header className="flex bg-white dark:bg-gray-800">
+      {/* <header className="flex bg-white dark:bg-gray-800">
         <Header />
-      </header>
+      </header> */}
 
       <div className="flex flex-1">
         <SideMenuBar />
