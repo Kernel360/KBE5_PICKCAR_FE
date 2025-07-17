@@ -1,7 +1,7 @@
 import KakaoMap from '@/components/common/KakaoMap'
 import CarFilters from '@/components/tracking/CarFilters'
 import CarList from '@/components/tracking/CarList'
-import Header from '@/components/common/Header'
+// import Header from '@/components/common/Header'
 import axios from '../axiosConfig'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingScreen from '@/components/common/LoadingScreen'
@@ -172,7 +172,7 @@ function TrackingCar() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="flex min-h-screen gap-6 bg-[#f5f8fa] dark:bg-gray-900">
         <SideMenuBar />
         <div className="my-10 flex flex-1 flex-col rounded-2xl bg-[#eaf1fb] p-6 shadow dark:bg-gray-800 dark:shadow-gray-700">

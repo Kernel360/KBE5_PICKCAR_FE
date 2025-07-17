@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from '@/axiosConfig'
 import '../main.css'
-import Header from '@/components/common/Header'
+// import Header from '@/components/common/Header'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import VehicleReservationStat from '@/components/dailyreport/VehicleReservationStat'
 import {
@@ -40,9 +40,9 @@ const DashBoard: React.FC = () => {
 
   return (
     <div className="bg-[#f5f8fa] dark:bg-gray-900">
-      <header>
+      {/* <header>
         <Header />
-      </header>
+      </header> */}
 
       <div className="flex flex-1">
         <SideMenuBar />
