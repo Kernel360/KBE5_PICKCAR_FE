@@ -44,7 +44,8 @@ function LoginForm() {
           email,
           password
         },
-        { skipAuth: true } as any)
+        { skipAuth: true } as any
+      )
       const result = response.data
 
       // 로그인 성공 시 로직
@@ -87,7 +88,7 @@ function LoginForm() {
         <input
           type="email"
           placeholder="이메일 주소를 입력하세요."
-          className="mb-2 bg-transparent border-b border-gray-400 focus:border-green-400 text-sm text-white placeholder-gray-300 px-0 py-3 outline-none transition"
+          className="mb-2 border-b border-gray-400 bg-transparent px-0 py-3 text-sm text-white placeholder-gray-300 transition outline-none focus:border-green-400"
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
@@ -95,7 +96,7 @@ function LoginForm() {
         <input
           type="password"
           placeholder="비밀번호를 입력하세요."
-          className="mb-12 bg-transparent border-b border-gray-400 focus:border-green-400 text-sm text-white placeholder-gray-300 px-0 py-3 outline-none transition"
+          className="mb-12 border-b border-gray-400 bg-transparent px-0 py-3 text-sm text-white placeholder-gray-300 transition outline-none focus:border-green-400"
           value={password}
           onChange={e => setPassword(e.target.value)}
         />
@@ -106,7 +107,7 @@ function LoginForm() {
         )}
         <button
           type="submit"
-          className="btn w-full rounded-full bg-blue-500 py-5 text-lg font-semibold text-white">
+          className="btn w-full rounded-full bg-blue-500 py-5 text-lg font-semibold text-white outline-none">
           로그인
         </button>
         <div className="mt-4 text-center text-sm text-gray-500">

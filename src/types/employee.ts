@@ -1,9 +1,11 @@
-export interface Employee {
-  userId: number
+export interface EmployeeReservationProjection {
+  reservationId: number
+  employeeId: number
   name: string
-  status: string // UserStatus
-  role: string // UserRole
   email: string
+  role: string // UserRole
+  hasReservation: boolean
+  licensePlate: string | null
 }
 
 export interface EmployeeFormData {
@@ -25,11 +27,12 @@ export interface AvailableVehicleResponse {
   vehicleId: number
   model: string
   licensePlate: string
-  status: string
+  color: string
+  carAge: string
 }
 
 export interface EmployeeListResponse {
-  content: Employee[]
+  content: EmployeeReservationProjection[]
   page: {
     number: number
     size: number
