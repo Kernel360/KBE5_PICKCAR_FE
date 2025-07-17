@@ -1,13 +1,13 @@
-import Header from '@/components/common/Header'
+// import Header from '@/components/common/Header'
 import SideMenuBar from '@/components/common/SideMenuBar'
 import EmployeeTable from '@/components/employee/EmployeeTable'
 
 export default function EmployeeManagement() {
   return (
     <div className="flex flex-col bg-[#f5f8fa] dark:bg-gray-900">
-      <header className="flex bg-white dark:bg-gray-800">
+      {/* <header className="flex bg-white dark:bg-gray-800">
         <Header />
-      </header>
+      </header> */}
 
       <div className="flex flex-1">
         <SideMenuBar />

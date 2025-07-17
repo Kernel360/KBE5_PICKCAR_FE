@@ -9,7 +9,7 @@ import type { PaginationState } from '@/types/common/Pagination'
 import axios from '../axiosConfig'
 import { isAxiosError } from 'axios'
 import DrivingHistoryDetailModal from '@/components/history/DrivingHistoryDetailModal'
-import Header from '@/components/common/Header'
+// import Header from '@/components/common/Header'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import DrivingHistoryTopBar from '@/components/history/DrivingHistoryTopBar'
 import DrivingHistoryBottomBar from '@/components/history/DrivingHistoryBottomBar'
@@ -168,9 +168,9 @@ function DrivingHistoryPage() {
 
   return (
     <div className="flex flex-col bg-[#f5f8fa] dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800">
+      {/* <header className="bg-white dark:bg-gray-800">
         <Header />
-      </header>
+      </header> */}
 
       <div className="flex flex-1">
         <SideMenuBar />
