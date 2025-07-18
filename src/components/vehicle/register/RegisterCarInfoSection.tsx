@@ -14,6 +14,9 @@ const CAR_TYPES = [
 const MANUFACTURERS = ['현대', '기아', '쌍용', 'custom'] as const
 
 const FUEL_TYPES = ['LPG', '휘발유', '경유', '전기', '기타'] as const
+
+const COLOR = ['흰색', '검은색', '빨간색', '파란색', '노란색', '초록색', '회색', '은색'] as const
+
 interface RegisterCarInfoSectionProps {
   carNumber: string
   setCarNumber: (v: string) => void
@@ -64,7 +67,7 @@ export default function RegisterCarInfoSection({
     if (!manufacturer) setManufacturer(MANUFACTURERS[0])
     if (!year) setYear('2025')
     if (!fuelType) setFuelType(FUEL_TYPES[0])
-    if (!color) setColor('검정색')
+    if (!color) setColor(COLOR[0])
     if (hasGps !== '예') setHasGps('예')
   }, [])
   return (
@@ -96,7 +99,7 @@ export default function RegisterCarInfoSection({
             id="model"
             name="model"
             className="input dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-            placeholder="모델명 입력 (예: 현대 아반떼, 기아 스포티지)"
+            placeholder="모델명 입력 (예: 아반떼, 스포티지)"
             value={model}
             onChange={e => setModel(e.target.value)}
           />
@@ -193,14 +196,26 @@ export default function RegisterCarInfoSection({
             className="text-sm font-medium text-gray-900 dark:text-gray-300">
             색상
           </label>
-          <input
+          <select
             id="color"
             name="color"
-            className="input dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-            placeholder="색상 입력"
+            className="select dark:border-gray-600 dark:bg-gray-700 dark:text-white"
             value={color}
-            onChange={e => setColor(e.target.value)}
-          />
+            onChange={e => setColor(e.target.value)}>
+            <option
+              value=""
+              disabled={color !== ''}
+              hidden={color !== ''}>
+              색상 타입 선택
+            </option>
+	          {COLOR.map(type => (
+              <option
+                key={type}
+                value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="flex flex-col gap-1">
           <label
